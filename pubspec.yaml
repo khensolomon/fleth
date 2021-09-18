@@ -1,0 +1,46 @@
+name: fleth
+description: Lethil Flutter Template
+
+# Prevent accidental publishing to pub.dev.
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.12.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  intl: ^0.17.0
+
+  # Local lidea package, development only
+  lidea:
+    path: ../lidea
+    # git:
+    #   url: git://github.com/laisiangtho/lidea.git
+    #   ref: main
+
+  # Custom
+  hive_flutter: ^1.1.0
+  # share: ^2.0.4
+  in_app_purchase: ^1.0.8
+  just_audio: ^0.9.11
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^1.0.0
+
+flutter:
+  uses-material-design: true
+
+  # Enable generation of localized Strings from arb files.
+  generate: true
+
+  assets:
+    # Add assets from the images directory to the application.
+    - assets/images/
