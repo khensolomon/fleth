@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.lethil.fleth">
    <application
-      android:label="Zaideih"
+      android:label="Fleth"
       android:icon="@mipmap/icon"
       android:roundIcon="@mipmap/iconrounded"
       android:usesCleartextTraffic="true">
