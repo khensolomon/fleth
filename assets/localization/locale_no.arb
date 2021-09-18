@@ -1,0 +1,11 @@
+{
+  "appTitle": "Zaideih",
+  "@appTitle": {
+    "description": "The title of the application"
+  },
+  "settings": "Innstillinger",
+  "@settings": {
+    "description": "App settings"
+  }
+
+}
