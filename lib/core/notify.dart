@@ -14,14 +14,13 @@ class CoreNotifier extends Notify with _CoreNotifiable {
   bool get nodeFocus => _nodeFocus;
   set nodeFocus(bool value) => notifyIf<bool>(_nodeFocus, _nodeFocus = value);
 
+  // String _suggestQuery = '';
+  // String get suggestQuery => _suggestQuery;
+  // set suggestQuery(String value) => notifyIf<String>(_suggestQuery, _suggestQuery = value);
 
-  // String _suggestionQuery = '';
-  // String get suggestionQuery => _suggestionQuery;
-  // set suggestionQuery(String value) => notifyIf<String>(_suggestionQuery, _suggestionQuery = value);
-
-  // String _definitionQuery = '';
-  // String get definitionQuery => _definitionQuery;
-  // set definitionQuery(String value) => notifyIf<String>(_definitionQuery, _definitionQuery = value);
+  String _searchQuery = '';
+  String get searchQuery => _searchQuery;
+  set searchQuery(String value) => notifyIf<String>(_searchQuery, _searchQuery = value);
 }
 
 mixin _CoreNotifiable{}

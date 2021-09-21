@@ -3,14 +3,20 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import 'package:lidea/notify.dart';
+
 import 'service.dart';
+
+export 'package:flutter_localizations/flutter_localizations.dart';
+export 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 /// A class that many Widgets can interact with to read user settings, update
 /// user settings, or listen to user settings changes.
 ///
 /// Controllers glue Data Services to Flutter Widgets. The SettingsController
 /// uses the SettingsService to store and retrieve user settings.
-class SettingsController with ChangeNotifier {
+// class SettingsController with ChangeNotifier {
+class SettingsController extends Notify {
   // SettingsController(this._settingsService);
   // // Make SettingsService a private variable so it is not used directly.
   // final SettingsService _settingsService;
@@ -49,7 +55,10 @@ class SettingsController with ChangeNotifier {
     if (newThemeMode == null) return;
 
     // Dot not perform any work if new and old ThemeMode are identical
-    if (newThemeMode == _themeMode) return;
+    if (newThemeMode == _themeMode) {
+      debugPrint('same');
+
+    }
 
     // Otherwise, store the new theme mode in memory
     _themeMode = newThemeMode;
@@ -58,11 +67,32 @@ class SettingsController with ChangeNotifier {
     notifyListeners();
 
     // Persist the changes to a local database or the internet using the
-    // SettingService.
     await _settingsService.updateThemeMode(newThemeMode);
   }
 
   bool get isDarkMode => themeMode == ThemeMode.dark;
+
+  /// Returns the active [Brightness].
+  Brightness get systemBrightness {
+    Brightness brightness;
+    switch (themeMode) {
+      case ThemeMode.light:
+        brightness = Brightness.light;
+        break;
+      case ThemeMode.dark:
+        brightness = Brightness.dark;
+        break;
+      default:
+        brightness = WidgetsBinding.instance!.window.platformBrightness;
+    }
+    return brightness;
+  }
+
+  /// Returns opposite of active [Brightness].
+  Brightness get resolvedSystemBrightness {
+    return systemBrightness == Brightness.dark ? Brightness.light : Brightness.dark;
+  }
+
 
   late Locale _locale;
 
@@ -88,7 +118,7 @@ class SettingsController with ChangeNotifier {
   late BuildContext context ;
 
   // AppLocalizations get translate =>_localizations!;
-  AppLocalizations get language => AppLocalizations.of(context)!;
+  AppLocalizations get translate => AppLocalizations.of(context)!;
 
   // static SettingsController of(BuildContext context) {
   //   return context.;
@@ -97,7 +127,7 @@ class SettingsController with ChangeNotifier {
   // static void update(BuildContext context, IdeaTheme newModel) {
   //   final scope = context.dependOnInheritedWidgetOfExactType<_ModelBindingScope>();
   //   scope!.modelBindingState.updateModel(newModel);
-  // }   
+  // }
 
 
 }

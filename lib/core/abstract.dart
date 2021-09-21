@@ -2,12 +2,16 @@
 part of 'main.dart';
 
 abstract class _Abstract extends CoreNotifier with _Configuration, _Utility {
-  /*
-  Future<void> initEnvironment() async {
-    collection.env = EnvironmentType.fromJSON(UtilDocument.decodeJSON(await UtilDocument.loadBundleAsString('env.json')));
-  }
 
-  Future<void> initSetting() async {
+  Future<void> initEnvironment() async {
+    Stopwatch initWatch =  Stopwatch()..start();
+    await Hive.initFlutter();
+    Hive.registerAdapter(SettingAdapter());
+    Hive.registerAdapter(PurchaseAdapter());
+    Hive.registerAdapter(HistoryAdapter());
+
+    collection.env = EnvironmentType.fromJSON(UtilDocument.decodeJSON(await UtilDocument.loadBundleAsString('env.json')));
+
     // Box<SettingType> box = await Hive.openBox<SettingType>(collection.env.settingName);
     // SettingType active = collection.boxOfSetting.get(collection.env.settingKey,defaultValue: collection.env.setting)!;
     collection.boxOfSetting = await Hive.openBox<SettingType>(collection.env.settingName);
@@ -20,12 +24,17 @@ abstract class _Abstract extends CoreNotifier with _Configuration, _Utility {
       collection.boxOfSetting.put(collection.env.settingKey,active.merge(collection.env.setting));
       await loadArchive(collection.env.bucketAPI.archive);
     }
+    debugPrint('initEnvironment in ${initWatch.elapsedMilliseconds} ms');
+  }
 
+  Future<void> initData() async {
     collection.cacheBucket = AudioBucketType.fromJSON(
       Map.fromEntries(
-        await Future.wait(collection.env.apis.map(
-          (e) async => MapEntry(e.uid, await readArchive(e.archive))
-        ))
+        await Future.wait(
+          collection.env.apis.map(
+            (e) async => MapEntry(e.uid, await readArchive(e.archive))
+          )
+        )
       )
     );
 
@@ -53,7 +62,7 @@ abstract class _Abstract extends CoreNotifier with _Configuration, _Utility {
     ).catchError((e) => null);
     if (bytes != null && bytes.isNotEmpty) {
       final res = await UtilArchive().extract(bytes).catchError((_) {
-        print('$_');
+        debugPrint('$_');
         return null;
       });
       if (res != null) {
@@ -79,5 +88,5 @@ abstract class _Abstract extends CoreNotifier with _Configuration, _Utility {
   Future<void> analyticsFromCollection() async{
     analyticsSearch('keyword goes here');
   }
-  */
+
 }

@@ -1,9 +1,9 @@
 part of 'main.dart';
 
 mixin _Configuration  {
-  // final Collection collection = Collection.internal();
+  final Collection collection = Collection.internal();
 
-  // late Store store;
+  late Store store;
   // late SQLite _sql;
   // late Audio audio;
 
@@ -13,4 +13,5 @@ mixin _Configuration  {
   List<String> albumFilterCharList= [];
   List<int> albumFilterLangList = [];
   List<int> albumFilterGenreList = [];
+
 }

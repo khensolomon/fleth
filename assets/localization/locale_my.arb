@@ -3,35 +3,35 @@
   "@appTitle": {
     "description": "The title of the application"
   },
-  "home": "Hjem",
+  "home": "အိမ်",
   "@home": {
     "description": "Home page"
   },
-  "back": "Tilbake",
+  "back": "နောက်သို့",
   "@back": {
     "description": "Back"
   },
-  "filter": "Filter",
+  "filter": "စီစစ်ရန်",
   "@filter": {
     "description": "Filter content"
   },
-  "settings": "Innstillinger",
+  "settings": "ချိန်ညှိခြင်း",
   "@settings": {
     "description": "App settings"
   },
-  "search": "Søk",
+  "search": "ရှာဖွေရန်",
   "@search": {
     "description": "Search"
   },
-  "cancel": "Avbryt",
+  "cancel": "ပယ်ဖျက်ရန်",
   "@cancel": {
     "description": "Cancel search"
   },
-  "clear": "klar",
+  "clear": "ရှင်းလင်းရန်",
   "@clear": {
     "description": "Clear search"
   },
-  "aWordOrTwo": "...et ord eller to",
+  "aWordOrTwo": "...စကားလုံး တစ်လုံး နှစ်လုံး",
   "@aWordOrTwo": {
     "description": "a word or two to search"
   }

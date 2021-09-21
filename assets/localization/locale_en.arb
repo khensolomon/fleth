@@ -1,11 +1,80 @@
 {
-  "appTitle": "Zaideih",
+  "appTitle": "Fleth",
   "@appTitle": {
     "description": "The title of the application"
+  },
+  "home": "Home",
+  "@home": {
+    "description": "Home page"
+  },
+  "back": "Back",
+  "@back": {
+    "description": "Back"
+  },
+  "filter": "Filter",
+  "@filter": {
+    "description": "Filter content"
   },
   "settings": "Settings",
   "@settings": {
     "description": "App settings"
+  },
+
+  "history": "History",
+  "@history": {
+    "description": "History"
+  },
+  "recent": "Recent",
+  "@recent": {
+    "description": "Recent"
+  },
+  "restore": "Restore",
+  "@restore": {
+    "description": "Restore"
+  },
+  "search": "Search",
+  "@search": {
+    "description": "Search"
+  },
+  "recentSearch": "Recent search",
+  "@recentSearch": {
+    "description": "Recent search"
+  },
+  "cancel": "Cancel",
+  "@cancel": {
+    "description": "Cancel task"
+  },
+  "confirm": "Confirm",
+  "@confirm": {
+    "description": "Confirm task"
+  },
+  "clear": "Clear",
+  "@clear": {
+    "description": "Clear search"
+  },
+  "aWordOrTwo": "...a word or two",
+  "@aWordOrTwo": {
+    "description": "a word or two to search"
+  },
+  "locale": "Locale",
+  "@locale": {
+    "description": "System locale"
+  },
+  "switchTheme": "Switch theme",
+  "@switchTheme": {
+    "description": "Change theme"
+  },
+  "automatic": "Automatic",
+  "@automatic": {
+    "description": "Default theme mode"
+  },
+  "dark": "Dark",
+  "@dark": {
+    "description": "Dark theme"
+  },
+  "light": "Light",
+  "@light": {
+    "description": "Light theme"
   },
   "album": "Album"
 }

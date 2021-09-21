@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -5,18 +7,29 @@ class IdeaData {
   static const IdeaColor _lightColor = IdeaColor(
     brightness: Brightness.light,
     focus: Colors.black,
-    primaryScheme: Colors.black,
+    primaryScheme: Colors.black87,
 
-    primary: Color(0xFFf7f7f7),
+    primary: Color(0xFFffffff),
     // primary: Color(0xFFffffff),
-    scaffold: Color(0xFFffffff),
+    scaffold: Color(0xFFf7f7f7),
     highlight: Colors.orange,
-    // background: Color(0xFFbdbdbd),
-    background: Color(0xFFe8e8e8),
+    background: Color(0xFFbdbdbd),
+    // background: Color(0xFFffffff),
     // shadow: Colors.grey[400]!,
     // shadow: Colors.grey.shade400,
     shadow: Color(0xFFbdbdbd),
     button: Color(0xFFdedcdc)
+
+    // primary: Color(0xFFf7f7f7),
+    // // primary: Color(0xFFffffff),
+    // scaffold: Color(0xFFffffff),
+    // highlight: Colors.orange,
+    // // background: Color(0xFFbdbdbd),
+    // background: Color(0xFFe8e8e8),
+    // // shadow: Colors.grey[400]!,
+    // // shadow: Colors.grey.shade400,
+    // shadow: Color(0xFFbdbdbd),
+    // button: Color(0xFFdedcdc)
   );
 
   static const IdeaColor _darkColor = IdeaColor(
@@ -34,18 +47,19 @@ class IdeaData {
     button: Color(0xFFd9d9d9)
   );
 
-  static ThemeData light = theme(_lightColor);
-  static ThemeData dark = theme(_darkColor);
+  static ThemeData light(BuildContext context) => theme(context, _lightColor);
+  static ThemeData dark(BuildContext context) => theme(context, _darkColor);
 
-  static ThemeData theme(IdeaColor color) {
+  static ThemeData theme(BuildContext context,IdeaColor color) {
+    final TextTheme textTheme = Theme.of(context).textTheme.merge(_textTheme);
+    // final TextTheme textTheme = _textTheme.merge(Theme.of(context).textTheme);
+
     return ThemeData(
       colorScheme: color.scheme,
       brightness: color.brightness,
-      textTheme: _textTheme,
 
-      // fontFamily: "Lato, 'Paduak', sans-serif",
-      // fontFamily: "Lato, Mm3Web",
-      fontFamily: "Lato, Mm3Web, sans-serif",
+      // fontFamily: "Lato, sans-serif",
+      fontFamily: "Lato, 'Mm3Web', sans-serif",
 
       primaryColor: color.primary,
       shadowColor: color.shadow,
@@ -55,8 +69,33 @@ class IdeaData {
       highlightColor: color.highlight,
       // buttonColor:color.button,
 
+      textTheme: textTheme.apply(
+        bodyColor: color.focus,
+        displayColor:color.highlight,
+        decorationColor: Colors.red,
+      ),
+
+      primaryTextTheme:textTheme,
+      appBarTheme: AppBarTheme(
+        backgroundColor: color.primary,
+        foregroundColor: color.focus
+      ),
+
       iconTheme: IconThemeData(
-        color: color.focus
+        color: color.focus,
+        size: 23
+      ),
+
+      cardTheme: CardTheme(
+        color: color.primary,
+        elevation:0,
+        shadowColor: color.shadow,
+        margin: const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
+        shape: RoundedRectangleBorder(
+          side: BorderSide(width: 0.2, color: color.shadow),
+          // BorderRadius.circular(5)
+          borderRadius: const BorderRadius.all(Radius.circular(5)),
+        ),
       ),
 
       cupertinoOverrideTheme: const NoDefaultCupertinoThemeData(
@@ -65,28 +104,39 @@ class IdeaData {
           actionTextStyle:TextStyle(color: Colors.orange)
         )
       ),
+
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: color.background,
+        fillColor: color.shadow.withOpacity(0.7),
         // hoverColor: Colors.green,
         // focusColor: Colors.red,
-        hintStyle: const TextStyle(color: Colors.grey),
+        // hintStyle: const TextStyle(height: 1.3),
+        // labelStyle: const TextStyle(height: 1.3),
+        // alignLabelWithHint: true,
+        suffixStyle: const TextStyle(color: Colors.red),
+
 
         contentPadding: const EdgeInsets.symmetric(horizontal: 0,vertical: 0),
 
-        focusedBorder: const OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.grey, width: 0.3),
-          borderRadius: BorderRadius.all(Radius.circular(5)),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: color.background, width: 0.3),
+          borderRadius: const BorderRadius.all(Radius.circular(5)),
         ),
-        enabledBorder: const OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.grey, width: 0.2),
-          borderRadius: BorderRadius.all(Radius.circular(5)),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: color.shadow, width: 0.2),
+          borderRadius: const BorderRadius.all(Radius.circular(5)),
         ),
-        border: const OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.grey, width: 0.2),
-          borderRadius: BorderRadius.all(Radius.circular(5)),
+        disabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: color.shadow.withOpacity(0.8), width: 0.2),
+          borderRadius: const BorderRadius.all(Radius.circular(5)),
+        ),
+
+        border: OutlineInputBorder(
+          borderSide: BorderSide(color: color.shadow, width: 0.2),
+          borderRadius: const BorderRadius.all(Radius.circular(5)),
         )
       ),
+
       bottomSheetTheme: BottomSheetThemeData(
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(3.5)),
@@ -102,50 +152,60 @@ class IdeaData {
         // backgroundColor: Colors.red,
         elevation:0.0,
       ),
+
       bottomAppBarTheme: const BottomAppBarTheme(
         color: Colors.cyan
       ),
+
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
         backgroundColor: Colors.red
       ),
 
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
+          padding: EdgeInsets.zero,
           textStyle: const TextStyle(
             fontSize: 19
           )
         ),
       ),
-      // primaryTextTheme: _textTheme
+
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ButtonStyle(
+          foregroundColor: MaterialStateProperty.all<Color>(color.focus),
+          backgroundColor: MaterialStateProperty.all<Color>(color.primary)
+        )
+      )
     );
   }
 
   static ColorScheme lightScheme = _lightColor.scheme;
   static ColorScheme darkScheme = _darkColor.scheme;
 
-  static const _fontWeightThin = FontWeight.w300;
-  static const _fontWeighRegular = FontWeight.w400;
-  static const _fontWeighMedium = FontWeight.w500;
-  static const _fontWeighSemiBold = FontWeight.w600;
-  static const _fontWeighBold = FontWeight.w700;
+  static const _fontWeightSemiThin = FontWeight.w100;
+  static const _fontWeightThin = FontWeight.w100;
+  static const _fontWeighRegular = FontWeight.w300;
+  static const _fontWeighMedium = FontWeight.w400;
+  static const _fontWeighSemiBold = FontWeight.w500;
+  // static const _fontWeighBold = FontWeight.w700;
 
   static const TextTheme _textTheme = TextTheme(
-    headline1: TextStyle(fontWeight: _fontWeighBold, fontSize: 26.0, height: 1.0),
-    headline2: TextStyle(fontWeight: _fontWeighBold, fontSize: 24.0, height: 1.0),
-    headline3: TextStyle(fontWeight: _fontWeighMedium, fontSize: 19.0, height: 1.0),
-    headline4: TextStyle(fontWeight: _fontWeighMedium, fontSize: 17.0, height: 1.0),
-    headline5: TextStyle(fontWeight: _fontWeighMedium, fontSize: 13.0, height: 1.0),
-    headline6: TextStyle(fontWeight: _fontWeighMedium, fontSize: 20.0, height: 1.0),
+    headline1: TextStyle(fontWeight: _fontWeightSemiThin, fontFamilyFallback:["Mm3Web","sans-serif"], height: 1.0),
+    headline2: TextStyle(fontWeight: _fontWeightThin, fontFamilyFallback:["Mm3Web","sans-serif"], height: 1.0),
+    headline3: TextStyle(fontWeight: _fontWeighRegular, fontFamilyFallback:["Mm3Web","sans-serif"], height: 1.0),
+    headline4: TextStyle(fontWeight: _fontWeighRegular, fontFamilyFallback:["Mm3Web","sans-serif"], height: 1.0),
+    headline5: TextStyle(fontWeight: _fontWeighRegular, fontFamilyFallback:["Mm3Web","sans-serif"], height: 1.0),
+    headline6: TextStyle(fontWeight: _fontWeighRegular, fontFamilyFallback:["Mm3Web","sans-serif"], height: 1.2),
 
-    subtitle1: TextStyle(fontWeight: _fontWeighRegular, fontSize: 16.0, height: 1.0),
-    subtitle2: TextStyle(fontWeight: _fontWeighMedium, fontSize: 14.0, height: 1.0),
+    subtitle1: TextStyle(fontWeight: _fontWeighRegular, fontFamilyFallback:["Mm3Web","sans-serif"], height: 1.4),
+    subtitle2: TextStyle(fontWeight: _fontWeighMedium, fontFamilyFallback:["Mm3Web","sans-serif"], height: 1.0),
 
-    bodyText1: TextStyle(fontWeight: _fontWeighRegular, fontSize: 16.0, height: 1.0),
-    bodyText2: TextStyle(fontWeight: _fontWeighRegular, fontSize: 13.0, height: 1.0),
+    bodyText1: TextStyle(fontWeight: _fontWeighRegular, fontFamilyFallback:["Mm3Web","sans-serif"], fontSize: 18,height: 1.2),
+    bodyText2: TextStyle(fontWeight: _fontWeighRegular, fontFamilyFallback:["Mm3Web","Lato","sans-serif"], fontSize: 20, height: 1.25),
 
-    caption: TextStyle(fontWeight: _fontWeighSemiBold, fontSize: 16.0, height: 1.0),
-    button: TextStyle(fontWeight: _fontWeightThin,fontSize: 14.0,height: 1.0),
-    overline: TextStyle(fontWeight: _fontWeighMedium, fontSize: 12.0, height: 1.0)
+    caption: TextStyle(fontWeight: _fontWeighSemiBold, fontFamilyFallback:["Mm3Web","sans-serif"], height: 1.0),
+    button: TextStyle(fontWeight: _fontWeightThin, fontFamilyFallback:["Mm3Web","sans-serif"], height: 1.0),
+    overline: TextStyle(fontWeight: _fontWeighMedium, fontFamilyFallback:["Mm3Web","sans-serif"], height: 1.0)
   );
 
 }
@@ -190,9 +250,9 @@ class IdeaColor{
   ColorScheme get scheme => ColorScheme(
     brightness: brightness,
     primary: primaryScheme,
-    primaryVariant: primaryScheme.darken(),
+    primaryVariant: primary.darken(),
     secondary: primaryScheme,
-    secondaryVariant: primaryScheme.darken(),
+    secondaryVariant: primary.darken(),
     background: scaffold,
     surface: scaffold.darken(),
     error: focusOpacity,

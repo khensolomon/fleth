@@ -16,6 +16,8 @@ dependencies:
     sdk: flutter
   intl: ^0.17.0
 
+  cupertino_icons: ^1.0.3
+
   # Local lidea package, development only
   lidea:
     path: ../lidea
@@ -41,6 +43,32 @@ flutter:
   # Enable generation of localized Strings from arb files.
   generate: true
 
-  # assets:
+  assets:
     # Add assets from the images directory to the application.
-    # - assets/images/
+    - assets/env.json
+    - assets/album.json
+
+  fonts:
+    - family: Lato
+      fonts:
+        - asset: assets/fonts/Lato-Regular.ttf
+        - asset: assets/fonts/Lato-Thin.ttf
+        - asset: assets/fonts/Lato-Light.ttf
+        - asset: assets/fonts/Lato-Bold.ttf
+    - family: Zaideih
+      fonts:
+        - asset: assets/fonts/Zaideih.ttf
+    # - family: Padauk
+      # fonts:
+      #   - asset: assets/fonts/Padauk-Regular.ttf
+      #   - asset: assets/fonts/Padauk-Bold.ttf
+    # - family: Noto Sans Myanmar
+    #   fonts:
+    #     - asset: assets/fonts/NotoSansMyanmar-Regular.ttf
+    #     - asset: assets/fonts/NotoSansMyanmar-Thin.ttf
+    #     - asset: assets/fonts/NotoSansMyanmar-Light.ttf
+    #     - asset: assets/fonts/NotoSansMyanmar-Bold.ttf
+
+    - family: Mm3Web
+      fonts:
+        - asset: assets/fonts/Mm3Web.ttf

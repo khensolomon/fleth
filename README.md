@@ -1,6 +1,20 @@
 # Fleth
 
-A new Flutter project.
+Flutter UI template
+
+## Features
+
+... primary textfield features
+
+```note
+on initState(searchQuery)
+  get -> core.collection.searchQuery
+onSearch
+  set -> core.collection.searchQuery from core.searchQuery
+onCancel
+  restore -> core.searchQuery from core.collection.searchQuery
+  update -> textController.text
+```
 
 ## Getting Started
 
@@ -15,4 +29,10 @@ For help getting started with Flutter, view our
 [online documentation](https://flutter.dev/docs), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
 
-fleth
+Exception has occurred.
+FlutterError (setState() or markNeedsBuild() called during build.
+This _InheritedProviderScope<Core?> widget cannot be marked as needing to build because the framework is already in the process of building widgets.  A widget can be marked as needing to be built during the build phase only if one of its ancestors is currently building. This exception is allowed because the framework builds parent widgets before children, which means a dirty descendant will always be built. Otherwise, the framework might not visit this widget during this build phase.
+The widget on which setState() or markNeedsBuild() was called was:
+  _InheritedProviderScope<Core?>
+The widget which was currently being built when the offending call was made was:
+  Builder)
