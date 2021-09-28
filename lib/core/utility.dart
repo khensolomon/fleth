@@ -1,7 +1,7 @@
 part of 'main.dart';
 
 mixin _Utility {
-  final UtilAnalytics utilAnalytics = UtilAnalytics();
+  late final UtilAnalytics utilAnalytics = UtilAnalytics();
 
   Future<void> analyticsSearch(String searchTerm) async {
     if (searchTerm.isNotEmpty) await utilAnalytics.search(searchTerm);
@@ -10,6 +10,6 @@ mixin _Utility {
   Future<void> analyticsScreen(String name, String classes) async {
     // await new FirebaseAnalytics().setCurrentScreen(creenName: 'home',screenClassOverride: 'HomeState');
     // debugPrint('analyticsScreen $name $classes');
-    await utilAnalytics.send.setCurrentScreen(screenName: name,screenClassOverride: classes);
+    await utilAnalytics.send.setCurrentScreen(screenName: name, screenClassOverride: classes);
   }
 }

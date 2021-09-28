@@ -1,7 +1,4 @@
-// import 'dart:async';
 import 'dart:io';
-// import 'dart:math';
-// import 'package:flutter/foundation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -20,7 +17,6 @@ class PurchaseView extends StatefulWidget {
 }
 
 class _View extends State<PurchaseView> {
-
   late Core core;
 
   @override
@@ -37,7 +33,7 @@ class _View extends State<PurchaseView> {
   @override
   Widget build(BuildContext context) {
     return Consumer<Core>(
-      builder: (BuildContext _, Core core, Widget? child) => buildContainer()
+      builder: (BuildContext _, Core core, Widget? child) => buildContainer(),
     );
   }
 
@@ -68,15 +64,13 @@ class _View extends State<PurchaseView> {
       );
     } else {
       if (core.store.isPending) {
-        sliverChildren.add(
-          const Center(child: CircularProgressIndicator())
-        );
+        sliverChildren.add(const Center(
+          child: CircularProgressIndicator(),
+        ));
       } else {
-        sliverChildren.add(
-          Center(
-            child: Text(core.store.messageResponseError!),
-          )
-        );
+        sliverChildren.add(Center(
+          child: Text(core.store.messageResponseError!),
+        ));
       }
     }
 
@@ -93,10 +87,7 @@ class _View extends State<PurchaseView> {
     //   )
     // );
 
-    return SliverList(
-      delegate: SliverChildListDelegate(sliverChildren)
-    );
-
+    return SliverList(delegate: SliverChildListDelegate(sliverChildren));
   }
 
   Widget _buildDescription() {
@@ -112,35 +103,33 @@ class _View extends State<PurchaseView> {
       msgWidget = const Text('A moment please');
     } else if (core.store.isAvailable) {
       // NOTE: Purchase is ready, Purchase is available
-      msgWidget = const Text('Ready to contribute!', style: TextStyle(fontSize: 20),);
-      msgIcon = const Icon(CupertinoIcons.checkmark_shield,size: 50);
+      msgWidget = const Text(
+        'Ready to contribute!',
+        style: TextStyle(fontSize: 20),
+      );
+      msgIcon = const Icon(CupertinoIcons.checkmark_shield, size: 50);
     } else {
       // NOTE: Connected to store, but purchase is not ready yet
       msgWidget = const Text('Purchase unavailable');
-      msgIcon = const Icon(Icons.error_outlined,size: 50);
+      msgIcon = const Icon(Icons.error_outlined, size: 50);
     }
     return MergeSemantics(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            child: msgIcon
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 4),
-            child: msgWidget
-          ),
+          Padding(padding: const EdgeInsets.symmetric(vertical: 10), child: msgIcon),
+          Padding(padding: const EdgeInsets.symmetric(vertical: 4), child: msgWidget),
           _buildConsumableStar(),
           const Padding(
             padding: EdgeInsets.symmetric(vertical: 30, horizontal: 30),
-            child: Text('Any contribution makes a huge difference for the future of MyOrdbok.',
+            child: Text(
+              'Any contribution makes a huge difference for the future of MyOrdbok.',
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 18),
-            )
+            ),
           )
-        ]
+        ],
       ),
     );
   }
@@ -148,7 +137,7 @@ class _View extends State<PurchaseView> {
   Widget _buildProductList() {
     if (core.store.isLoading) {
       return const Card(
-        child: Text('...')
+        child: Text('...'),
       );
     }
 
@@ -158,22 +147,18 @@ class _View extends State<PurchaseView> {
 
     List<Widget> itemsWidget = <Widget>[];
 
-    String storeName = Platform.isAndroid?'Play Store':'App Store';
+    String storeName = Platform.isAndroid ? 'Play Store' : 'App Store';
 
     if (core.store.listOfPurchaseItem.isEmpty && !core.store.isAvailable) {
-      itemsWidget.add(
-        Card(
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(7.0))
-          ),
-          elevation: 2,
-          margin: const EdgeInsets.symmetric(vertical:5, horizontal:7),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 30),
-            child:Text('Unable to connect with $storeName!')
-          )
-        )
-      );
+      itemsWidget.add(Card(
+        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(7.0))),
+        elevation: 2,
+        margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 7),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 30),
+          child: Text('Unable to connect with $storeName!'),
+        ),
+      ));
     }
     // This app needs special configuration to run. Please see example/README.md for instructions.
     // if (core.store.listOfNotFoundId.isNotEmpty) {
@@ -212,10 +197,7 @@ class _View extends State<PurchaseView> {
       (ProductDetails item) => _buildProductItem(item, purs),
     ));
 
-    return Column(
-      mainAxisSize: MainAxisSize.max,
-      children: itemsWidget
-    );
+    return Column(mainAxisSize: MainAxisSize.max, children: itemsWidget);
   }
 
   Widget _buildProductItem(ProductDetails item, Map<String, PurchaseDetails> purs) {
@@ -223,115 +205,114 @@ class _View extends State<PurchaseView> {
     bool hasPurchasedPreviously = previousPurchase != null;
     String title = item.title;
     String description = item.description;
-    if (title.isEmpty){
+    if (title.isEmpty) {
       final ev = core.store.productbyCart(item.id);
       title = ev.title;
       description = ev.description;
     }
 
-    final hasPurchased = hasPurchasedPreviously || core.collection.boxOfPurchase.values.where((o) => o.productId == item.id).isNotEmpty;
+    final hasPurchased = hasPurchasedPreviously ||
+        core.collection.boxOfPurchase.values.where((o) => o.productId == item.id).isNotEmpty;
     return Card(
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(7.0))
-      ),
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(7.0))),
       elevation: 2,
-      margin: const EdgeInsets.symmetric(vertical:5, horizontal:7),
+      margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 7),
       child: Semantics(
         child: ListTile(
-          contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 7),
-          leading: hasPurchased?const Icon(
-            CupertinoIcons.checkmark_shield_fill,
-            size: 35
-          ):null,
-          title: Text(
-            title.replaceAll(RegExp(r'\(.+?\)$'), ""),
-            // semanticsLabel: item.title,
-            style: TextStyle(
-              fontWeight: FontWeight.w400,
-              color: Theme.of(context).colorScheme.primaryVariant,
-              fontSize: 20
-            )
-          ),
-          subtitle: Padding(
-            padding: const EdgeInsets.only(top:10),
-            child: Text(
-              description,
-              semanticsLabel: description,
-              // textScaleFactor:0.9,
+            contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 7),
+            leading:
+                hasPurchased ? const Icon(CupertinoIcons.checkmark_shield_fill, size: 35) : null,
+            title: Text(
+              title.replaceAll(RegExp(r'\(.+?\)$'), ""),
+              // semanticsLabel: item.title,
               style: TextStyle(
+                fontWeight: FontWeight.w400,
                 color: Theme.of(context).colorScheme.primaryVariant,
-                fontSize: 17,
-                fontWeight: FontWeight.w300
-              )
+                fontSize: 20,
+              ),
             ),
-          ),
-          // trailing: hasPurchased?Text(
-          //   item.price,
-          //   semanticsLabel: item.price,
-          //   style: TextStyle(
-          //     decoration: TextDecoration.lineThrough,
-          //     fontWeight: FontWeight.w200,
-          //     // color: Theme.of(context).backgroundColor,
-          //     fontSize: 13
-          //   ),
-          // ):TextButton(
-          //   style: TextButton.styleFrom(
-          //     minimumSize: Size(90, 30),
-          //     padding: EdgeInsets.symmetric(vertical:3, horizontal:7),
-          //     backgroundColor: hasPurchased?null:Theme.of(context).primaryColorDark,
-          //     // backgroundColor: hasPurchased?null:Colors.red,
-          //     // primary: Theme.of(context).primaryColorLight,
-          //     shape: RoundedRectangleBorder(
-          //       borderRadius: BorderRadius.circular(100)
-          //     )
-          //   ),
-          //   child: Text(
-          //     item.price,
-          //     semanticsLabel: item.price,
-          //     style: TextStyle(
-          //       color: Theme.of(context).primaryColorLight
-          //     )
-          //   ),
-          //   onPressed: hasPurchased?null:() => core.store.doPurchase(item, purs)
-          // )
-          trailing: hasPurchased?null:CupertinoButton(
-            padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 15),
-            minSize: 45,
-            color: Theme.of(context).primaryColorDark,
-            borderRadius: const BorderRadius.all(Radius.circular(100.0)),
-            child: Text(
-              item.price,
-              semanticsLabel: item.price,
-              style: TextStyle(
-                color: Theme.of(context).primaryColorLight,
-                fontSize: 17
-              )
+            subtitle: Padding(
+              padding: const EdgeInsets.only(top: 10),
+              child: Text(
+                description,
+                semanticsLabel: description,
+                // textScaleFactor:0.9,
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.primaryVariant,
+                  fontSize: 17,
+                  fontWeight: FontWeight.w300,
+                ),
+              ),
             ),
-            onPressed: hasPurchased?null:() => core.store.doPurchase(item, purs)
-          )
-          // trailing: hasPurchased?null:TextButton(
-          //   style: TextButton.styleFrom(
-          //     minimumSize: Size(110, 50),
-          //     padding: EdgeInsets.symmetric(vertical:3, horizontal:7),
-          //     // backgroundColor: Theme.of(context).primaryColorDark,
-          //     backgroundColor: Theme.of(context).backgroundColor,
-          //     // backgroundColor: hasPurchased?null:Colors.red,
-          //     // primary: Theme.of(context).primaryColorLight,
-          //     shape: RoundedRectangleBorder(
-          //       borderRadius: BorderRadius.circular(100)
-          //     )
-          //   ),
-          //   child: Text(
-          //     item.price,
-          //     semanticsLabel: item.price,
-          //     style: TextStyle(
-          //       // color: Theme.of(context).primaryColorLight,
-          //       fontSize: 17
-          //     )
-          //   ),
-          //   onPressed: hasPurchased?null:() => core.store.doPurchase(item, purs)
-          // )
-        ),
+            // trailing: hasPurchased?Text(
+            //   item.price,
+            //   semanticsLabel: item.price,
+            //   style: TextStyle(
+            //     decoration: TextDecoration.lineThrough,
+            //     fontWeight: FontWeight.w200,
+            //     // color: Theme.of(context).backgroundColor,
+            //     fontSize: 13
+            //   ),
+            // ):TextButton(
+            //   style: TextButton.styleFrom(
+            //     minimumSize: Size(90, 30),
+            //     padding: EdgeInsets.symmetric(vertical:3, horizontal:7),
+            //     backgroundColor: hasPurchased?null:Theme.of(context).primaryColorDark,
+            //     // backgroundColor: hasPurchased?null:Colors.red,
+            //     // primary: Theme.of(context).primaryColorLight,
+            //     shape: RoundedRectangleBorder(
+            //       borderRadius: BorderRadius.circular(100)
+            //     )
+            //   ),
+            //   child: Text(
+            //     item.price,
+            //     semanticsLabel: item.price,
+            //     style: TextStyle(
+            //       color: Theme.of(context).primaryColorLight
+            //     )
+            //   ),
+            //   onPressed: hasPurchased?null:() => core.store.doPurchase(item, purs)
+            // )
+            trailing: hasPurchased
+                ? null
+                : CupertinoButton(
+                    padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 15),
+                    minSize: 45,
+                    color: Theme.of(context).primaryColorDark,
+                    borderRadius: const BorderRadius.all(Radius.circular(100.0)),
+                    child: Text(
+                      item.price,
+                      semanticsLabel: item.price,
+                      style: TextStyle(
+                        color: Theme.of(context).primaryColorLight,
+                        fontSize: 17,
+                      ),
+                    ),
+                    onPressed: hasPurchased ? null : () => core.store.doPurchase(item, purs),
+                  )
+            // trailing: hasPurchased?null:TextButton(
+            //   style: TextButton.styleFrom(
+            //     minimumSize: Size(110, 50),
+            //     padding: EdgeInsets.symmetric(vertical:3, horizontal:7),
+            //     // backgroundColor: Theme.of(context).primaryColorDark,
+            //     backgroundColor: Theme.of(context).backgroundColor,
+            //     // backgroundColor: hasPurchased?null:Colors.red,
+            //     // primary: Theme.of(context).primaryColorLight,
+            //     shape: RoundedRectangleBorder(
+            //       borderRadius: BorderRadius.circular(100)
+            //     )
+            //   ),
+            //   child: Text(
+            //     item.price,
+            //     semanticsLabel: item.price,
+            //     style: TextStyle(
+            //       // color: Theme.of(context).primaryColorLight,
+            //       fontSize: 17
+            //     )
+            //   ),
+            //   onPressed: hasPurchased?null:() => core.store.doPurchase(item, purs)
+            // )
+            ),
       ),
     );
   }
@@ -360,32 +341,34 @@ class _View extends State<PurchaseView> {
     //   ).toList()
     // );
     return Selector<Core, Iterable<PurchaseType>>(
-      selector: (BuildContext _, Core core) => core.collection.boxOfPurchase.values.toList().where(
-        (e) => e.consumable == true && !core.store.listOfNotFoundId.contains(e.productId)
-      ),
+      selector: (BuildContext _, Core core) => core.collection.boxOfPurchase.values
+          .toList()
+          .where((e) => e.consumable == true && !core.store.listOfNotFoundId.contains(e.productId)),
       builder: (BuildContext _, Iterable<PurchaseType> data, Widget? child) {
         return Card(
           child: Wrap(
             // _kOfConsumable.data
-            children: data.map(
-              (PurchaseType e) => IconButton(
-                icon: const Icon(Icons.star),
-                iconSize: 35,
-                color: Theme.of(context).primaryColorDark,
-                // onPressed: () async => _buildConsumableDialog(e.productId)
-                onPressed: () {
-                  doConfirmWithDialog(
-                    context: context,
-                    message: 'Are you sure to remove?'
-                  ).then(
-                    (bool? confirmation) {
-                      // debugPrint('TODO: Consumable consume');
-                      if (confirmation != null && confirmation) core.store.doConsume(e.purchaseId!);
-                    }
-                  );
-                }
-              )
-            ).toList()
+            children: data
+                .map(
+                  (PurchaseType e) => IconButton(
+                    icon: const Icon(Icons.star),
+                    iconSize: 35,
+                    color: Theme.of(context).primaryColorDark,
+                    // onPressed: () async => _buildConsumableDialog(e.productId)
+                    onPressed: () {
+                      doConfirmWithDialog(
+                        context: context,
+                        message: 'Are you sure to remove?',
+                      ).then((bool? confirmation) {
+                        // debugPrint('TODO: Consumable consume');
+                        if (confirmation != null && confirmation) {
+                          core.store.doConsume(e.purchaseId!);
+                        }
+                      });
+                    },
+                  ),
+                )
+                .toList(),
           ),
         );
       },

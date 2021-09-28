@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+// import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:lidea/notify.dart';
 
@@ -10,64 +10,39 @@ import 'service.dart';
 export 'package:flutter_localizations/flutter_localizations.dart';
 export 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-/// A class that many Widgets can interact with to read user settings, update
-/// user settings, or listen to user settings changes.
-///
-/// Controllers glue Data Services to Flutter Widgets. The SettingsController
-/// uses the SettingsService to store and retrieve user settings.
-// class SettingsController with ChangeNotifier {
 class SettingsController extends Notify {
-  // SettingsController(this._settingsService);
-  // // Make SettingsService a private variable so it is not used directly.
-  // final SettingsService _settingsService;
+  SettingsController(this._service);
 
-  static final SettingsController _instance = SettingsController.internal();
-  SettingsController.internal();
-  factory SettingsController() => _instance;
-  // retrieve the instance through the app
-  static SettingsController get instance => _instance;
-  final _settingsService = SettingsService();
-
-  // static SettingsController _instance;
-  // factory SettingsController() => _instance ??= SettingsController._();
-  // SettingsController._();
-
-  // Make ThemeMode a private variable so it is not updated directly without
-  // also persisting the changes with the SettingsService.
+  final SettingsService _service;
   late ThemeMode _themeMode;
 
-  // Allow Widgets to read the user's preferred ThemeMode.
   ThemeMode get themeMode => _themeMode;
 
-  /// Load the user's settings from the SettingsService. It may load from a
-  /// local database or the internet. The controller only knows it can load the
-  /// settings from the service.
-  Future<void> init() async {
-    _themeMode = await _settingsService.themeMode();
-    _locale = await _settingsService.locale();
+  Future<void> ensureInitialized() async {
+    _themeMode = ThemeMode.values.firstWhere(
+      (e) => e == ThemeMode.values.elementAt(_service.setting.mode),
+      orElse: () => ThemeMode.system,
+    );
 
-    // Important! Inform listeners a change has occurred.
+    _locale = await _service.locale();
+
     notifyListeners();
   }
 
-  /// Update and persist the ThemeMode based on the user's selection.
-  Future<void> updateThemeMode(ThemeMode? newThemeMode) async {
-    if (newThemeMode == null) return;
+  Future<void> updateThemeMode(ThemeMode? mode) async {
+    if (mode == null) return;
 
     // Dot not perform any work if new and old ThemeMode are identical
-    if (newThemeMode == _themeMode) {
-      debugPrint('same');
-
-    }
+    if (mode == _themeMode) return;
 
     // Otherwise, store the new theme mode in memory
-    _themeMode = newThemeMode;
+    _themeMode = mode;
 
     // Important! Inform listeners a change has occurred.
     notifyListeners();
 
     // Persist the changes to a local database or the internet using the
-    await _settingsService.updateThemeMode(newThemeMode);
+    await _service.updateTheme(mode);
   }
 
   bool get isDarkMode => themeMode == ThemeMode.dark;
@@ -93,11 +68,9 @@ class SettingsController extends Notify {
     return systemBrightness == Brightness.dark ? Brightness.light : Brightness.dark;
   }
 
-
   late Locale _locale;
 
   Future<void> updateLocale(Locale? newLocale) async {
-    // _locale = abc!;
     if (newLocale == null) return;
 
     // Dot not perform any work if new and old ThemeMode are identical
@@ -108,26 +81,57 @@ class SettingsController extends Notify {
 
     // Important! Inform listeners a change has occurred.
     notifyListeners();
-
-    await _settingsService.updateLocale(newLocale);
+    await _service.updateLocale(newLocale);
   }
 
   Locale get locale => _locale;
+}
 
-  // late AppLocalizations? _localizations;
-  late BuildContext context ;
+class NavigatorNotifyObserver extends NavigatorObserver {
+  NavigatorNotifyObserver(this._changeNotifier);
 
-  // AppLocalizations get translate =>_localizations!;
-  AppLocalizations get translate => AppLocalizations.of(context)!;
+  final NavigatorNotify _changeNotifier;
 
-  // static SettingsController of(BuildContext context) {
-  //   return context.;
-  // }
+  @override
+  void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
+    Future.microtask(() {
+      _changeNotifier.push(route, previousRoute);
+    });
+  }
 
-  // static void update(BuildContext context, IdeaTheme newModel) {
-  //   final scope = context.dependOnInheritedWidgetOfExactType<_ModelBindingScope>();
-  //   scope!.modelBindingState.updateModel(newModel);
-  // }
+  @override
+  void didPop(Route<dynamic> route, Route<dynamic>? previousRoute) {
+    _changeNotifier.pop(route, previousRoute);
+  }
+}
 
+class NavigatorNotify extends Notify {
+  String name = '/';
+  int _index = 0;
 
+  int get index => _index;
+  set index(int value) {
+    if (value != _index) {
+      _index = value;
+      notify();
+    }
+  }
+
+  //  route.settings.name
+  void push(Route<dynamic> current, Route<dynamic>? previous) {
+    if (current.settings.name != null) {
+      name = current.settings.name!;
+      debugPrint('push current ${current.settings.name}');
+      notify();
+    }
+    if (previous != null) {
+      debugPrint('push previous ${previous.settings.name}');
+    }
+  }
+
+  void pop(Route<dynamic> current, Route<dynamic>? previous) {
+    name = previous!.settings.name!;
+    debugPrint('pop current ${current.settings.name} previous ${previous.settings.name}');
+    notify();
+  }
 }

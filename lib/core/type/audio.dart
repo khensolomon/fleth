@@ -1,7 +1,6 @@
 part of 'main.dart';
 
 class AudioBucketType {
-
   final List<AudioAlbumType> album;
   final List<AudioTrackType> track;
   List<AudioArtistType> artist;
@@ -13,21 +12,24 @@ class AudioBucketType {
     required this.track,
     required this.artist,
     required this.genre,
-    required this.lang
+    required this.lang,
   });
 
   factory AudioBucketType.fromJSON(Map<String, dynamic> o) {
     return AudioBucketType(
-      album:o["album"].map<AudioAlbumType>((e) => AudioAlbumType.fromJSON(e)).toList(),
+      album: o["album"].map<AudioAlbumType>((e) => AudioAlbumType.fromJSON(e)).toList(),
       // track: (o["album"] as List).map(
       //   (e) => (e["tk"] as List).map<AudioTrackType>((i) => AudioTrackType.fromJSON(i,uid: e["ui"])).toList()
       // ).expand((i) => i).toList(),
-      track: (o["album"] as List).map(
-        (alb) => (alb["tk"] as List).map<AudioTrackType>((i) => AudioTrackType.fromJSON(i,alb: alb)).toList()
-      ).expand((i) => i).toList(),
-      artist:o["artist"].map<AudioArtistType>((e) => AudioArtistType.fromJSON(e)).toList(),
-      genre:o["genre"].map<AudioGenreType>((e) => AudioGenreType.fromJSON(e)).toList(),
-      lang:o["lang"].map<AudioLangType>((e) => AudioLangType.fromJSON(e)).toList()
+      track: (o["album"] as List)
+          .map((alb) => (alb["tk"] as List)
+              .map<AudioTrackType>((i) => AudioTrackType.fromJSON(i, alb: alb))
+              .toList())
+          .expand((i) => i)
+          .toList(),
+      artist: o["artist"].map<AudioArtistType>((e) => AudioArtistType.fromJSON(e)).toList(),
+      genre: o["genre"].map<AudioGenreType>((e) => AudioGenreType.fromJSON(e)).toList(),
+      lang: o["lang"].map<AudioLangType>((e) => AudioLangType.fromJSON(e)).toList(),
     );
   }
 
@@ -41,7 +43,7 @@ class AudioBucketType {
   //   };
   // }
 
-  Future<void> artistInit() async{
+  Future<void> artistInit() async {
     // for (var index = 0; index < artist.length; index++) {
     //   final o = artist[index];
     //   if (index > 1){
@@ -76,22 +78,26 @@ class AudioBucketType {
     artist.sort((a, b) => b.plays.compareTo(a.plays));
   }
 
-  Future<void> trackInit() async{
+  Future<void> trackInit() async {
     return track.sort((a, b) => b.plays.compareTo(a.plays));
   }
 
-  Future<void> albumInit() async{
+  Future<void> albumInit() async {
     return album.sort((a, b) => b.plays.compareTo(a.plays));
   }
 
-  Future<void> langInit() async{
+  Future<void> langInit() async {
     for (var lg in lang) {
-      List<AudioAlbumType> alb = album.where((e) => e.lang == lg.id).toList();
+      List<AudioAlbumType> alb = album
+          .where(
+            (e) => e.lang == lg.id,
+          )
+          .toList();
       lg.updateWith(
         album: alb.length,
         plays: alb.fold<int>(0, (value, e) => value + e.plays),
         duration: alb.fold<int>(0, (value, e) => value + e.duration),
-        track: alb.fold<int>(0, (value, e) => value + e.track)
+        track: alb.fold<int>(0, (value, e) => value + e.track),
       );
     }
     return lang.sort((a, b) => b.plays.compareTo(a.plays));
@@ -104,21 +110,16 @@ class AudioBucketType {
 
   AudioTrackType trackById(int id) => track.firstWhere((e) => e.id == id);
 
-  Iterable<AudioTrackType> trackByUid(List<String> ids) => track.where(
-    (e) => ids.contains(e.uid)
-  );
+  Iterable<AudioTrackType> trackByUid(List<String> ids) => track.where((e) => ids.contains(e.uid));
 
-  Iterable<AudioTrackType> trackByIds(List<int> ids) => track.where(
-    (e) => ids.contains(e.id)
-  );
+  Iterable<AudioTrackType> trackByIds(List<int> ids) => track.where((e) => ids.contains(e.id));
 
   // artist.elementAt(index);
   AudioArtistType artistById(int index) => artist.firstWhere((e) => e.id == index);
   // AudioArtistType artistById(int index) => artist.elementAt(index);
 
-  Iterable<AudioArtistType> artistList(List<int> indexes) => indexes.toSet().map(
-    (index) => artistById(index)
-  ).toSet();
+  Iterable<AudioArtistType> artistList(List<int> indexes) =>
+      indexes.toSet().map((index) => artistById(index)).toSet();
 
   // Iterable<AudioArtistType> artistPopularByLang(int id) => track.where(
   //   (s) => s.lang == id
@@ -127,31 +128,28 @@ class AudioBucketType {
   // );
 
   // Iterable<AudioArtistType> artistPopularByLang(int id) => artist.where((e) => e.lang.length > 0 && e.lang.first == id).take(17);
-  Iterable<int> artistPopularByLang(int id) => artist.where((e) => e.lang.isNotEmpty && e.lang.first == id).take(17).map((e) => e.id);
+  Iterable<int> artistPopularByLang(int id) =>
+      artist.where((e) => e.lang.isNotEmpty && e.lang.first == id).take(17).map((e) => e.id);
 
   AudioGenreType genreByIndex(int index) => genre.elementAt(index);
 
-  Iterable<AudioGenreType> genreList(List<int> indexes) => indexes.map(
-    (index) => genreByIndex(index)
-  ).toSet();
+  Iterable<AudioGenreType> genreList(List<int> indexes) =>
+      indexes.map((index) => genreByIndex(index)).toSet();
 
   // lang.elementAt(index);
   AudioLangType langById(int id) => lang.firstWhere((e) => e.id == id);
 
-  Iterable<AudioLangType> langList(List<int> indexes) => indexes.map(
-    (index) => langById(index)
-  ).toSet();
+  Iterable<AudioLangType> langList(List<int> indexes) =>
+      indexes.map((index) => langById(index)).toSet();
 
-  Iterable<AudioLangType> langAvailable() => lang.where(
-    (e) => e.album > 0
-  );
+  Iterable<AudioLangType> langAvailable() => lang.where((e) => e.album > 0);
 
   AudioMetaType meta(int trackId) {
     AudioTrackType track = trackById(trackId);
     return AudioMetaType(
-      trackInfo:track,
+      trackInfo: track,
       albumInfo: albumById(track.uid),
-      artistInfo: artistList(track.artists)
+      artistInfo: artistList(track.artists),
     );
   }
 
@@ -159,17 +157,17 @@ class AudioBucketType {
   String duration(int seconds) {
     final duration = Duration(seconds: seconds);
     final result = [];
-    if (duration.inHours>0){
+    if (duration.inHours > 0) {
       result.add(duration.inHours);
     }
-    if (duration.inMinutes>0){
-      if (duration.inHours>0){
+    if (duration.inMinutes > 0) {
+      if (duration.inHours > 0) {
         result.add(duration.inMinutes.remainder(60).toString().padLeft(2, '0'));
       } else {
         result.add(duration.inMinutes.remainder(60));
       }
     }
-    if (duration.inSeconds>0){
+    if (duration.inSeconds > 0) {
       result.add(duration.inSeconds.remainder(60).toString().padLeft(2, '0'));
     }
 
@@ -208,10 +206,9 @@ class AudioAlbumType {
     required this.genre,
     required this.year,
     required this.lang,
-
     required this.track,
     required this.duration,
-    required this.plays
+    required this.plays,
   });
 
   factory AudioAlbumType.fromJSON(Map<String, dynamic> o) {
@@ -219,37 +216,38 @@ class AudioAlbumType {
     return AudioAlbumType(
       uid: o["ui"],
       name: o["ab"],
-      genre: ((o["gr"]??[]) as List<dynamic>).map((e) => (e??0) as int).toList(),
-      year: ((o["yr"]??[]) as List<dynamic>).map(
-        (e) => e.toString().replaceAll('null', '')
-      ).toSet().toList(),
-      lang: (o["lg"]??0) as int,
+      genre: ((o["gr"] ?? []) as List<dynamic>).map((e) => (e ?? 0) as int).toList(),
+      year: ((o["yr"] ?? []) as List<dynamic>)
+          .map((e) => e.toString().replaceAll('null', ''))
+          .toSet()
+          .toList(),
+      lang: (o["lg"] ?? 0) as int,
       // track: trk.map<AudioTrackType>((e) => AudioTrackType.fromJSON(e)).toList()
 
       track: trk.length,
-      duration: trk.fold(0, (previousValue, e) => previousValue + (e["d"]??0) as int),
-      plays: trk.fold(0, (previousValue, e) => previousValue + (e["p"]??0) as int),
+      duration: trk.fold(0, (previousValue, e) => previousValue + (e["d"] ?? 0) as int),
+      plays: trk.fold(0, (previousValue, e) => previousValue + (e["p"] ?? 0) as int),
     );
   }
 
   Map<String, dynamic> toJSON() {
     return {
-      "uid":uid,
-      "name":name,
-      "genre":genre,
-      "year":year,
-      "lang":lang,
+      "uid": uid,
+      "name": name,
+      "genre": genre,
+      "year": year,
+      "lang": lang,
       // "track":track.map((e)=>e.toJSON()).toList()
 
-      "track":track,
-      "duration":duration,
-      "plays":plays
+      "track": track,
+      "duration": duration,
+      "plays": plays
     };
   }
 }
 
 // NOTE: only type, AudioBucketType child {i:'?', t:'?', a:[], d: 0, p: 1}
-class AudioTrackType extends Notify{
+class AudioTrackType extends Notify {
   final int id;
   // final dynamic alb;
   final String uid;
@@ -272,11 +270,10 @@ class AudioTrackType extends Notify{
     required this.duration,
     required this.plays,
     required this.lang,
-
-    this.isQueued =false,
-    this.isPlaying =false,
-    this.isLoading =false,
-    this.isAvailable =false
+    this.isQueued = false,
+    this.isPlaying = false,
+    this.isLoading = false,
+    this.isAvailable = false,
   });
 
   factory AudioTrackType.fromJSON(Map<String, dynamic> o, {required dynamic alb}) {
@@ -285,10 +282,10 @@ class AudioTrackType extends Notify{
       // uid: uid,
       uid: alb["ui"] as String,
       title: o["t"],
-      artists: ((o['a']??[]) as List<dynamic>).map((e) => (e??0) as int).toSet().toList(),
-      duration: (o["d"]??0) as int,
-      plays: (o["p"]??0) as int,
-      lang: (alb["lg"]??0) as int,
+      artists: ((o['a'] ?? []) as List<dynamic>).map((e) => (e ?? 0) as int).toSet().toList(),
+      duration: (o["d"] ?? 0) as int,
+      plays: (o["p"] ?? 0) as int,
+      lang: (alb["lg"] ?? 0) as int,
     );
   }
 
@@ -340,13 +337,12 @@ class AudioArtistType {
     required this.correction,
     required this.thesaurus,
     required this.aka,
-
-    this.id =0,
-    this.duration =0,
-    this.plays =0,
-    this.track =0,
-    this.album =0,
-    this.lang =const [],
+    this.id = 0,
+    this.duration = 0,
+    this.plays = 0,
+    this.track = 0,
+    this.album = 0,
+    this.lang = const [],
   });
 
   factory AudioArtistType.fromJSON(Map<String, dynamic> o) {
@@ -356,20 +352,19 @@ class AudioArtistType {
       thesaurus: o["thesaurus"].map<String>((e) => e.toString()).toList(),
       // correction: List.from((o['correction']??[]).map<String>((e) => e.toString())),
       // thesaurus: List.from((o['thesaurus']??[]).map<String>((e) => e.toString())),
-      aka: o["aka"]??"",
+      aka: o["aka"] ?? "",
 
       // genre: ((o["gr"]??[]) as List<dynamic>).map((e) => (e??0) as int).toList(),
       // year: ((o["yr"]??[]) as List<dynamic>).map(
       //   (e) => e.toString().replaceAll('null', '')
       // ).toSet().toList(),
-      id: (o["id"]??0) as int,
-      duration: (o["duration"]??0) as int,
-      plays: (o["plays"]??0) as int,
-      track: (o["track"]??0) as int,
-      album: (o["album"]??0) as int,
+      id: (o["id"] ?? 0) as int,
+      duration: (o["duration"] ?? 0) as int,
+      plays: (o["plays"] ?? 0) as int,
+      track: (o["track"] ?? 0) as int,
+      album: (o["album"] ?? 0) as int,
       // lang: o["lang"].map<int>((e) => e as int).toList()
-      lang: ((o["lang"]??[]) as List<dynamic>).map((e) => (e??0) as int).toList(),
-
+      lang: ((o["lang"] ?? []) as List<dynamic>).map((e) => (e ?? 0) as int).toList(),
     );
   }
 
@@ -381,26 +376,26 @@ class AudioArtistType {
     int? album,
     List<int>? lang,
   }) {
-    this.duration = duration??this.duration;
-    this.plays = plays??this.plays;
-    this.track = track??this.track;
-    this.album = album??this.album;
-    this.id = id??this.id;
-    this.lang = lang??this.lang;
+    this.duration = duration ?? this.duration;
+    this.plays = plays ?? this.plays;
+    this.track = track ?? this.track;
+    this.album = album ?? this.album;
+    this.id = id ?? this.id;
+    this.lang = lang ?? this.lang;
   }
 
   Map<String, dynamic> toJSON() {
     return {
-      "name":name,
-      "correction":correction.toList(),
-      "thesaurus":thesaurus.toList(),
-      "aka":aka,
-      "duration":duration,
-      "plays":plays,
-      "track":track,
-      "album":album,
-      "lang":lang,
-      "id":id
+      "name": name,
+      "correction": correction.toList(),
+      "thesaurus": thesaurus.toList(),
+      "aka": aka,
+      "duration": duration,
+      "plays": plays,
+      "track": track,
+      "album": album,
+      "lang": lang,
+      "id": id
     };
   }
 }
@@ -411,32 +406,20 @@ class AudioGenreType {
   final List<String> correction;
   final List<String> thesaurus;
 
-  AudioGenreType({
-    required this.name,
-    required this.correction,
-    required this.thesaurus
-  });
+  AudioGenreType({required this.name, required this.correction, required this.thesaurus});
 
   factory AudioGenreType.fromJSON(Map<String, dynamic> o) {
     return AudioGenreType(
       name: o["name"],
       // correction: o["correction"].map<int>((e) => e as String).toList(),
       // thesaurus: o["thesaurus"].map<int>((e) => e as String).toList()
-      correction: List.from(
-        (o['correction']??[]).map<String>((e) => e.toString())
-      ),
-      thesaurus: List.from(
-        (o['thesaurus']??[]).map<String>((e) => e.toString())
-      )
+      correction: List.from((o['correction'] ?? []).map<String>((e) => e.toString())),
+      thesaurus: List.from((o['thesaurus'] ?? []).map<String>((e) => e.toString())),
     );
   }
 
   Map<String, dynamic> toJSON() {
-    return {
-      "name":name,
-      "correction":correction.toList(),
-      "thesaurus":thesaurus.toList()
-    };
+    return {"name": name, "correction": correction.toList(), "thesaurus": thesaurus.toList()};
   }
 }
 
@@ -449,20 +432,16 @@ class AudioLangType {
   int plays;
   int duration;
 
-  AudioLangType({
-    required this.id,
-    required this.name,
-    this.album =0,
-    this.track =0,
-    this.plays =0,
-    this.duration =0
-  });
+  AudioLangType(
+      {required this.id,
+      required this.name,
+      this.album = 0,
+      this.track = 0,
+      this.plays = 0,
+      this.duration = 0});
 
   factory AudioLangType.fromJSON(Map<String, dynamic> o) {
-    return AudioLangType(
-      id: o["id"] as int,
-      name: o["name"] as String
-    );
+    return AudioLangType(id: o["id"] as int, name: o["name"] as String);
   }
 
   void updateWith({
@@ -471,42 +450,39 @@ class AudioLangType {
     int? plays,
     int? duration,
   }) {
-    this.album = album??this.album;
-    this.track = track??this.track;
-    this.plays = plays??this.plays;
-    this.duration = duration??this.duration;
+    this.album = album ?? this.album;
+    this.track = track ?? this.track;
+    this.plays = plays ?? this.plays;
+    this.duration = duration ?? this.duration;
   }
 
   Map<String, dynamic> toJSON() {
     return {
-      "id":id,
-      "name":name,
-      "album":album,
-      "track":track,
-      "plays":plays,
-      "duration":duration
+      "id": id,
+      "name": name,
+      "album": album,
+      "track": track,
+      "plays": plays,
+      "duration": duration
     };
   }
 }
 
 // NOTE: only type, AudioBucketType child
-class AudioMetaType{
+class AudioMetaType {
   final AudioTrackType trackInfo;
   final AudioAlbumType albumInfo;
   final Iterable<AudioArtistType> artistInfo;
   final String? cover;
 
-  AudioMetaType({
-    required this.trackInfo,
-    required this.albumInfo,
-    required this.artistInfo,
-    this.cover
-  });
+  AudioMetaType(
+      {required this.trackInfo, required this.albumInfo, required this.artistInfo, this.cover});
 
   String get title => trackInfo.title;
   String get album => albumInfo.name;
   String get artist => artistInfo.map((e) => e.name).join(', ');
-  String get artwork => cover??"https://media.wnyc.org/i/1400/1400/l/80/1/ScienceFriday_WNYCStudios_1400.jpg";
+  String get artwork =>
+      cover ?? "https://media.wnyc.org/i/1400/1400/l/80/1/ScienceFriday_WNYCStudios_1400.jpg";
 }
 
 class AudioPositionType {

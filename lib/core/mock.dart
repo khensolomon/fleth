@@ -2,12 +2,44 @@ part of 'main.dart';
 
 /// check
 mixin _Mock on _Abstract {
-
   Future<dynamic> mockTest() async {
     Stopwatch mockWatch = Stopwatch()..start();
-    debugPrint('mockTest in ${mockWatch.elapsedMilliseconds} Milliseconds');
+
+    final a3 = UtilDocument.encodeJSON({'hello': getRandomString(10)});
+    userGist.updateFile(file: userFile, content: a3).then((e) {
+      debugPrint('$e');
+    }).catchError((e) async {
+      if (e == 'Failed to load') {
+        await userTokenUpdate().then((e) {
+          debugPrint(e);
+        }).catchError((e) {
+          debugPrint('$e');
+        });
+      } else {
+        debugPrint('$e');
+      }
+    });
+
+    // await gist.gitFiles().then((res) {
+    //   debugPrint('result $res');
+    // }).catchError((e) {
+    //   debugPrint('error $e');
+    // });
+    // await gist.updateFile('other.csv', 'id,\nfirst-,\nsecond-,').then((res) {
+    //   debugPrint('result $res');
+    // }).catchError((e) {
+    //   debugPrint('error $e');
+    // });
+    // await gist.removeFile('others.csv').then((res) {
+    //   debugPrint('result $res');
+    // }).catchError((e) {
+    //   debugPrint('error $e');
+    // });
+
+    debugPrint('mockTest in ${mockWatch.elapsedMilliseconds} ms');
   }
 
+  String get userFile => authentication.id.isNotEmpty ? '${authentication.id}.json' : '';
 
   // Future<bool> initArchive() async{
   //   bool toChecks = false;
@@ -57,32 +89,59 @@ mixin _Mock on _Abstract {
   //   return Future.error("Failed to load");
   // }
 
+  String getRandomString(int length) {
+    const _chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+    return List.generate(length, (index) => _chars[Random().nextInt(_chars.length)]).join();
+  }
+
+  /// ```dart
+  /// [query: String, raw: List<Map<String, Object?>>]
+  /// ```
+  /// typeof [SuggestionType]
   Future<void> suggestionGenerate() async {
-    // if (collection.cacheSuggestion.query != collection.searchQuery){
-    //   collection.cacheSuggestion = SuggestionType(
-    //     query: collection.searchQuery,
-    //     // raw: await _sql.suggestion()
-    //   );
-    //   notify();
-    // }
+    Stopwatch suggestionWatch = Stopwatch()..start();
+    int randomNumber = Random().nextInt(100);
+    collection.cacheSuggestion = SuggestionType(
+      query: searchQuery,
+      // raw: await _sql.suggestion()
+      raw: List.generate(randomNumber, (_) => {'word': 'random $randomNumber $searchQuery'}),
+    );
+    notify();
+    debugPrint('suggestionGenerate in ${suggestionWatch.elapsedMilliseconds} ms');
   }
 
   // ignore: todo
   // TODO: definition on multi words
-  // see
-  Future<void> definitionGenerate() async {
-    // Stopwatch definitionWatch = new Stopwatch()..start();
-    // if (collection.cacheDefinition.query != collection.searchQuery){
-    //   collection.cacheDefinition = DefinitionType(
-    //     query: collection.searchQuery,
-    //     // raw: await _definitionGenerator()
-    //   );
-    //   notify();
-    // }
-    // // collection.searchQueryUpdate(word);
-    // // collection.searchQuery = word;
-    // debugPrint('definitionTest in ${definitionWatch.elapsedMilliseconds} Milliseconds');
+  /// ```dart
+  /// [query: String, raw: List<Map<String, Object?>>]
+  /// ```
+  /// typeof [ConclusionType]
+  Future<void> conclusionGenerate({bool init = false}) async {
+    // Stopwatch conclusionWatch = Stopwatch()..start();
+    int _random = Random().nextInt(100);
+    // collection.cacheConclusion = ConclusionType(
+    //   query: collection.searchQuery,
+    //   raw: List.generate(randomNumber, (_) => {'word': 'random $randomNumber'}),
+    // );
+    // notify();
+
+    // debugPrint('conclusionGenerate in ${conclusionWatch.elapsedMilliseconds} ms');
+
+    debugPrint('conclusionGenerate ${collection.searchQuery}');
+
+    if (collection.cacheConclusion.query != collection.searchQuery) {
+      collection.cacheConclusion = ConclusionType(
+        query: collection.searchQuery,
+        // raw: await _definitionGenerator()
+        raw: List.generate(_random, (_) => {'word': '${collection.searchQuery} $_random'}),
+      );
+      collection.recentSearchUpdate(collection.searchQuery);
+      if (!init) {
+        notify();
+      }
+    }
+    // collection.recentSearchUpdate(word);
+    // collection.searchQuery = word;
     // analyticsSearch(collection.searchQuery);
   }
-
 }

@@ -1,21 +1,16 @@
 part of 'main.dart';
 
-class Collection{
+class Collection {
   late EnvironmentType env;
 
   late AudioBucketType cacheBucket;
-  // late AudioAlbumType audioAlbum;
-  // late List<AudioAlbumType> cacheAlbum;
-  // late List<AudioArtistType> cacheArtist;
-  // late List<AudioGenreType> cacheGenre;
-  // late List<String> cacheLang;
 
   late Box<SettingType> boxOfSetting;
   late Box<PurchaseType> boxOfPurchase;
-  late Box<HistoryType> boxOfHistory;
+  late Box<RecentSearchType> boxOfRecentSearch;
 
-  SuggestionType cacheSuggestion = SuggestionType();
-  DefinitionType cacheDefinition = DefinitionType();
+  SuggestionType cacheSuggestion = const SuggestionType();
+  ConclusionType cacheConclusion = const ConclusionType();
 
   // final time = watch..start(); time.elapsedMilliseconds
   // final Stopwatch watch = new Stopwatch();
@@ -26,39 +21,41 @@ class Collection{
   // retrieve the instance through the app
   static Collection get instance => _instance;
 
-  SettingType get setting => boxOfSetting.get(env.settingKey,defaultValue: env.setting)!;
+  SettingType get setting => boxOfSetting.get(env.settingKey, defaultValue: env.setting)!;
 
-  Future<void> settingUpdate(SettingType? value) async{
+  Future<void> settingUpdate(SettingType? value) async {
     if (value != null) {
-      boxOfSetting.put(env.settingKey,value);
+      boxOfSetting.put(env.settingKey, value);
     }
   }
 
   String get searchQuery => setting.searchQuery;
-  // set searchQuery(String searchQuery) => setting.searchQuery = searchQuery;
-  set searchQuery(String word) {
-    if (setting.searchQuery != word){
-      setting.searchQuery = word;
+
+  set searchQuery(String ord) {
+    if (setting.searchQuery != ord) {
+      setting.searchQuery = ord;
       settingUpdate(setting);
     }
   }
 
   bool stringCompare(String? a, String b) => a!.toLowerCase() == b.toLowerCase();
 
-  // boxOfHistory addWordHistory
-  // bool hasNotHistory(String ord) => this.boxOfHistory.values.firstWhere((e) => stringCompare(e,ord),orElse: ()=>'') == null;
-  // bool hasNotHistory(String ord) => this.boxOfHistory.values.firstWhere((e) => stringCompare(e,ord),orElse: () => '')!.isEmpty;
+  // boxOfRecentSearch addWordHistory
+  // bool hasNotHistory(String ord) => this.boxOfRecentSearch.values.firstWhere((e) => stringCompare(e,ord),orElse: ()=>'') == null;
+  // bool hasNotHistory(String ord) => this.boxOfRecentSearch.values.firstWhere((e) => stringCompare(e,ord),orElse: () => '')!.isEmpty;
 
-  MapEntry<dynamic, PurchaseType> boxOfPurchaseExist(String id) => boxOfPurchase.toMap().entries.firstWhere(
-    (e) => stringCompare(e.value.purchaseId,id),
-    orElse: ()=> MapEntry(null,PurchaseType())
-  );
+  MapEntry<dynamic, PurchaseType> boxOfPurchaseExist(String id) {
+    return boxOfPurchase.toMap().entries.firstWhere(
+          (e) => stringCompare(e.value.purchaseId, id),
+          orElse: () => MapEntry(null, PurchaseType()),
+        );
+  }
 
   bool boxOfPurchaseDeleteByPurchaseId(String id) {
-    if (id.isNotEmpty){
+    if (id.isNotEmpty) {
       final purchase = boxOfPurchaseExist(id);
-      if (purchase.key != null){
-        // this.boxOfHistory.deleteAt(history.key);
+      if (purchase.key != null) {
+        // this.boxOfRecentSearch.deleteAt(history.key);
         boxOfPurchase.delete(purchase.key);
         return true;
       }
@@ -67,50 +64,60 @@ class Collection{
   }
 
   // NOTE: History
-  Iterable<MapEntry<dynamic, HistoryType>> get historyIterable => boxOfHistory.toMap().entries;
+  /// get all recentSearches
+  Iterable<MapEntry<dynamic, RecentSearchType>> get recentSearches {
+    return boxOfRecentSearch.toMap().entries;
+  }
 
-  MapEntry<dynamic, HistoryType> historyExist(String ord) => historyIterable.firstWhere(
-    (e) => stringCompare(e.value.word,ord),
-    orElse: () => MapEntry(null,HistoryType(word: ord))
-  );
+  /// recentSearch Exist of word
+  MapEntry<dynamic, RecentSearchType> recentSearchExist(String ord) {
+    return recentSearches.firstWhere(
+      (e) => stringCompare(e.value.word, ord),
+      orElse: () => MapEntry(null, RecentSearchType(word: ord)),
+    );
+  }
 
-  bool historyUpdate(String ord) {
-    if (ord.isNotEmpty){
-      final history = historyExist(ord);
-      history.value.date = DateTime.now();
-      history.value.hit++;
-      if (history.key == null){
-        boxOfHistory.add(history.value);
+  /// recentSearch Update item if exist, if not insert
+  bool recentSearchUpdate(String ord) {
+    debugPrint('recentSearchUpdate: $ord');
+    if (ord.isNotEmpty) {
+      final ob = recentSearchExist(ord);
+      ob.value.date = DateTime.now();
+      ob.value.hit++;
+      if (ob.key == null) {
+        boxOfRecentSearch.add(ob.value);
       } else {
-        boxOfHistory.put(history.key, history.value);
+        boxOfRecentSearch.put(ob.key, ob.value);
       }
       return true;
     }
     return false;
   }
 
-  bool historyDeleteByWord(String ord) {
-    if (ord.isNotEmpty){
-      final history = historyExist(ord);
-      if (history.key != null){
-        boxOfHistory.delete(history.key);
+  /// recentSearch Delete item by word
+  bool recentSearchDelete(String ord) {
+    if (ord.isNotEmpty) {
+      final ob = recentSearchExist(ord);
+      if (ob.key != null) {
+        boxOfRecentSearch.delete(ob.key);
         return true;
       }
     }
     return false;
   }
 
-  Iterable<MapEntry<dynamic, HistoryType>> history() {
-    if (searchQuery.isEmpty){
-      return historyIterable;
-    } else {
-      return historyIterable.where(
-        (e) => e.value.word.toLowerCase().startsWith(searchQuery.toLowerCase())
-      );
-    }
-  }
+  // Iterable<MapEntry<dynamic, RecentSearchType>> recentSearch() {
+  //   if (searchQuery.isEmpty) {
+  //     return recentSearches;
+  //   } else {
+  //     return recentSearches.where(
+  //       (e) => e.value.word.toLowerCase().startsWith(searchQuery.toLowerCase()),
+  //     );
+  //   }
+  // }
 
-  void boxOfHistoryClear() {
-    boxOfHistory.clear();
-  }
+  // recentSearchClear
+  // void boxOfRecentSearchClear() {
+  //   boxOfRecentSearch.clear();
+  // }
 }

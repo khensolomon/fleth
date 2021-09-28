@@ -4,7 +4,7 @@ description: Lethil Flutter Template
 # Prevent accidental publishing to pub.dev.
 publish_to: 'none'
 
-version: 1.0.0+1
+version: 1.0.0+2
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
@@ -26,8 +26,6 @@ dependencies:
     #   ref: main
 
   # Custom
-  hive_flutter: ^1.1.0
-  # share: ^2.0.4
   in_app_purchase: ^1.0.8
   just_audio: ^0.9.11
 

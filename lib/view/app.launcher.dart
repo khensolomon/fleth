@@ -8,6 +8,7 @@ class ScreenLauncher extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).primaryColor,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -61,70 +62,63 @@ class ScreenLauncher extends StatelessWidget {
                   semanticsLabel: "open quotation mark",
                   style: TextStyle(
                     color: Theme.of(context).primaryTextTheme.button!.color,
-                    fontSize: 25,
+                    fontSize: 30,
                     fontWeight: FontWeight.w200,
                   ),
                   children: <TextSpan>[
                     const TextSpan(
-                      text:'Listen',
+                      text: 'Listen',
                       semanticsLabel: "listen",
-                      style: TextStyle(
-                        fontSize: 45
-                      )
+                      style: TextStyle(fontSize: 45),
                     ),
                     const TextSpan(
                       text: ' to\n',
                       semanticsLabel: "to",
                       style: TextStyle(
-                        fontSize: 50,
-                      )
+                        fontSize: 45,
+                      ),
                     ),
                     TextSpan(
                       text: 'Zaideih\n'.toUpperCase(),
                       semanticsLabel: "Zaideih",
                       style: const TextStyle(
                         fontSize: 60,
-                      )
+                      ),
                     ),
                     const TextSpan(
                       text: 'music ',
                       semanticsLabel: "music",
-                      style: TextStyle(
-                        fontSize: 32
-                      )
+                      // style: TextStyle(fontSize: 30),
                     ),
                     const TextSpan(
                       text: 'station',
                       semanticsLabel: "station",
-                      style: TextStyle(
-                        fontSize: 30
-                      )
+                      // style: TextStyle(fontSize: 30),
                     ),
                     const TextSpan(
                       text: '"',
                       semanticsLabel: "close quotation mark",
-                      style: TextStyle(
-                        fontSize: 25
-                      )
-                    )
-                  ]
-                )
+                      style: TextStyle(fontSize: 25),
+                    ),
+                  ],
+                ),
               ),
             ),
             Semantics(
               label: "Progress",
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical:50),
-                child: Selector<Core, double?>(
-                  selector: (_, core) => core.progressPercentage,
-                  builder: (BuildContext context, double? percentage, Widget? child) => CircularProgressIndicator(
-                    semanticsLabel: 'percentage',
-                    semanticsValue: percentage.toString(),
-                    strokeWidth: 2.0,
-                    value: percentage,
-                    valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryTextTheme.button!.color!),
-                  )
-                )
+              child: const Padding(
+                padding: EdgeInsets.symmetric(vertical: 50),
+                child: Text('...'),
+                // child: Selector<Core, double?>(
+                //   selector: (_, core) => core.progressPercentage,
+                //   builder: (BuildContext context, double? percentage, Widget? child) => CircularProgressIndicator(
+                //     semanticsLabel: 'percentage',
+                //     semanticsValue: percentage.toString(),
+                //     strokeWidth: 2.0,
+                //     value: percentage,
+                //     valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryTextTheme.button!.color!),
+                //   )
+                // )
                 // child: CircularProgressIndicator(
                 //   semanticsLabel: 'percentage',
                 //   semanticsValue: state.progressPercentage.toString(),
@@ -151,20 +145,18 @@ class ScreenLauncher extends StatelessWidget {
                 //     valueColor: new AlwaysStoppedAnimation<Color>(Theme.of(context).primaryTextTheme.button!.color!),
                 //   )
                 // )
-              )
+              ),
             ),
             Semantics(
               label: "Message",
               child: Selector<Core, String>(
                 selector: (_, core) => core.message,
-                builder: (BuildContext _, String message, Widget? child) => Text(message,
+                builder: (BuildContext _, String message, Widget? child) => Text(
+                  message,
                   semanticsLabel: message,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w300,
-                    fontSize: 30
-                  )
-                )
-              )
+                  style: const TextStyle(fontSize: 30),
+                ),
+              ),
             )
             // Semantics(
             //   label: "Message",
@@ -188,9 +180,9 @@ class ScreenLauncher extends StatelessWidget {
             //     )
             //   )
             // )
-          ]
-        )
-      )
+          ],
+        ),
+      ),
     );
   }
 

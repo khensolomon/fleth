@@ -4,11 +4,12 @@
   "package":"",
   "version":"1.0.0",
   "buildNumber":"0",
-  "settingName":"settingPrimary",
-  "settingKey":"setting",
+  "settingName":"s00",
+  "settingKey":"s01",
   "setting":{
     "version":0,
     "mode":0,
+    "locale":"",
     "fontSize":24.0,
     "searchQuery":""
   },

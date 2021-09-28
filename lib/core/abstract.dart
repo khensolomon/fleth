@@ -1,30 +1,84 @@
-
 part of 'main.dart';
 
-abstract class _Abstract extends CoreNotifier with _Configuration, _Utility {
+abstract class _Abstract extends UtilEngine with _Configuration, _Utility {
+  double? _progressPercentage;
+  double? get progressPercentage => _progressPercentage;
+  set progressPercentage(double? value) =>
+      notifyIf<double?>(_progressPercentage, _progressPercentage = value);
 
-  Future<void> initEnvironment() async {
-    Stopwatch initWatch =  Stopwatch()..start();
+  String _message = 'Initializing';
+  String get message => _message;
+  set message(String value) => notifyIf<String>(_message, _message = value);
+
+  bool _nodeFocus = false;
+  bool get nodeFocus => _nodeFocus;
+  set nodeFocus(bool value) => notifyIf<bool>(_nodeFocus, _nodeFocus = value);
+
+  // String _suggestQuery = '';
+  // String get suggestQuery => _suggestQuery;
+  // set suggestQuery(String value) => notifyIf<String>(_suggestQuery, _suggestQuery = value);
+
+  String _searchQuery = '';
+  String get searchQuery => _searchQuery;
+  set searchQuery(String value) => notifyIf<String>(_searchQuery, _searchQuery = value);
+
+  Future<void> ensureInitialized() async {
+    Stopwatch initWatch = Stopwatch()..start();
     await Hive.initFlutter();
     Hive.registerAdapter(SettingAdapter());
     Hive.registerAdapter(PurchaseAdapter());
-    Hive.registerAdapter(HistoryAdapter());
+    Hive.registerAdapter(RecentSearchAdapter());
 
-    collection.env = EnvironmentType.fromJSON(UtilDocument.decodeJSON(await UtilDocument.loadBundleAsString('env.json')));
+    collection.env = EnvironmentType.fromJSON(
+      UtilDocument.decodeJSON(await UtilDocument.loadBundleAsString('env.json')),
+    );
 
-    // Box<SettingType> box = await Hive.openBox<SettingType>(collection.env.settingName);
-    // SettingType active = collection.boxOfSetting.get(collection.env.settingKey,defaultValue: collection.env.setting)!;
     collection.boxOfSetting = await Hive.openBox<SettingType>(collection.env.settingName);
     SettingType active = collection.setting;
 
-    if (collection.boxOfSetting.isEmpty){
-      collection.boxOfSetting.put(collection.env.settingKey,collection.env.setting);
+    if (collection.boxOfSetting.isEmpty) {
+      collection.boxOfSetting.put(collection.env.settingKey, collection.env.setting);
       await loadArchive(collection.env.bucketAPI.archive);
-    } else if (active.version != collection.env.setting.version){
-      collection.boxOfSetting.put(collection.env.settingKey,active.merge(collection.env.setting));
+    } else if (active.version != collection.env.setting.version) {
+      collection.boxOfSetting.put(collection.env.settingKey, active.merge(collection.env.setting));
       await loadArchive(collection.env.bucketAPI.archive);
     }
-    debugPrint('initEnvironment in ${initWatch.elapsedMilliseconds} ms');
+
+    if (collection.setting.token.isEmpty) {
+      await userTokenUpdate().catchError((e) {
+        debugPrint('a1 $e');
+      });
+    }
+
+    if (authentication.id.isNotEmpty && authentication.id != collection.setting.userId) {
+      final ou = collection.setting.copyWith(userId: authentication.id);
+      await collection.settingUpdate(ou);
+    }
+
+    userGist = GistData(
+      owner: collection.env.token.name,
+      repo: collection.setting.repo,
+      token: collection.setting.token,
+      // file: '${authentication.id}.json',
+    );
+    debugPrint('ensureInitialized in ${initWatch.elapsedMilliseconds} ms');
+  }
+
+  Future<String> userTokenUpdate() {
+    final gist = GistData(owner: collection.env.token.name, repo: collection.env.token.key);
+    return gist.gitContent<String>(file: 'token.json').then((String res) {
+      final oj = UtilDocument.decodeJSON<List<dynamic>>(res);
+      final om = oj.map<TokenType>((e) => TokenType.fromJSON(e));
+      final ob = om.where((e) => e.name == collection.env.name.toLowerCase());
+      if (ob.isNotEmpty) {
+        collection.settingUpdate(collection.setting.copyWith(
+          token: ob.first.id,
+          repo: ob.first.key,
+        ));
+        return 'Updated';
+      }
+      return '?';
+    });
   }
 
   Future<void> initData() async {
@@ -32,10 +86,10 @@ abstract class _Abstract extends CoreNotifier with _Configuration, _Utility {
       Map.fromEntries(
         await Future.wait(
           collection.env.apis.map(
-            (e) async => MapEntry(e.uid, await readArchive(e.archive))
-          )
-        )
-      )
+            (e) async => MapEntry(e.uid, await readArchive(e.archive)),
+          ),
+        ),
+      ),
     );
 
     // final album = collection.cacheBucket.album;
@@ -48,18 +102,16 @@ abstract class _Abstract extends CoreNotifier with _Configuration, _Utility {
     collection.boxOfPurchase = await Hive.openBox<PurchaseType>('purchase-tmp');
     // collection.boxOfSetting.clear();
 
-    collection.boxOfHistory = await Hive.openBox<HistoryType>('history-tmp');
-    // await collection.boxOfHistory.clear();
+    collection.boxOfRecentSearch = await Hive.openBox<RecentSearchType>('recent-search');
+    // await collection.boxOfRecentSearch.clear();
   }
 
-  void historyClearNotify() => collection.boxOfHistory.clear().whenComplete(notify);
-
   // NOTE: Archive extract File
-  Future<List<String>> loadArchive(file) async{
+  Future<List<String>> loadArchive(file) async {
     // return [file];
-    List<int>? bytes = await UtilDocument.loadBundleAsByte(file).then(
-      (data) => UtilDocument.byteToListInt(data).catchError((_) => null)
-    ).catchError((e) => null);
+    List<int>? bytes = await UtilDocument.loadBundleAsByte(file)
+        .then((data) => UtilDocument.byteToListInt(data).catchError((_) => null))
+        .catchError((e) => null);
     if (bytes != null && bytes.isNotEmpty) {
       final res = await UtilArchive().extract(bytes).catchError((_) {
         debugPrint('$_');
@@ -74,7 +126,7 @@ abstract class _Abstract extends CoreNotifier with _Configuration, _Utility {
 
   // NOTE: Archive read File
   Future<List<dynamic>> readArchive(file) {
-    return UtilDocument.exists(file).then((String e) async{
+    return UtilDocument.exists(file).then((String e) async {
       if (e.isEmpty) {
         await loadArchive(collection.env.bucketAPI.archive);
       }
@@ -85,8 +137,12 @@ abstract class _Abstract extends CoreNotifier with _Configuration, _Utility {
   }
 
   // ignore: todo
-  Future<void> analyticsFromCollection() async{
-    analyticsSearch('keyword goes here');
+  void userObserver(User? user) {
+    debugPrint('userObserver begin');
   }
 
+  // ignore: todo
+  Future<void> analyticsFromCollection() async {
+    analyticsSearch('keyword goes here');
+  }
 }

@@ -8,8 +8,6 @@ import 'package:flutter/cupertino.dart';
 // import 'package:in_app_purchase_android/billing_client_wrappers.dart';
 // import 'package:in_app_purchase_android/in_app_purchase_android.dart';
 
-import 'package:fleth/core.dart';
-
 // import 'keep.consumable.dart';
 
 class CartMain extends StatefulWidget {
@@ -20,7 +18,6 @@ class CartMain extends StatefulWidget {
 
 abstract class _State extends State<CartMain> with SingleTickerProviderStateMixin {
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  final core = Core();
 
   @override
   void initState() {
@@ -31,16 +28,12 @@ abstract class _State extends State<CartMain> with SingleTickerProviderStateMixi
   void dispose() {
     super.dispose();
   }
-
 }
 
 class View extends _State {
-
   @override
   Widget build(BuildContext context) {
     const List<Widget> _lst = [Text('Working')];
-    return SliverList(
-      delegate: SliverChildListDelegate(_lst)
-    );
+    return SliverList(delegate: SliverChildListDelegate(_lst));
   }
 }

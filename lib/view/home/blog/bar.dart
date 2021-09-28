@@ -1,17 +1,16 @@
 part of 'main.dart';
 
 mixin _Bar on _State {
-
   Widget bar() {
     return ViewHeaderSliverSnap(
       pinned: true,
-      floating:true,
+      floating: true,
       reservedPadding: MediaQuery.of(context).padding.top,
-      heights: const [kBottomNavigationBarHeight,40],
+      heights: const [kBottomNavigationBarHeight, 40],
       // overlapsBackgroundColor:Theme.of(context).primaryColor.withOpacity(0.8),
-      overlapsBackgroundColor:Theme.of(context).primaryColor,
-      overlapsBorderColor:Theme.of(context).shadowColor,
-      builder: (BuildContext context, ViewHeaderData org, ViewHeaderData snap){
+      overlapsBackgroundColor: Theme.of(context).primaryColor,
+      overlapsBorderColor: Theme.of(context).shadowColor,
+      builder: (BuildContext context, ViewHeaderData org, ViewHeaderData snap) {
         return Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -27,17 +26,22 @@ mixin _Bar on _State {
                       return Positioned(
                         left: align,
                         top: 4,
-                        child: (align == 0)?CupertinoButton(
-                          padding: EdgeInsets.zero,
-                          child: Hero(
-                            tag: 'appbar-left',
-                            child: WidgetLabel( icon: CupertinoIcons.left_chevron, label: translationInstance.back,),
-                          ),
-                          onPressed: () => Navigator.of(context).pop()
-                        ):WidgetLabel(
-                          icon: CupertinoIcons.left_chevron,
-                          label: translationInstance.back
-                        )
+                        child: (align == 0)
+                            ? CupertinoButton(
+                                padding: EdgeInsets.zero,
+                                child: Hero(
+                                  tag: 'appbar-left',
+                                  child: WidgetLabel(
+                                    icon: CupertinoIcons.left_chevron,
+                                    label: translate.back,
+                                  ),
+                                ),
+                                onPressed: () => Navigator.of(context).pop(),
+                              )
+                            : WidgetLabel(
+                                icon: CupertinoIcons.left_chevron,
+                                label: translate.back,
+                              ),
                       );
                     },
                   ),
@@ -77,10 +81,11 @@ mixin _Bar on _State {
                         child: Text(
                           'Blog',
                           style: Theme.of(context).textTheme.headline6,
-                          maxLines: 1, overflow: TextOverflow.fade,
+                          maxLines: 1,
+                          overflow: TextOverflow.fade,
                         ),
-                      )
-                    )
+                      ),
+                    ),
                   ),
 
                   Positioned(
@@ -96,29 +101,27 @@ mixin _Bar on _State {
                             // icon: Icons.tune,
                             icon: CupertinoIcons.slider_horizontal_3,
                             // icon: ZaideihIcon.sliders,
-                            label: translationInstance.filter,
+                            label: translate.filter,
                           ),
                         ),
                       ),
                       onPressed: showFilter,
-                    )
+                    ),
                   ),
-                ]
-              )
+                ],
+              ),
             ),
-
             Opacity(
               opacity: snap.shrink,
               child: SizedBox(
                 height: snap.offset,
                 width: double.infinity,
-                child: _barOptional(snap.shrink)
-              )
+                child: _barOptional(snap.shrink),
+              ),
             )
-          ]
+          ],
         );
-
-      }
+      },
     );
   }
 
@@ -128,36 +131,31 @@ mixin _Bar on _State {
   // Artists (2074) begin with (*)
   Widget _barOptional(double stretch) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 7*stretch, horizontal: 0),
+      padding: EdgeInsets.symmetric(vertical: 7 * stretch, horizontal: 0),
       child: ListView(
         scrollDirection: Axis.horizontal,
-        physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
         shrinkWrap: true,
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 0),
         children: [
           RichText(
-            strutStyle: StrutStyle(
-              height: 1*stretch
-            ),
+            strutStyle: StrutStyle(height: 1 * stretch),
             text: TextSpan(
               text: 'Selected ',
               style: Theme.of(context).textTheme.headline3!.copyWith(
-                height: 1.2,
-                fontWeight: FontWeight.w400,
-                fontSize: 18*stretch
-              ),
-              children: const[
+                    height: 1.2,
+                    fontWeight: FontWeight.w400,
+                    fontSize: 18 * stretch,
+                  ),
+              children: const [
                 TextSpan(text: '(...)'),
                 TextSpan(text: '...'),
-              ]
-            )
-          )
-        ]
-      )
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 
-  void showFilter(){
-
-  }
+  void showFilter() {}
 }

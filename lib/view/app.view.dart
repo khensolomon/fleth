@@ -3,18 +3,16 @@ part of 'app.dart';
 class AppView extends _State with _Other {
   @override
   Widget build(BuildContext context) {
-    debugPrint('AppView');
     return FutureBuilder(
       future: initiator,
       builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
         switch (snapshot.connectionState) {
           case ConnectionState.done:
             return launched();
-          // return const ScreenLauncher();
           default:
             return const ScreenLauncher();
         }
-      }
+      },
     );
   }
 
@@ -34,10 +32,9 @@ class AppView extends _State with _Other {
           pageSnapping: false,
           allowImplicitScrolling: true,
           physics: const NeverScrollableScrollPhysics(),
-          // physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           itemBuilder: (BuildContext context, int index) => _pageView[index],
-          itemCount: _pageView.length
-        )
+          itemCount: _pageView.length,
+        ),
       ),
       // extendBody: true,
       // extendBodyBehindAppBar: true,
@@ -120,155 +117,114 @@ class AppView extends _State with _Other {
     );
   }
 
-  Widget navButton({
-    String label='',
-    required void Function()? onPressed,
-    required Widget child,
-  }) {
-    return ElevatedButton(
-      style: ButtonStyle(
-        minimumSize:MaterialStateProperty.all<Size>(
-          const Size(20, 20)
-        ),
-        padding:MaterialStateProperty.all<EdgeInsets>(
-          EdgeInsets.zero
-        ),
-        // foregroundColor: MaterialStateProperty.all<Color>(Colors.red),
-        backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).primaryColor),
-        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-          RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(100.0),
-            // side: BorderSide(color: Colors.red,width: 0.0)
-          )
-        )
-      ),
-      child: child,
-      onPressed: onPressed
-    );
-  }
-
   Widget bottom() {
-    return Consumer<NotifyViewScroll>(
+    return Consumer<ViewScrollNotify>(
       builder: (context, scrollNavigation, child) {
         scrollNavigation.bottomPadding = MediaQuery.of(context).padding.bottom;
         return AnimatedContainer(
           duration: Duration(milliseconds: scrollNavigation.milliseconds),
           height: scrollNavigation.height,
-          child: ViewNavigation(
-            items: _pageButton,
-            itemDecoration: ({required BuildContext context, Widget? child}){
-              return DecoratedBox(
-                decoration: BoxDecoration(
-                  // color: Theme.of(context).scaffoldBackgroundColor,
-                  color: Theme.of(context).primaryColor,
-                  // color: Theme.of(context).backgroundColor,
-                  // border: Border(
-                  //   top: BorderSide(
-                  //     color: Theme.of(context).shadowColor,
-                  //     width: 0.3,
-                  //   ),
-                  // ),
-                  borderRadius: const BorderRadius.vertical(
-                    top: Radius.elliptical(3, 2),
-                    // bottom: Radius.elliptical(3, 2)
-                  ),
-                  boxShadow: [
-                     BoxShadow(
-                      blurRadius: scrollNavigation.height==0?2:0.2,
-                      // color: Theme.of(context).backgroundColor.withOpacity(0.3),
-                      color: Theme.of(context).shadowColor,
-                      // color: Colors.black,
-                      // spreadRadius: scrollNavigation.heightFactor==0?0.2:0,
-                      spreadRadius: scrollNavigation.height==0?0.2:0.5,
-                      offset: const Offset(0, 0),
-                    )
-                  ]
-                ),
-                child: Padding(
-                  padding:EdgeInsets.only(bottom: scrollNavigation.bottomPadding),
-                  // padding: EdgeInsets.only(bottom:0),
-                  child: AnimatedOpacity(
-                    opacity: scrollNavigation.heightFactor,
-                    duration: Duration.zero,
-                    child: child
-                  )
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              // color: Theme.of(context).scaffoldBackgroundColor,
+              color: Theme.of(context).primaryColor,
+              // color: Theme.of(context).backgroundColor,
+              // border: Border(
+              //   top: BorderSide(
+              //     color: Theme.of(context).shadowColor,
+              //     width: 0.3,
+              //   ),
+              // ),
+              borderRadius: const BorderRadius.vertical(
+                top: Radius.elliptical(3, 2),
+                // bottom: Radius.elliptical(3, 2)
+              ),
+              boxShadow: [
+                BoxShadow(
+                  blurRadius: scrollNavigation.height == 0 ? 2 : 0.2,
+                  // color: Theme.of(context).backgroundColor.withOpacity(0.3),
+                  color: Theme.of(context).shadowColor,
+                  // color: Colors.black,
+                  // spreadRadius: scrollNavigation.heightFactor==0?0.2:0,
+                  spreadRadius: scrollNavigation.height == 0 ? 0.2 : 0.5,
+                  offset: const Offset(0, 0),
                 )
-              );
-            },
-            itemBuilder: buttonItem
-          )
+              ],
+            ),
+            child: Padding(
+              padding: EdgeInsets.only(bottom: scrollNavigation.bottomPadding),
+              // padding: EdgeInsets.only(bottom:0),
+              child: AnimatedOpacity(
+                opacity: scrollNavigation.heightFactor,
+                duration: Duration.zero,
+                child: child,
+              ),
+            ),
+          ),
+        );
+      },
+      child: bottomAbc(),
+    );
+  }
+
+  Widget bottomAbc() {
+    return Consumer<NavigatorNotify>(
+      builder: (context, route, child) {
+        return Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: _pageButton
+              .asMap()
+              .map(
+                (index, item) {
+                  return MapEntry(
+                    index,
+                    buttonItem(
+                      context: context,
+                      index: index,
+                      item: item,
+                      route: item.action == null,
+                      disabled: item.action == null && item.key == route.index,
+                    ),
+                  );
+                },
+              )
+              .values
+              .toList(),
         );
       },
     );
   }
 
-  Widget buttonItem({required BuildContext context, required int index, required ViewNavigationModel item, required bool disabled, required bool route}) {
+  Widget buttonItem({
+    required BuildContext context,
+    required int index,
+    required ViewNavigationModel item,
+    required bool disabled,
+    required bool route,
+  }) {
     return Semantics(
       label: route ? "Page navigation" : "History navigation",
       namesRoute: route,
       enabled: route && !disabled,
-      child: Tooltip(
-        message: item.description,
-        excludeFromSemantics: true,
-        child: CupertinoButton(
-          minSize: 25,
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 1),
-          child: AnimatedContainer(
-            curve: Curves.easeIn,
-            duration: const Duration(milliseconds: 300),
-            padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
-            child: Icon(
-              item.icon,
-              size: route ? 26 : 18,
-              semanticLabel: item.name,
-            )
+      child: CupertinoButton(
+        minSize: 25,
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 1),
+        child: AnimatedContainer(
+          curve: Curves.easeIn,
+          duration: const Duration(milliseconds: 300),
+          padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
+          child: Icon(
+            item.icon,
+            size: route ? 26 : 18,
+            semanticLabel: item.name,
           ),
-          disabledColor: route
-              ? CupertinoColors.quaternarySystemFill
-              : Theme.of(context).hintColor,
-          // onPressed: current?null:()=>route?_navView(index):item.action(context)
-          onPressed: buttonPressed( item, disabled)
         ),
+        // disabledColor: route ? CupertinoColors.quaternarySystemFill : Theme.of(context).hintColor,
+        // onPressed: current?null:()=>route?_navView(index):item.action(context)
+        onPressed: _navButtonAction(item, disabled),
       ),
     );
-  }
-
-  void Function()? buttonPressed(ViewNavigationModel item, bool disable) {
-    if (disable) {
-      return null;
-    } else if (item.action == null && item.key != null) {
-      return () => _navView(item.key!);
-    } else {
-      // final items = core.collection.boxOfHistory.toMap().values.toList();
-      // items.sort((a, b) => b.date!.compareTo(a.date!));
-      // debugPrint(items.map((e) => e.word));
-      // return ()=>item.action!(context);
-      // return () {
-      //   history
-      // };
-      // _controller.master.bottom.pageChange(0);
-      // return ()=>item.action(context);
-      // core.collection.history.length;
-      // debugPrint(core.collection.history.length);
-      // debugPrint(asdfasdfasd.toString());
-      // debugPrint(core.counter.toString());
-      // int total = asdfasdfasd;
-      // // int currentPosition=0;
-      // // int nextButton = 1;
-      // // int previousButton = -1;
-      // if (total > 0){
-      //   return () {
-      //     if (_controller.master.bottom.pageNotify.value != 0){
-      //       _navView(0);
-      //     }
-      //     item.action(context);
-      //   };
-
-      // }
-      return item.action;
-      // return null;
-    }
-    // int abc = context.watch<HistoryNotifier>().current;
-    // int abc = context.watch<HistoryNotifier>().next;
   }
 }

@@ -1,63 +1,62 @@
 part of 'main.dart';
 
 mixin _Result on _State {
-
-  Widget result(){
-    return SliverToBoxAdapter(
-      child: Text('result: $searchQueryCurrent'),
+  Widget result() {
+    debugPrint('result');
+    return ListView(
+      primary: false,
+      shrinkWrap: true,
+      children: [
+        Text('result: $searchQueryCurrent'),
+        resultListView(),
+      ],
     );
   }
 
-  // Widget result(){
-  //   return Selector<Core,DefinitionType>(
-  //     selector: (_, e) => e.collection.cacheDefinition,
-  //     builder: (BuildContext context, DefinitionType o, Widget? child) {
-  //       if (o.query.isEmpty){
-  //         return _resultNoQuery();
-  //       } else if (o.raw.length > 0){
-  //         return _resultBlock(o);
-  //       } else {
-  //         return _resultNoMatch();
-  //       }
-  //     }
-  //   );
-  //   return _resultTmp();
-  // }
+  Widget resultListView() {
+    SizedBox(
+      height: 50,
+      child: Row(
+        children: const [
+          Text('asdfs'),
+          Text('asdfs'),
+        ],
+      ),
+    );
+    SizedBox(
+      height: 50,
+      child: Row(
+        children: const [
+          Text('a'),
+          Text('b'),
+          Text('a'),
+        ],
+      ),
+    );
 
-  // Widget _resultNoQuery(){
-  //   return WidgetMessage(
-  //     message: 'result: no query',
-  //   );
-  // }
-
-  // Widget _resultNoMatch(){
-  //   return WidgetMessage(
-  //     message: 'result: not found',
-  //   );
-  // }
-
-  // Widget _resultBlock(DefinitionType o){
-  //   return new SliverList(
-  //     delegate: SliverChildBuilderDelegate(
-  //       (BuildContext context, int i) => _resultItem(o.raw.elementAt(i)),
-  //       childCount: o.raw.length
-  //     )
-  //   );
-  // }
-
-  // Widget _resultItem(Map<String, dynamic> item) {
-  //   return Container(
-  //     child: Text('working'),
-  //   );
-  // }
-
-  // Widget _resultTmp(){
-  //   return SliverList(
-  //     delegate: SliverChildBuilderDelegate(
-  //       (BuildContext context, int i) => const Text('result'),
-  //       childCount: 50
-  //     )
-  //   );
-  // }
-
+    return ListView.builder(
+      itemCount: 25,
+      primary: false,
+      shrinkWrap: true,
+      addAutomaticKeepAlives: false,
+      // separatorBuilder: (BuildContext context, int index) => const Divider(),
+      itemBuilder: (BuildContext context, int index) {
+        // final delayedMilliseconds = 320 * (index % 10 + 1);
+        const delayedMs = 320;
+        return FutureBuilder(
+          future: Future.delayed(const Duration(milliseconds: delayedMs), () => true),
+          builder: (_, snap) {
+            if (snap.hasData == false) {
+              return const SizedBox(
+                height: 50,
+              );
+            }
+            return ListTile(
+              title: Text('item index: $index ms: $delayedMs'),
+            );
+          },
+        );
+      },
+    );
+  }
 }

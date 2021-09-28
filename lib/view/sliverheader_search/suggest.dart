@@ -2,69 +2,43 @@ part of 'main.dart';
 
 mixin _Suggest on _State {
 
-  // Widget suggest(){
-  //   return SliverToBoxAdapter(
-  //     child: Text('suggestion: $searchQueryCurrent'),
-  //   );
-  // }
-
   Widget suggest(){
-    return Selector<Core,String >(
+
+    return Selector<Core,String>(
       selector: (_, e) => e.searchQuery,
       builder: (BuildContext context,String query, Widget? child) {
-        return SliverToBoxAdapter(
-          child: Text('suggestion: $query'),
+        // return Text('suggestion: $query');
+        return ListView(
+          primary: false,
+          shrinkWrap: true,
+          children: [
+            Text('suggestion: $query'),
+            suggestListView()
+          ],
         );
       }
     );
   }
 
-  /*
-  Widget suggest(){
-    return Selector<Core,SuggestionType>(
-      selector: (_, e) => e.collection.cacheSuggestion,
-      builder: (BuildContext context,SuggestionType o, Widget? child) {
-        if (o.query.isEmpty){
-          return _suggestNoQuery();
-        } else if (o.raw.isNotEmpty){
-          return _suggestBlock(o);
-        } else {
-          return _suggestNoMatch();
-        }
-      }
+  Widget suggestListView(){
+    return ListView.separated(
+      itemCount: 25,
+      primary: false,
+      shrinkWrap: true,
+      separatorBuilder: (BuildContext context, int index) => const Divider(),
+      itemBuilder: (BuildContext context, int index) {
+        final delayedMilliseconds = 320 * (index % 25 + 1);
+        // const delayedMilliseconds = 300;
+        return FutureBuilder<bool>(
+          future: Future.delayed(Duration(milliseconds:delayedMilliseconds), ()=>true),
+          builder: (_, AsyncSnapshot<bool> snap){
+            if (snap.hasData == false) return const SizedBox(height: 50,);
+            return ListTile(
+              title: Text('suggestion index: $index delayedMilliseconds: $delayedMilliseconds'),
+            );
+          }
+        );
+      },
     );
   }
-
-  Widget _suggestNoQuery(){
-    return const WidgetMessage(
-      message: 'suggest: no query',
-    );
-  }
-
-  Widget _suggestNoMatch(){
-    return const WidgetMessage(
-      message: 'suggest: not found',
-    );
-  }
-
-  Widget _suggestBlock(SuggestionType o){
-    return SliverList(
-        delegate: SliverChildBuilderDelegate(
-          (BuildContext context, int index) {
-            final suggestion = o.raw.elementAt(index);
-            String word = suggestion.values.first.toString();
-            int hightlight = searchQuery.length < word.length
-                ? searchQuery.length
-                : word.length;
-            return _suggestItem(word, hightlight);
-          },
-          childCount: o.raw.length
-        )
-    );
-  }
-
-  Widget _suggestItem(String word, int hightlight) {
-    return const Text('working');
-  }
-  */
 }

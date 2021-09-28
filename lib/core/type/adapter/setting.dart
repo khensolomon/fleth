@@ -15,14 +15,16 @@ class SettingAdapter extends TypeAdapter<SettingType> {
       ..mode = fields[1] as int
       ..fontSize = fields[2] as double
       ..searchQuery = fields[3] as String
-      ..locale = fields[4] as String;
+      ..locale = fields[4] as String
+      ..token = fields[5] as String
+      ..userId = (fields[6] ?? '') as String
+      ..repo = (fields[7] ?? '') as String;
   }
 
   @override
   void write(BinaryWriter writer, SettingType obj) {
     writer
-      ..writeByte(5)
-
+      ..writeByte(8)
       ..writeByte(0)
       ..write(obj.version)
       ..writeByte(1)
@@ -32,7 +34,13 @@ class SettingAdapter extends TypeAdapter<SettingType> {
       ..writeByte(3)
       ..write(obj.searchQuery)
       ..writeByte(4)
-      ..write(obj.locale);
+      ..write(obj.locale)
+      ..writeByte(5)
+      ..write(obj.token)
+      ..writeByte(6)
+      ..write(obj.userId)
+      ..writeByte(7)
+      ..write(obj.repo);
   }
 
   @override
@@ -41,7 +49,5 @@ class SettingAdapter extends TypeAdapter<SettingType> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is SettingAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+      other is SettingAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
 }

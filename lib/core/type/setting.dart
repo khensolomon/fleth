@@ -1,4 +1,3 @@
-
 part of 'main.dart';
 
 @HiveType(typeId: 0)
@@ -20,12 +19,23 @@ class SettingType {
   @HiveField(4)
   String locale;
 
+  // token, user file
+  @HiveField(5)
+  String token;
+  @HiveField(6)
+  String userId;
+  @HiveField(7)
+  String repo;
+
   SettingType({
     this.version = 0,
     this.mode = 0,
     this.fontSize = 17.0,
     this.searchQuery = '',
-    this.locale = ''
+    this.locale = '',
+    this.token = '',
+    this.userId = '',
+    this.repo = '',
   });
 
   factory SettingType.fromJSON(Map<String, dynamic> o) {
@@ -34,17 +44,23 @@ class SettingType {
       mode: o["mode"] as int,
       fontSize: o["fontSize"] as double,
       searchQuery: o["searchQuery"] as String,
-      locale: o["locale"] as String
+      locale: o["locale"] as String,
+      token: (o["token"] ?? '') as String,
+      userId: (o["userId"] ?? '') as String,
+      repo: (o["file"] ?? '') as String,
     );
   }
 
   Map<String, dynamic> toJSON() {
     return {
-      "version":version,
-      "mode":mode,
-      "fontSize":fontSize,
-      "searchQuery":searchQuery,
-      "locale":locale
+      "version": version,
+      "mode": mode,
+      "fontSize": fontSize,
+      "searchQuery": searchQuery,
+      "locale": locale,
+      // "token": token,
+      "userId": userId,
+      "repo": repo,
     };
   }
 
@@ -55,6 +71,9 @@ class SettingType {
       fontSize: o.fontSize,
       searchQuery: o.searchQuery,
       locale: o.locale,
+      token: o.token,
+      userId: o.userId,
+      repo: o.repo,
     );
   }
 
@@ -63,14 +82,20 @@ class SettingType {
     int? mode,
     double? fontSize,
     String? searchQuery,
-    String? locale
+    String? locale,
+    String? token,
+    String? userId,
+    String? repo,
   }) {
     return SettingType(
-      version: version??this.version,
-      mode: mode??this.mode,
-      fontSize: fontSize??this.fontSize,
-      searchQuery: searchQuery??this.searchQuery,
-      locale: locale??this.locale
+      version: version ?? this.version,
+      mode: mode ?? this.mode,
+      fontSize: fontSize ?? this.fontSize,
+      searchQuery: searchQuery ?? this.searchQuery,
+      locale: locale ?? this.locale,
+      token: token ?? this.token,
+      userId: userId ?? this.userId,
+      repo: repo ?? this.repo,
     );
   }
 }

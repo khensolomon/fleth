@@ -1,20 +1,17 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
 // import 'package:flutter/gestures.dart';
 // import 'package:flutter/services.dart';
 
-// import 'package:hive_flutter/hive_flutter.dart';
-// import 'package:hive/hive.dart';
-
+// import 'package:lidea/hive.dart';;
 import 'package:lidea/provider.dart';
 // import 'package:lidea/intl.dart';
 import 'package:lidea/view.dart';
 
 import 'package:fleth/core.dart';
 import 'package:fleth/settings.dart';
-import 'package:fleth/widget.dart';
+// import 'package:fleth/widget.dart';
 import 'package:fleth/icon.dart';
 // import 'package:fleth/type.dart';
 
@@ -23,13 +20,16 @@ part 'result.dart';
 part 'suggest.dart';
 
 class Main extends StatefulWidget {
-  const Main({Key? key, this.settingsController, this.navigatorKey, this.arguments}) : super(key: key);
+  const Main({Key? key, this.settings, this.navigatorKey, this.arguments}) : super(key: key);
 
-  final SettingsController? settingsController;
+  final SettingsController? settings;
   final GlobalKey<NavigatorState>? navigatorKey;
   final Object? arguments;
 
-  static const routeName = '/sliverheader_search';
+  static const route = '/sliverheader_search';
+  static const icon = Icons.ac_unit;
+  static const name = 'search';
+  static const description = '...';
   static final uniqueKey = UniqueKey();
   // static final scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -52,20 +52,26 @@ abstract class _State extends State<Main> with SingleTickerProviderStateMixin {
   final FocusNode focusNode = FocusNode();
   final formKey = GlobalKey<FormState>();
 
-  late Core core;
-  late AppLocalizations translationInstance;
-  // localeInstance translationInstance
+  late final Core core;
+
   // late NotifyViewScroll scroll;
+  late final AnimationController animationController = AnimationController(
+    duration: const Duration(milliseconds: 500),
+    vsync: this,
+  ); //..repeat();
+  late final Animation<double> cancelButtonAnimation = CurvedAnimation(
+    parent: animationController,
+    curve: Curves.fastOutSlowIn,
+  );
 
   bool searchActive = true;
+
+  AppLocalizations get translate => AppLocalizations.of(context)!;
 
   @override
   void initState() {
     super.initState();
     core = context.read<Core>();
-    translationInstance = context.read<SettingsController>().translate;
-    // final translationInstance = SettingsController.instance;
-    // scroll = context.read<NotifyViewScroll>();
 
     Future.microtask(() {
       textController.text = searchQueryPrevious;
@@ -77,14 +83,28 @@ abstract class _State extends State<Main> with SingleTickerProviderStateMixin {
       //   textController.selection = TextSelection(baseOffset: 0, extentOffset: textController.value.text.length);
       // }
       core.nodeFocus = focusNode.hasFocus;
-      setState(() {});
+      // setState(() {});
+      if (focusNode.hasFocus) {
+        animationController.forward();
+      } else {
+        animationController.reverse();
+      }
     });
 
     scrollController.addListener(() {
-      if (focusNode.hasFocus){
+      if (focusNode.hasFocus) {
         focusNode.unfocus();
       }
     });
+
+    // cancelButtonAnimation.addStatusListener((AnimationStatus status) {
+    //   if (status == AnimationStatus.completed) {
+    //     animationController.reverse();
+    //   } else if (status == AnimationStatus.dismissed) {
+    //     animationController.forward();
+    //   }
+    // });
+    // animationController.forward();
 
     // FocusScope.of(context).requestFocus(FocusNode());
     // FocusScope.of(context).unfocus();
@@ -93,22 +113,23 @@ abstract class _State extends State<Main> with SingleTickerProviderStateMixin {
     //   searchPreviousQuery = textController.text.replaceAll(RegExp(' +'), ' ').trim();
     // });
 
-    Future.delayed(const Duration(milliseconds: 400), (){
-      focusNode.requestFocus();
-    });
+    // Future.delayed(const Duration(milliseconds: 400), (){
+    //   focusNode.requestFocus();
+    // });
   }
 
   @override
-  dispose() {
+  void dispose() {
     super.dispose();
     scrollController.dispose();
     textController.dispose();
     focusNode.dispose();
+    animationController.dispose();
   }
 
   @override
   void setState(fn) {
-    if(mounted) super.setState(fn);
+    if (mounted) super.setState(fn);
     debugPrint('setState');
   }
 
@@ -128,19 +149,22 @@ abstract class _State extends State<Main> with SingleTickerProviderStateMixin {
   }
 
   void onCancel() {
-    // searchQueryCurrent = searchQueryPrevious;
-    // textController.text = searchQueryCurrent;
-
+    searchQueryCurrent = searchQueryPrevious;
+    textController.text = searchQueryCurrent;
+    // searchActive = false;
     focusNode.unfocus();
-    // Future.delayed(Duration(milliseconds: focusNode.hasPrimaryFocus?200:0), (){
-    //   Navigator.of(context).pop();
+    // Future.delayed(Duration(milliseconds: searchActive?200:0), (){
+    //   if (searchActive){
+    //     setState(() {
+    //       searchActive = false;
+    //     });
+    //   }
     // });
   }
 
-
   void onSuggest(String str) {
     searchQueryCurrent = str;
-    if (searchActive == false){
+    if (searchActive == false) {
       setState(() {
         searchActive = true;
       });
@@ -152,37 +176,135 @@ abstract class _State extends State<Main> with SingleTickerProviderStateMixin {
     searchQueryCurrent = str;
     searchQueryPrevious = searchQueryCurrent;
 
-    if (searchActive){
+    if (searchActive) {
       setState(() {
         searchActive = false;
       });
     }
   }
-
 }
 
 class _View extends _State with _Bar, _Suggest, _Result {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: widget.key,
       body: ViewPage(
-        controller: scrollController,
-        child: body()
-      ),
+          // controller: scrollController,
+          child: body()),
     );
   }
 
-  CustomScrollView body(){
-    return  CustomScrollView(
-      // primary: true,
-      controller: scrollController,
-      physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-      slivers: <Widget>[
-        bar(),
-        searchActive?suggest():result()
-      ]
-    );
+  CustomScrollView body() {
+    return CustomScrollView(
+        // primary: true,
+        controller: scrollController,
+        slivers: <Widget>[
+          bar(),
+          // searchActive?tmp('suggest'):tmp('result')
+          SliverToBoxAdapter(
+            child: searchActive ? suggest() : result(),
+          )
+          // SliverToBoxAdapter(
+          //   child: suggest(),
+          // )
+
+          // SliverToBoxAdapter(
+          //   child: AnimatedSwitcher(
+          //     duration: const Duration(milliseconds: 300),
+          //     transitionBuilder: (Widget child, Animation<double> animation) {
+          //       return SlideTransition(
+          //         position: Tween(
+          //           begin: const Offset(1.0, 1.0),
+          //           end: const Offset(0.0, 0.0),
+          //         ).animate(animation),
+          //         child: child,
+          //       );
+          //     },
+          //     child: searchActive?suggest():result(),
+          //   )
+          // )
+          // SliverToBoxAdapter(
+          //   child: Padding(
+          //     padding: const EdgeInsets.only(top: 20),
+          //     child: AnimatedCrossFade(
+          //       duration: const Duration(milliseconds: 300),
+          //       firstChild: suggest(),
+          //       secondChild: result(),
+          //       crossFadeState: searchActive ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+          //       // layoutBuilder: (Widget topChild, Key topChildKey, Widget bottomChild, Key bottomChildKey) {
+          //       //   return Stack(
+          //       //     clipBehavior: Clip.none,
+          //       //     children: <Widget>[
+          //       //       Positioned(
+          //       //         key: bottomChildKey,
+          //       //         left: 100.0,
+          //       //         top: 100.0,
+          //       //         child: bottomChild,
+          //       //       ),
+          //       //       Positioned(
+          //       //         key: topChildKey,
+          //       //         child: topChild,
+          //       //       ),
+          //       //     ],
+          //       //   );
+          //       // },
+          //     ),
+          //   )
+          // )
+          // AnimatedCrossFade(
+          //   duration: const Duration(milliseconds: 300),
+          //   firstChild: tmp('suggest'),
+          //   secondChild: tmp('result'),
+          //   crossFadeState: searchActive ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+          // )
+
+          // SliverFadeTransition(
+          //   opacity: animationController,
+          //   sliver: SliverFixedExtentList(
+          //     itemExtent: 100.0,
+          //     delegate: SliverChildBuilderDelegate(
+          //       (BuildContext context, int index) {
+          //         return Container(
+          //           color: index.isEven
+          //             ? Colors.indigo[200]
+          //             : Colors.orange[200],
+          //         );
+          //       },
+          //       childCount: 5,
+          //     ),
+          //   ),
+          // )
+        ]);
   }
+
+  // Widget tmp(String message) {
+  //   // if (artist.length == 0) return const SliverSnapshotEmpty();
+  //   return SliverPadding(
+  //     key: widget.key,
+  //     padding: const EdgeInsets.symmetric(vertical: 10),
+  //     sliver: SliverList(
+  //       delegate: SliverChildBuilderDelegate(
+  //         // (BuildContext context, int index) => ArtistListItem(core: core, artist: artist.elementAt(index), index: index,),
+  //         (BuildContext context, int index) {
+  //           // final delayedMilliseconds = 320 * (index % 25 + 1);
+  //         const delayedMilliseconds = 320;
+  //           return FutureBuilder<bool>(
+  //             // future: Future.microtask(() => true),
+  //             future: Future.delayed(const Duration(milliseconds: delayedMilliseconds), ()=>true),
+  //             builder: (_, snap){
+  //               if (snap.hasData == false) return const SizedBox(height: 50,);
+  //               // return ArtistListItem(core: core, artist: artist.elementAt(index));
+  //               return ListTile(
+  //                 title: Text('$message index: $index delayedMilliseconds: $delayedMilliseconds'),
+  //               );
+  //               // return const ArtistListItemHolder();
+  //             }
+  //           );
+  //         },
+  //         childCount: 30
+  //       )
+  //     )
+  //   );
+  // }
 }
