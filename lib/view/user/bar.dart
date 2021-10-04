@@ -25,7 +25,7 @@ mixin _Bar on _State {
                           ? CupertinoButton(
                               padding: EdgeInsets.zero,
                               child: Hero(
-                                tag: 'appbar-left',
+                                tag: 'appbar-left-$canPop',
                                 child: WidgetLabel(
                                   icon: CupertinoIcons.left_chevron,
                                   label: translate.back,
@@ -47,7 +47,7 @@ mixin _Bar on _State {
             Align(
               alignment: const Alignment(0, 0),
               child: Hero(
-                tag: 'appbar-center',
+                tag: 'appbar-center-$canPop',
                 child: userPhoto(org, snap),
               ),
             ),
@@ -57,7 +57,7 @@ mixin _Bar on _State {
               child: CupertinoButton(
                 padding: const EdgeInsets.symmetric(horizontal: 3),
                 child: Hero(
-                  tag: 'appbar-right',
+                  tag: 'appbar-right-$canPop',
                   child: WidgetLabel(
                     icon: Icons.logout_rounded,
                     message: translate.signOut,

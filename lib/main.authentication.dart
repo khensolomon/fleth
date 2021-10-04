@@ -19,7 +19,7 @@ void main() async {
   final authentication = Authentication();
   await authentication.ensureInitialized();
 
-  final core = Core();
+  final core = Core(authentication);
   await core.ensureInitialized();
 
   final settings = SettingsController(SettingsService(core.collection));

@@ -8,7 +8,9 @@ class DemoSliverList extends StatelessWidget {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
-          return Text('SliverChildBuilderDelegate $index');
+          return Card(
+            child: Text('SliverChildBuilderDelegate $index'),
+          );
         },
         childCount: 1,
       ),

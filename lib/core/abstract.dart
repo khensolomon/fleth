@@ -1,10 +1,14 @@
 part of 'main.dart';
 
 abstract class _Abstract extends UtilEngine with _Configuration, _Utility {
-  double? _progressPercentage;
-  double? get progressPercentage => _progressPercentage;
-  set progressPercentage(double? value) =>
-      notifyIf<double?>(_progressPercentage, _progressPercentage = value);
+  final Authentication authentication;
+
+  _Abstract(this.authentication);
+
+  // double? _progressPercentage;
+  // double? get progressPercentage => _progressPercentage;
+  // set progressPercentage(double? value) =>
+  //     notifyIf<double?>(_progressPercentage, _progressPercentage = value);
 
   String _message = 'Initializing';
   String get message => _message;

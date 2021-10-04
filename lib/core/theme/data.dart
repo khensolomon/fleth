@@ -8,28 +8,20 @@ class IdeaData {
   static const IdeaColor _lightColor = IdeaColor(
     brightness: Brightness.light,
     focus: Colors.black,
-    primaryScheme: Colors.black87,
+    primaryScheme: Colors.black,
+    // primaryScheme: Color(0xFFdbdbdb),
     primary: Color(0xFFffffff),
     // primary: Color(0xFFffffff),
     scaffold: Color(0xFFf7f7f7),
     highlight: Colors.orange,
-    background: Color(0xFFbdbdbd),
-    // background: Color(0xFFffffff),
+    // background: Color(0xFFbdbdbd),
+    // background: Color(0xFFd9d9d9),
+    background: Color(0xFFdbdbdb),
     // shadow: Colors.grey[400]!,
     // shadow: Colors.grey.shade400,
     shadow: Color(0xFFbdbdbd),
     button: Color(0xFFdedcdc),
-
-    // primary: Color(0xFFf7f7f7),
-    // // primary: Color(0xFFffffff),
-    // scaffold: Color(0xFFffffff),
-    // highlight: Colors.orange,
-    // // background: Color(0xFFbdbdbd),
-    // background: Color(0xFFe8e8e8),
-    // // shadow: Colors.grey[400]!,
-    // // shadow: Colors.grey.shade400,
-    // shadow: Color(0xFFbdbdbd),
-    // button: Color(0xFFdedcdc),
+    disable: Colors.black38,
   );
 
   static const IdeaColor _darkColor = IdeaColor(
@@ -44,6 +36,7 @@ class IdeaData {
     // shadow: Colors.grey[600]!,
     shadow: Color(0xFF8f8f8f),
     button: Color(0xFFd9d9d9),
+    disable: Colors.white30,
   );
 
   static ThemeData light(BuildContext context) => theme(context, _lightColor);
@@ -94,6 +87,7 @@ class IdeaData {
           actionTextStyle: TextStyle(color: Colors.orange),
         ),
       ),
+
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: color.shadow.withOpacity(0.7),
@@ -217,12 +211,15 @@ class IdeaData {
     ),
     bodyText1: TextStyle(
       fontWeight: _fontWeighRegular,
-      fontFamilyFallback: ["Mm3Web", "sans-serif"],
-      fontSize: 18,
-      height: 1.2,
+      fontFamilyFallback: [
+        "sans-serif",
+        "Mm3Web",
+      ],
+      fontSize: 19,
+      height: 1.1,
     ),
     bodyText2: TextStyle(
-      fontWeight: _fontWeighRegular,
+      fontWeight: _fontWeighMedium,
       fontFamilyFallback: ["Mm3Web", "Lato", "sans-serif"],
       fontSize: 20,
       height: 1.25,

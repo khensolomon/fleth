@@ -104,8 +104,8 @@
   "@locale": {
     "description": "System locale"
   },
-  "switchTheme": "Switch theme",
-  "@switchTheme": {
+  "themeMode": "Theme mode",
+  "@themeMode": {
     "description": "Change theme"
   },
   "automatic": "Automatic",

@@ -50,7 +50,7 @@ mixin _Bar on _State {
           //       type: MaterialType.transparency,
           //       child: WidgetLabel(
           //         label: translate.cancel,
-          //         // icon: ZaideihIcon.search,
+          //         // icon: LideaIcon.search,
           //       ),
           //     ),
           //   ),
@@ -119,7 +119,7 @@ mixin _Bar on _State {
           // floatingLabelBehavior: FloatingLabelBehavior.always,
           // label: const Text('Label'),
 
-          prefixIcon: const Icon(ZaideihIcon.find, size: 17),
+          prefixIcon: const Icon(LideaIcon.find, size: 17),
           suffixIcon: Selector<Core, bool>(
             selector: (BuildContext _, Core e) => e.nodeFocus && searchQueryCurrent.isNotEmpty,
             builder: (BuildContext _, bool word, Widget? child) {

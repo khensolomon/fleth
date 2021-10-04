@@ -45,10 +45,17 @@ class Core extends _Abstract with _Mock {
   // // retrieve the instance through the app
   // static Core get instance => _instance;
 
+  // Core(Authentication abc) {
+  //   authentication = abc;
+  // }
+  Core(Authentication authentication) : super(authentication);
+
+  // final Authentication authentication;
+
   Future<void> init() async {
     Stopwatch initWatch = Stopwatch()..start();
 
-    if (progressPercentage == 1.0) return;
+    // if (progressPercentage == 1.0) return;
     // await Future.delayed(const Duration(milliseconds: 1000));
     await Future.microtask(() => null);
 

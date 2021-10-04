@@ -2,10 +2,11 @@ part of 'main.dart';
 
 mixin _Configuration {
   final Collection collection = Collection.internal();
+  // final Authentication authentication;
+  // late Authentication authentication;
   late void Function({int at, String? to, Object? args, bool routePush}) navigate;
 
   late Store store;
-  late Authentication authentication;
   late GistData userGist;
   // late SQLite _sql;
   // late Audio audio;

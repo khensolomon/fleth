@@ -7,18 +7,19 @@ import 'package:lidea/provider.dart';
 import 'package:lidea/connectivity.dart';
 import 'package:lidea/view.dart';
 import 'package:lidea/keepAlive.dart';
+// import 'package:lidea/icon.dart';
 
 import 'package:fleth/core.dart';
 import 'package:fleth/settings.dart';
-// import 'package:fleth/icon.dart';
 // import 'package:fleth/type.dart';
 
 import 'package:fleth/view/home/main.dart' as home;
+import 'package:fleth/view/user/main.dart' as user;
 // import 'package:fleth/view/sliverheader_shrink/main.dart' as shrink;
 // import 'package:fleth/view/sliverheader_collapse/main.dart' as collapse;
-import 'package:fleth/view/user/main.dart' as user;
 // import 'package:fleth/view/sliverheader_search/main.dart' as search;
 import 'package:fleth/view/search/main.dart' as search;
+import 'package:fleth/view/reader/main.dart' as reader;
 import 'package:fleth/view/setting/main.dart' as setting;
 // import 'package:fleth/view/more/main.dart' as note;
 // import 'package:fleth/view/more/main.dart' as more;
@@ -57,32 +58,38 @@ abstract class _State extends State<AppMain> with SingleTickerProviderStateMixin
   // late final initiator = Future.delayed(const Duration(milliseconds: 300));
   late final GlobalKey<NavigatorState> _tmp123 = home.Main.navigatorKey;
 
-  late final _pageButton = [
-    ViewNavigationModel(
-      key: 0,
-      icon: home.Main.icon,
-      name: home.Main.name,
-      description: translate.home,
-    ),
-    const ViewNavigationModel(
-      key: 1,
-      icon: user.Main.icon,
-      name: user.Main.name,
-      description: "User",
-    ),
-    ViewNavigationModel(
-      key: 2,
-      icon: search.Main.icon,
-      name: search.Main.name,
-      description: translate.search,
-    ),
-    ViewNavigationModel(
-      key: 3,
-      icon: setting.Main.icon,
-      name: setting.Main.name,
-      description: translate.settings,
-    ),
-  ];
+  List<ViewNavigationModel> get _pageButton => [
+        ViewNavigationModel(
+          key: 0,
+          icon: home.Main.icon,
+          name: home.Main.name,
+          description: translate.home,
+        ),
+        const ViewNavigationModel(
+          key: 1,
+          icon: user.Main.icon,
+          name: user.Main.name,
+          description: "User",
+        ),
+        ViewNavigationModel(
+          key: 2,
+          icon: search.Main.icon,
+          name: search.Main.name,
+          description: translate.search,
+        ),
+        const ViewNavigationModel(
+          key: 3,
+          icon: reader.Main.icon,
+          name: reader.Main.name,
+          description: 'read',
+        ),
+        ViewNavigationModel(
+          key: 4,
+          icon: setting.Main.icon,
+          name: setting.Main.name,
+          description: translate.settings,
+        ),
+      ];
 
   @override
   void initState() {
@@ -110,6 +117,10 @@ abstract class _State extends State<AppMain> with SingleTickerProviderStateMixin
         child: const search.Main(
           defaultRouteName: '/result',
         ),
+      ),
+      WidgetKeepAlive(
+        key: reader.Main.uniqueKey,
+        child: const reader.Main(),
       ),
       WidgetKeepAlive(
         key: setting.Main.uniqueKey,

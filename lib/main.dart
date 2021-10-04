@@ -28,8 +28,7 @@ void main() async {
   final authentication = Authentication();
   await authentication.ensureInitialized();
 
-  final core = Core();
-  core.authentication = authentication;
+  final core = Core(authentication);
   await core.ensureInitialized();
   authentication.stateObserver(core.userObserver);
 

@@ -6,13 +6,13 @@ import 'package:flutter/rendering.dart';
 
 import 'package:lidea/provider.dart';
 import 'package:lidea/view.dart';
+import 'package:lidea/icon.dart';
 import 'package:lidea/authentication.dart';
 import 'package:lidea/cached_network_image.dart';
 
 import 'package:fleth/core.dart';
 import 'package:fleth/settings.dart';
 import 'package:fleth/widget.dart';
-import 'package:fleth/icon.dart';
 // import 'package:fleth/type.dart';
 
 part 'bar.dart';
@@ -24,7 +24,7 @@ class Main extends StatefulWidget {
   final Object? arguments;
 
   static const route = '/launch';
-  static const icon = ZaideihIcon.home;
+  static const icon = LideaIcon.home;
   static const name = 'Launch';
   static const description = '...';
   // static final uniqueKey = UniqueKey();
@@ -111,7 +111,7 @@ class _View extends _State with _Bar, _Refresh {
                           hintText: translate.aWordOrTwo,
                           // contentPadding: const EdgeInsets.symmetric(horizontal: 6, vertical: 7),
 
-                          prefixIcon: const Icon(ZaideihIcon.find, size: 17),
+                          prefixIcon: const Icon(LideaIcon.find, size: 17),
                           fillColor:
                               Theme.of(context).inputDecorationTheme.fillColor!.withOpacity(0.4),
                         ),
@@ -162,6 +162,11 @@ class _View extends _State with _Bar, _Refresh {
                   onTap: () => core.navigate(to: '/article'),
                 ),
                 ListTile(
+                  leading: const Icon(LideaIcon.bookOpen),
+                  title: const Text('Navigate to reader'),
+                  onTap: () => core.navigate(to: '/reader'),
+                ),
+                ListTile(
                   leading: const Icon(Icons.sort),
                   title: const Text('Reorderable with Swipe for more'),
                   onTap: () => core.navigate(to: '/reorderable'),
@@ -206,6 +211,25 @@ class _View extends _State with _Bar, _Refresh {
                   ),
                   child: const Text('TextButton custom overlayColor'),
                   onPressed: () => false,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    WidgetLabel(
+                      label: 'abc',
+                    ),
+                    WidgetLabel(
+                      label: '23',
+                    ),
+                    WidgetLabel(
+                      icon: CupertinoIcons.back,
+                      label: 'ပြန်',
+                    ),
+                    WidgetLabel(
+                      icon: CupertinoIcons.back,
+                      label: 'Back',
+                    ),
+                  ],
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,

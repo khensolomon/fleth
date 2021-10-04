@@ -5,11 +5,11 @@ import 'package:flutter/rendering.dart';
 
 import 'package:lidea/provider.dart';
 import 'package:lidea/view.dart';
+import 'package:lidea/icon.dart';
 
 import 'package:fleth/core.dart';
 import 'package:fleth/settings.dart';
 import 'package:fleth/widget.dart';
-import 'package:fleth/icon.dart';
 import 'package:fleth/type.dart';
 
 part 'bar.dart';
@@ -20,7 +20,7 @@ class Main extends StatefulWidget {
   final Object? arguments;
 
   static const route = '/result';
-  static const icon = ZaideihIcon.search;
+  static const icon = LideaIcon.search;
   static const name = 'Result';
   static const description = '...';
   // static final uniqueKey = UniqueKey();

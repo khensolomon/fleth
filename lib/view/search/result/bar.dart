@@ -15,7 +15,7 @@ mixin _Bar on _State {
           children: [
             const Align(
               child: Hero(
-                tag: 'appbar-left',
+                tag: 'appbar-left-0',
                 child: SizedBox(),
               ),
             ),
@@ -29,7 +29,7 @@ mixin _Bar on _State {
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 11),
                 child: Hero(
-                  tag: 'searchHero',
+                  tag: 'searchHero-0',
                   child: GestureDetector(
                     child: Material(
                       type: MaterialType.transparency,
@@ -44,7 +44,7 @@ mixin _Bar on _State {
                             initialValue: initialValue,
                             decoration: InputDecoration(
                               hintText: translate.aWordOrTwo,
-                              prefixIcon: const Icon(ZaideihIcon.find, size: 17),
+                              prefixIcon: const Icon(LideaIcon.find, size: 17),
                               fillColor: Theme.of(context)
                                   .inputDecorationTheme
                                   .fillColor!
@@ -65,7 +65,7 @@ mixin _Bar on _State {
             ),
             Align(
               child: Hero(
-                tag: 'appbar-right',
+                tag: 'appbar-right-0',
                 child: canPop
                     ? CupertinoButton(
                         padding: const EdgeInsets.only(right: 10),

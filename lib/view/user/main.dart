@@ -8,14 +8,13 @@ import 'package:lidea/provider.dart';
 import 'package:lidea/view.dart';
 import 'package:lidea/authentication.dart';
 import 'package:lidea/cached_network_image.dart';
+import 'package:lidea/icon.dart';
 
-import 'package:fleth/icon.dart';
 import 'package:fleth/widget.dart';
 
 import 'package:fleth/core.dart';
 import 'package:fleth/settings.dart';
 // import 'package:fleth/widget.dart';
-// import 'package:fleth/icon.dart';
 // import 'package:fleth/type.dart';
 
 part 'bar.dart';
@@ -48,11 +47,11 @@ abstract class _State extends State<Main> with SingleTickerProviderStateMixin {
   AppLocalizations get translate => AppLocalizations.of(context)!;
   // Authentication get authenticate => context.read<Authentication>();
 
-  late final List<String> themeName = [
-    translate.automatic,
-    translate.light,
-    translate.dark,
-  ];
+  List<String> get themeName => [
+        translate.automatic,
+        translate.light,
+        translate.dark,
+      ];
 
   late final ViewNavigationArguments arguments = widget.arguments as ViewNavigationArguments;
   late final bool canPop = widget.arguments != null;
@@ -161,20 +160,21 @@ class _View extends _State with _Bar {
                         padding: const EdgeInsets.symmetric(horizontal: 7),
                         child: WidgetLabel(
                           icon: Icons.lightbulb,
-                          label: translate.switchTheme,
+                          label: translate.themeMode,
                         ),
                       ),
                       const Divider(),
                       Selector<SettingsController, ThemeMode>(
                         selector: (_, e) => e.themeMode,
                         builder: (BuildContext context, ThemeMode theme, Widget? child) => Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: ThemeMode.values.map<Widget>((e) {
                             bool active = theme == e;
                             return CupertinoButton(
-                              child: Text(
-                                themeName[e.index],
-                                semanticsLabel: themeName[e.index],
+                              padding: const EdgeInsets.all(0),
+                              child: WidgetLabel(
+                                enable: !active,
+                                label: themeName[e.index],
                               ),
                               onPressed: active ? null : () => settings.updateThemeMode(e),
                             );
@@ -278,7 +278,7 @@ class _View extends _State with _Bar {
           await authenticate.signInWithGoogle();
         },
         child: const WidgetLabel(
-          icon: ZaideihIcon.google,
+          icon: LideaIcon.google,
           iconSize: 17,
           label: 'Google',
         ),
@@ -288,7 +288,7 @@ class _View extends _State with _Bar {
           await authenticate.signInWithFacebook();
         },
         child: const WidgetLabel(
-          icon: ZaideihIcon.facebook,
+          icon: LideaIcon.facebook,
           iconSize: 17,
           label: 'Facebook',
         ),
@@ -296,7 +296,7 @@ class _View extends _State with _Bar {
       // OutlinedButton(
       //   onPressed: () => false,
       //   child: const WidgetLabel(
-      //     icon: ZaideihIcon.apple,
+      //     icon: LideaIcon.apple,
       //     iconSize: 17,
       //     label: 'Apple',
       //   ),
@@ -304,7 +304,7 @@ class _View extends _State with _Bar {
       // OutlinedButton(
       //   onPressed: () async {},
       //   child: const WidgetLabel(
-      //     icon: ZaideihIcon.microsoft,
+      //     icon: LideaIcon.microsoft,
       //     iconSize: 17,
       //     label: 'Microsoft',
       //   ),
@@ -312,7 +312,7 @@ class _View extends _State with _Bar {
       // OutlinedButton(
       //   onPressed: () async {},
       //   child: const WidgetLabel(
-      //     icon: ZaideihIcon.github,
+      //     icon: LideaIcon.github,
       //     iconSize: 17,
       //     label: 'gitHub',
       //   ),

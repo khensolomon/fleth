@@ -38,6 +38,13 @@ class Collection {
     }
   }
 
+  double get fontSize => setting.fontSize;
+  set fontSize(double size) {
+    if (setting.fontSize != size) {
+      settingUpdate(setting.copyWith(fontSize: size));
+    }
+  }
+
   bool stringCompare(String? a, String b) => a!.toLowerCase() == b.toLowerCase();
 
   // boxOfRecentSearch addWordHistory

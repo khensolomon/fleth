@@ -2,6 +2,7 @@ export 'package:lidea/widget.dart';
 
 export 'widget/highlight.dart';
 export 'widget/decoration.dart';
+export 'widget/popup.dart';
 // export 'widget/content.dart';
 // export 'widget/block/track.dart';
 // export 'widget/block/album.dart';

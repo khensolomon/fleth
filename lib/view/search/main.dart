@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
 import 'package:lidea/view.dart';
+import 'package:lidea/icon.dart';
+
 import 'package:fleth/settings.dart';
-import 'package:fleth/icon.dart';
 
 import 'result/main.dart' as result;
 import 'suggest/main.dart' as suggest;
@@ -21,7 +22,7 @@ class Main extends StatefulWidget {
   final String? defaultRouteName;
 
   static const route = '/search';
-  static const icon = ZaideihIcon.search;
+  static const icon = LideaIcon.search;
   static const name = 'Search';
   static const description = 'Search';
   static final uniqueKey = UniqueKey();

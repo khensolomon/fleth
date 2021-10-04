@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 import 'package:lidea/provider.dart';
+import 'package:lidea/icon.dart';
 
 // import 'package:fleth/core.dart';
 import 'package:fleth/settings.dart';
-import 'package:fleth/icon.dart';
 
 // launch blog article
 import 'launch/main.dart' as launch;
@@ -12,6 +12,7 @@ import 'blog/main.dart' as blog;
 import 'article/main.dart' as article;
 import '../search/main.dart' as search;
 import '../user/main.dart' as user;
+import '../reader/main.dart' as reader;
 import 'reorderable/main.dart' as reorderable;
 import 'dismissible/main.dart' as dismissible;
 import 'recent_search/main.dart' as recent_search;
@@ -22,7 +23,7 @@ import 'recent_search/main.dart' as recent_search;
 // import 'artist-info/main.dart' as ArtistInfo;
 
 // key: 0,
-//       icon: ZaideihIcon.home,
+//       icon: LideaIcon.home,
 //       name: "Home",
 //       description: translate.home,
 class Main extends StatefulWidget {
@@ -32,7 +33,7 @@ class Main extends StatefulWidget {
   // final GlobalKey<NavigatorState>? navigatorKey;
 
   static const route = '/home';
-  static const icon = ZaideihIcon.home;
+  static const icon = LideaIcon.home;
   static const name = 'Home';
   static const description = 'home';
   static final uniqueKey = UniqueKey();
@@ -109,6 +110,8 @@ class _State extends State<Main> {
                     return search.Main(arguments: route.arguments);
                   case user.Main.route:
                     return user.Main(arguments: route.arguments);
+                  case reader.Main.route:
+                    return reader.Main(arguments: route.arguments);
                   case search.Main.route + '/result':
                     return search.Main(arguments: route.arguments, defaultRouteName: '/result');
                   case recent_search.Main.route:

@@ -71,7 +71,7 @@ mixin _Bar on _State {
                   child: Material(
                     type: MaterialType.transparency,
                     child: WidgetLabel(
-                      icon: ZaideihIcon.trash,
+                      icon: LideaIcon.trash,
                       // icon: CupertinoIcons.search,
                       // icon: Icons.delete_sweep_rounded,
                     ),

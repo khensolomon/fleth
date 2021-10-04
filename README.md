@@ -22,7 +22,9 @@ onCancel
   update -> textController.text 
 ```
 
-... api token
+## Token
+
+... api
 
 ```json
 [
@@ -30,63 +32,68 @@ onCancel
     "name":"name",
     "level":1,
     "id":"testing-tmp"
-  }
+  },
+  {
+    "level":0,
+    "id":"abc"
+  },
+  // -> abc
+  {
+    "level":0,
+    "id":"a~b~c"
+  },
+  // -> a0b0c
+  {
+    "level":0,
+    "id":"[a~b~c]"
+  },
+  // -> c1b1a
 ]
 
 ```
 
-... env token
+## keystore for Android
 
-```json
-token-sss:{
-  "key":0,
-  "id":"abc"
-}
-// -> abc
-token:{
-  "key":0,
-  "id":"a_b_c"
-}
-// -> a0b0c
-token:{
-  "key":0,
-  "id":"[a_b_c]"
-}
-// -> c0b0a
+... create keystore on windows
+
+```bash
+# %USERPROFILE%
+# %OneDrive%/
+# -keyalg RSA -keysize 2048 -validity 10000
+keytool -genkey -v -alias ? -storepass ? -keystore %OneDrive%/Setting/keystore/com.name.app.jks -deststoretype pkcs12 -keyalg RSA -keysize 2048 -validity 10000
+
+# migrate from proprietary format to [pkcs12]
+# The JKS keystore uses a proprietary format. It is recommended to migrate to PKCS12 which is an industry standard format using "keytool -importkeystore -srckeystore ?/name.app.jks -destkeystore ?/name.app.jks -deststoretype pkcs12"
+keytool -importkeystore -srckeystore "path/name.jks" -destkeystore "path/name.jks" -deststoretype pkcs12
+
+# list ?
+keytool -list -v -keystore debug.keystore -alias android -storepass android -keypass android
 ```
 
-keytool -list -v -keystore debug.keystore -alias android -storepass android -keypass android
+... gradlew Android
 
-sign_in_failed, com.google.android.gms.common.api.ApiException: 10
-sign_in_canceled, com.google.android.gms.common.api.ApiException: 12501
-sign_in_canceled, com.google.android.gms.common.api.ApiException: 12501
-
-Configure SHA-1 certificate and download google-services.json in project settings
-
-keytool -list -v \ -alias androiddebugkey -keystore %USERPROFILE%\.android\debug.keystore
-
-keytool -list -v \ -alias androiddebugkey -keystore %USERPROFILE%\.android\debug.keystore
-keytool -list -v \ -alias androiddebugkey -keystore %USERPROFILE%\.android\zaideihdebug.keystore
-
-cd android/
-./gradlew signingReport
-
+```bash
+cd app/android/
+# check signing report
+gradlew signingReport
+# clean
 gradlew clean
+```
 
-Facebook
+## OpenSSL
 
-Key Hash
+```bash
+# openssl: C:\Program Files\Git\usr\bin
+```
 
-gtcccfccc496fc21a5798ff34251618c7c7e29eb3e
+## Error
 
-openssl: C:\Program Files\Git\usr\bin
+... Android
 
-```note
-      
-keytool -exportcert -alias androiddebugkey -keystore "c:\Users\imsol\OneDrive\Setting\keystore\lethil.Android.jks" | "PATH_TO_OPENSSL_LIBRARY\bin\openssl" sha1 -binary | "PATH_TO_OPENSSL_LIBRARY\bin\openssl" base64
-keytool -exportcert -alias androiddebugkey -keystore "C:\Users\USERNAME\.android\debug.keystore" | "PATH_TO_OPENSSL_LIBRARY\bin\openssl" sha1 -binary | "PATH_TO_OPENSSL_LIBRARY\bin\openssl" base64
-
-keytool -exportcert -alias -keystore Lethil "/Users/imsol/OneDrive/Setting/keystore/lethil.Android.jks" | openssl sha1 -binary | openssl base64
+```bash
+# sign_in_failed, com.google.android.gms.common.api.ApiException: 10
+# sign_in_canceled, com.google.android.gms.common.api.ApiException: 12501
+# sign_in_canceled, com.google.android.gms.common.api.ApiException: 12501
 ```
 
 ## Getting Started

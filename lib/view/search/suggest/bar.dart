@@ -20,7 +20,7 @@ mixin _Bar on _State {
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 11),
                 child: Hero(
-                  tag: 'searchHero',
+                  tag: 'searchHero-0',
                   child: Material(
                     type: MaterialType.transparency,
                     // child: _barForm()
@@ -35,7 +35,7 @@ mixin _Bar on _State {
             CupertinoButton(
               padding: const EdgeInsets.only(right: 15),
               child: Hero(
-                tag: 'appbar-right',
+                tag: 'appbar-right-0',
                 child: Material(
                   type: MaterialType.transparency,
                   child: WidgetLabel(
@@ -66,7 +66,7 @@ mixin _Bar on _State {
       // enableSuggestions: true,
       maxLines: 1,
       decoration: InputDecoration(
-        prefixIcon: const Icon(ZaideihIcon.find, size: 17),
+        prefixIcon: const Icon(LideaIcon.find, size: 17),
         suffixIcon: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,

@@ -100,7 +100,7 @@ mixin _Bar on _State {
                           child: WidgetLabel(
                             // icon: Icons.tune,
                             icon: CupertinoIcons.slider_horizontal_3,
-                            // icon: ZaideihIcon.sliders,
+                            // icon: LideaIcon.sliders,
                             label: translate.filter,
                           ),
                         ),

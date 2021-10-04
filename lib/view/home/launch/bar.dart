@@ -87,7 +87,7 @@ mixin _Bar on _State {
             //       child: Material(
             //         type: MaterialType.transparency,
             //         child: WidgetLabel(
-            //           icon: ZaideihIcon.search,
+            //           icon: LideaIcon.search,
             //           // icon: CupertinoIcons.search,
             //           // icon: Icons.search,
             //         ),

@@ -41,7 +41,7 @@ mixin _Bar on _State {
         ),
         CupertinoButton(
           child: const Icon(Icons.restore),
-          // child: Icon(ZaideihIcon.history),
+          // child: Icon(LideaIcon.history),
           onPressed: () async {
             // await InAppPurchase.instance.restorePurchases().whenComplete(() =>setState);
             // core.store.doRestore().whenComplete((){

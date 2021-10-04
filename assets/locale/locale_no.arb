@@ -17,7 +17,7 @@
   "aWordOrTwo": "...et ord eller to",
 
   "locale": "Språk",
-  "switchTheme": "Bytt tema",
+  "themeMode": "Temamodus",
   "automatic": "Automatisk",
   "dark": "Mørk",
   "light": "Lys",

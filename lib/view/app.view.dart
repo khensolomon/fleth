@@ -30,8 +30,8 @@ class AppView extends _State with _Other {
           controller: pageController,
           // onPageChanged: _pageChanged,
           pageSnapping: false,
-          allowImplicitScrolling: true,
-          physics: const NeverScrollableScrollPhysics(),
+          // allowImplicitScrolling: true,
+          // physics: const NeverScrollableScrollPhysics(),
           itemBuilder: (BuildContext context, int index) => _pageView[index],
           itemCount: _pageView.length,
         ),
@@ -208,22 +208,25 @@ class AppView extends _State with _Other {
       label: route ? "Page navigation" : "History navigation",
       namesRoute: route,
       enabled: route && !disabled,
-      child: CupertinoButton(
-        minSize: 25,
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 1),
-        child: AnimatedContainer(
-          curve: Curves.easeIn,
-          duration: const Duration(milliseconds: 300),
-          padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
-          child: Icon(
-            item.icon,
-            size: route ? 26 : 18,
-            semanticLabel: item.name,
+      child: Tooltip(
+        message: item.description!,
+        child: CupertinoButton(
+          minSize: 25,
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 1),
+          child: AnimatedContainer(
+            curve: Curves.easeIn,
+            duration: const Duration(milliseconds: 300),
+            padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
+            child: Icon(
+              item.icon,
+              size: route ? 26 : 18,
+              semanticLabel: item.name,
+            ),
           ),
+          // disabledColor: route ? CupertinoColors.quaternarySystemFill : Theme.of(context).hintColor,
+          // onPressed: current?null:()=>route?_navView(index):item.action(context)
+          onPressed: _navButtonAction(item, disabled),
         ),
-        // disabledColor: route ? CupertinoColors.quaternarySystemFill : Theme.of(context).hintColor,
-        // onPressed: current?null:()=>route?_navView(index):item.action(context)
-        onPressed: _navButtonAction(item, disabled),
       ),
     );
   }
