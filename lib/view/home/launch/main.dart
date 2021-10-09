@@ -196,12 +196,12 @@ class _View extends _State with _Bar, _Refresh {
                   ),
                   icon: const Icon(Icons.baby_changing_station),
                   label: const Text('TextButton NoSplash'),
-                  onPressed: () => core.mockTest(),
+                  onPressed: () => core.mockTest1(),
                 ),
                 TextButton.icon(
                   icon: const Icon(Icons.icecream_outlined),
                   label: const Text('TextButton.icon'),
-                  onPressed: () => false,
+                  onPressed: () => core.mockTest2(),
                 ),
                 TextButton(
                   style: ButtonStyle(

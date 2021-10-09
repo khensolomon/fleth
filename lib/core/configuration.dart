@@ -7,7 +7,7 @@ mixin _Configuration {
   late void Function({int at, String? to, Object? args, bool routePush}) navigate;
 
   late Store store;
-  late GistData userGist;
+
   // late SQLite _sql;
   // late Audio audio;
 

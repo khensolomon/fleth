@@ -5,6 +5,7 @@ import 'dart:math';
 // import 'dart:io';
 // import 'dart:typed_data';
 
+import 'package:fleth/type.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 
@@ -18,12 +19,11 @@ import 'package:flutter/foundation.dart';
 // import 'package:hive/hive.dart';
 // import 'package:hive_flutter/hive_flutter.dart';
 
-import 'package:lidea/hive.dart';
 import 'package:lidea/authentication.dart';
 
 import 'package:lidea/analytics.dart';
 import 'package:lidea/engine.dart';
-// import 'package:lidea/intl.dart';
+import 'package:lidea/type.dart';
 
 import 'type/main.dart';
 
@@ -71,10 +71,10 @@ class Core extends _Abstract with _Mock {
     // // _sql = new SQLite(collection: collection);
     // // await _sql.init();
 
-    await collection.cacheBucket.artistInit();
-    await collection.cacheBucket.trackInit();
-    await collection.cacheBucket.albumInit();
-    await collection.cacheBucket.langInit();
+    // await collection.cacheBucket.artistInit();
+    // await collection.cacheBucket.trackInit();
+    // await collection.cacheBucket.albumInit();
+    // await collection.cacheBucket.langInit();
 
     // audio = new Audio(notifyIf:notifyIf, collection: collection);
     // await audio.init();

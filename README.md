@@ -61,10 +61,12 @@ onCancel
 # %OneDrive%/
 # -keyalg RSA -keysize 2048 -validity 10000
 keytool -genkey -v -alias ? -storepass ? -keystore %OneDrive%/Setting/keystore/com.name.app.jks -deststoretype pkcs12 -keyalg RSA -keysize 2048 -validity 10000
+keytool -genkey -v -alias ? -storepass ? -keystore %OneDrive%/Setting/laisiangtho/bible.Android.jks -deststoretype pkcs12 -keyalg RSA -keysize 2048 -validity 10000
 
 # migrate from proprietary format to [pkcs12]
 # The JKS keystore uses a proprietary format. It is recommended to migrate to PKCS12 which is an industry standard format using "keytool -importkeystore -srckeystore ?/name.app.jks -destkeystore ?/name.app.jks -deststoretype pkcs12"
 keytool -importkeystore -srckeystore "path/name.jks" -destkeystore "path/name.jks" -deststoretype pkcs12
+
 
 # list ?
 keytool -list -v -keystore debug.keystore -alias android -storepass android -keypass android
@@ -80,7 +82,26 @@ gradlew signingReport
 gradlew clean
 ```
 
+... gradlew Android
+
+```bash
+keytool -exportcert -alias androiddebugkey -keystore "C:\Users\USERNAME\.android\debug.keystore" | "PATH_TO_OPENSSL_LIBRARY\bin\openssl" sha1 -binary | "PATH_TO_OPENSSL_LIBRARY\bin\openssl" base64
+
+keytool -exportcert -alias androiddebugkey -keystore "%USERPROFILE%/.android/debug.keystore" | "C:\Program Files\Git\usr\bin\openssl" sha1 -binary | "C:\Program Files\Git\usr\bin\openssl" base64
+
+keytool -exportcert -alias androiddebugkey -keystore "%USERPROFILE%/.android/debug.keystore" | "openssl" sha1 -binary | "openssl" base64
+
+      
+keytool -exportcert -alias Lethil -keystore %OneDrive%/Setting/laisiangtho/bible.Android.jks | "C:\Program Files\Git\usr\bin\openssl" sha1 -binary | "C:\Program Files\Git\usr\bin\openssl" base64
+keytool -exportcert -alias Lethil -keystore %OneDrive%/Setting/laisiangtho/bible.Android.jks | openssl sha1 -binary | openssl base64
+
+
+
+```
+
 ## OpenSSL
+
+On windows 10: `Environment Variable` > `Path` add `C:\Program Files\Git\usr\bin`
 
 ```bash
 # openssl: C:\Program Files\Git\usr\bin

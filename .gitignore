@@ -7,15 +7,18 @@ tmp/
 # !assets/fonts
 # !assets/psd
 # !assets/*-mock.*
-assets/env.json
-assets/bucket.json
-assets/bucket.zip
-assets/album.json
-assets/album.zip
+# assets/env.json
+# assets/bucket.json
+assets/*.json
+assets/*.db
+!assets/env-mock.json
+assets/*.zip
 
+# Android
 android/key.properties
 android/app/google-services.json
 
+# iOS
 ios/Runner/GoogleService-Info.plist
 
 # Miscellaneous

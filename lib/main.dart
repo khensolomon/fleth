@@ -111,9 +111,8 @@ class Fleth extends StatelessWidget {
           themeMode: settings.themeMode,
 
           onGenerateTitle: (BuildContext context) => AppLocalizations.of(context)!.appTitle,
-          onGenerateRoute: (RouteSettings route) => PageRouteBuilder<void>(
-            settings: route,
-            pageBuilder: (BuildContext context, Animation<double> a, Animation<double> b) {
+          home: Builder(
+            builder: (BuildContext context) {
               return AnnotatedRegion<SystemUiOverlayStyle>(
                 value: SystemUiOverlayStyle(
                   systemNavigationBarColor: Theme.of(context).primaryColor,
@@ -129,6 +128,24 @@ class Fleth extends StatelessWidget {
               );
             },
           ),
+          // onGenerateRoute: (RouteSettings route) => PageRouteBuilder<void>(
+          //   settings: route,
+          //   pageBuilder: (BuildContext context, Animation<double> a, Animation<double> b) {
+          //     return AnnotatedRegion<SystemUiOverlayStyle>(
+          //       value: SystemUiOverlayStyle(
+          //         systemNavigationBarColor: Theme.of(context).primaryColor,
+          //         systemNavigationBarDividerColor: Colors.transparent,
+          //         systemNavigationBarIconBrightness: settings.resolvedSystemBrightness,
+          //         systemNavigationBarContrastEnforced: true,
+          //         statusBarColor: Colors.transparent,
+          //         statusBarBrightness: settings.resolvedSystemBrightness,
+          //         statusBarIconBrightness: settings.resolvedSystemBrightness,
+          //         systemStatusBarContrastEnforced: true,
+          //       ),
+          //       child: AppMain(settings: settings),
+          //     );
+          //   },
+          // ),
           // onGenerateRoute: (RouteSettings routeSettings) {
           //   return MaterialPageRoute<void>(
           //     settings: routeSettings,

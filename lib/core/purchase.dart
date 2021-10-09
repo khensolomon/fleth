@@ -5,7 +5,7 @@ import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:in_app_purchase_android/billing_client_wrappers.dart';
 import 'package:in_app_purchase_android/in_app_purchase_android.dart';
 
-import 'type/main.dart';
+import 'package:fleth/type.dart';
 
 class Store {
   late Collection _cluster;

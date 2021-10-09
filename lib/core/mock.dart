@@ -2,16 +2,16 @@ part of 'main.dart';
 
 /// check
 mixin _Mock on _Abstract {
-  Future<dynamic> mockTest() async {
+  Future<dynamic> mockTest1() async {
     Stopwatch mockWatch = Stopwatch()..start();
 
     final a3 = UtilDocument.encodeJSON({'hello': getRandomString(10)});
-    userGist.updateFile(file: userFile, content: a3).then((e) {
+    collection.gist.updateFile(file: userFile, content: a3).then((e) {
       debugPrint('$e');
     }).catchError((e) async {
       if (e == 'Failed to load') {
-        await userTokenUpdate().then((e) {
-          debugPrint(e);
+        await collection.tokenUpdate().then((e) {
+          debugPrint('done');
         }).catchError((e) {
           debugPrint('$e');
         });
@@ -37,6 +37,86 @@ mixin _Mock on _Abstract {
     // });
 
     debugPrint('mockTest in ${mockWatch.elapsedMilliseconds} ms');
+  }
+
+  Future<dynamic> mockTest2() async {
+    // final gist = GistData(
+    //   owner: 'collection.env.configure.owns',
+    //   repo: 'collection.env.configure.name',
+    // );
+    // final gist = userGist;
+
+    // final gitUri = await gist.gitContent<Uri>(
+    //   // owner: 'me',
+    //   // repo: 'lai',
+    //   file: 'bfe/abc.json',
+    //   debug: true,
+    // );
+    // uri request local, get nameLive getCache
+    // final tmpLive = collection.env.repo.live(2147);
+    // final tmpCache = collection.env.repo.local(2147);
+    // final tmpLive = collection.env.repo.local(2147);
+    // final tmpCache = collection.env.repo.local(2147);
+
+    // final api = collection.env.api.firstWhere((e) => e.uid == 'bible');
+    // final bibleUri = gist.rawContentUri(
+    //   owner: collection.env.repo.owns,
+    //   repo: collection.env.repo.name,
+    //   file: api.repoName('fe'),
+    // );
+    // debugPrint(' repo: $bibleUri');
+
+    // comLive, comCache
+
+    // final trackLive = collection.env.track.liveName(2147);
+    // final trackCache = collection.env.track.cacheName(2147);
+    // debugPrint('-live: $trackLive \n-cache: $trackCache');
+
+    // debugPrint(' ${gitUri.toString()}');
+    // debugPrint(' ${rawUri.toString()}');
+    // debugPrint(' ${liveUri.toString()}');
+    // debugPrint(' ${gist.gitContentUri}');
+    // debugPrint(' ${gist.rawContentUri}');
+
+    // final urlParse = Uri.parse(url);
+    // debugPrint(
+    //     'parse $urlParse ${urlParse.authority} ${urlParse.path} ${urlParse.queryParametersAll}');
+    // final urlParseHttp = Uri.https(urlParse.authority, urlParse.path, urlParse.queryParameters);
+    // debugPrint(
+    //     'http $urlParseHttp ${urlParseHttp.authority} ${urlParseHttp.path} ${urlParseHttp.queryParameters}');
+
+    // final asdf = 'com+';
+    // final adf = Uri.parse('api/audio/#?d1v=l1&ad=2');
+    // debugPrint(' $adf ${adf.path} ${adf.queryParameters}');
+    // final adf1 = collection.env.apis
+    //     .firstWhere((e) => e.uid == 'track')
+    //     .parseUriTest(collection.env.domain, 5);
+    // debugPrint(' $adf1');
+
+    // final fee = collection.env.apis.firstWhere((e) => e.uid == 'track');
+    // final fee1 = collection.env.urlTest(fee.liveName(45));
+    // debugPrint(' $fee1');
+    // for (var api in collection.env.api) {
+    //   debugPrint(' ${api.uid} \n -src ${api.src}');
+    // }
+
+    // final uriFirst = collection.env.url('word').uri('4354');
+    // final uriSecond = collection.env.url('word').uri('4354', index: 1, scheme: 'http');
+    // final cache = collection.env.url('word').cache('4354');
+    // debugPrint('\n live $uriFirst \n cache $cache \n second $uriSecond');
+
+    final uriFirst = collection.env.url('bible').uri('4354');
+    final uriSecond = collection.env.url('bible').uri('4354', index: 1, scheme: 'http');
+    final cache = collection.env.url('bible').cache('4354');
+    debugPrint('\n live $uriFirst \n cache $cache \n second $uriSecond');
+
+    // final bible = collection.env.url('bible');
+    // final bibleLive = bible.uri('4354');
+    // final bibleCache = bible.cache('4354');
+    // debugPrint('---------\n bibleLive $bibleLive \n bibleCache $bibleCache');
+    // debugPrint('assetName ${bible.assetName}');
+    // debugPrint('localName ${bible.localName}');
+    // debugPrint('repoName ${bible.repoName}');
   }
 
   String get userFile => authentication.id.isNotEmpty ? '${authentication.id}.json' : '';
