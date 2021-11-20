@@ -53,7 +53,7 @@ abstract class _State extends State<Main> with TickerProviderStateMixin {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   ViewNavigationArguments get arguments => widget.arguments as ViewNavigationArguments;
-  GlobalKey<NavigatorState> get navigator => arguments.navigator;
+  GlobalKey<NavigatorState> get navigator => arguments.navigator!;
   ViewNavigationArguments get parent => arguments.args as ViewNavigationArguments;
   bool get canPop => arguments.args != null;
 
@@ -125,11 +125,15 @@ abstract class _State extends State<Main> with TickerProviderStateMixin {
     core.collection.searchQuery = str;
   }
 
-  String get searchQueryCurrent => core.searchQuery;
+  // String get searchQueryCurrent => core.searchQuery;
+  // set searchQueryCurrent(String str) {
+  //   core.searchQuery = str.replaceAll(RegExp(' +'), ' ').trim();
+  // }
+  String get searchQueryCurrent => core.collection.suggestQuery;
   set searchQueryCurrent(String str) {
-    core.searchQuery = str.replaceAll(RegExp(' +'), ' ').trim();
+    final ord = str.replaceAll(RegExp(' +'), ' ').trim();
+    core.notifyIf<String>(searchQueryCurrent, core.collection.suggestQuery = ord);
   }
-
   void onClear() {
     textController.clear();
     searchQueryCurrent = '';

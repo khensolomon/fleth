@@ -72,9 +72,9 @@ class IdeaData {
       iconTheme: IconThemeData(color: color.focus, size: 23),
       cardTheme: CardTheme(
         color: color.primary,
-        elevation: 0,
+        elevation: 1,
         shadowColor: color.shadow,
-        margin: const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
+        margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
         shape: RoundedRectangleBorder(
           side: BorderSide(width: 0.2, color: color.shadow),
           // BorderRadius.circular(5)

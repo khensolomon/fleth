@@ -12,7 +12,7 @@ import 'blog/main.dart' as blog;
 import 'article/main.dart' as article;
 import '../search/main.dart' as search;
 import '../user/main.dart' as user;
-import '../reader/main.dart' as reader;
+import '../read/main.dart' as read;
 import 'reorderable/main.dart' as reorderable;
 import 'dismissible/main.dart' as dismissible;
 import 'recent_search/main.dart' as recent_search;
@@ -108,12 +108,12 @@ class _State extends State<Main> {
                 switch (route.name) {
                   case search.Main.route:
                     return search.Main(arguments: route.arguments);
-                  case user.Main.route:
-                    return user.Main(arguments: route.arguments);
-                  case reader.Main.route:
-                    return reader.Main(arguments: route.arguments);
                   case search.Main.route + '/result':
                     return search.Main(arguments: route.arguments, defaultRouteName: '/result');
+                  case user.Main.route:
+                    return user.Main(arguments: route.arguments);
+                  case read.Main.route:
+                    return read.Main(arguments: route.arguments);
                   case recent_search.Main.route:
                     return recent_search.Main(arguments: route.arguments);
                   case blog.Main.route:

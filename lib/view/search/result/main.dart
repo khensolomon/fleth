@@ -38,7 +38,7 @@ abstract class _State extends State<Main> with SingleTickerProviderStateMixin {
   late final Future<void> initiator = core.conclusionGenerate(init: true);
 
   ViewNavigationArguments get arguments => widget.arguments as ViewNavigationArguments;
-  GlobalKey<NavigatorState> get navigator => arguments.navigator;
+  GlobalKey<NavigatorState> get navigator => arguments.navigator!;
   ViewNavigationArguments get parent => arguments.args as ViewNavigationArguments;
   bool get canPop => arguments.args != null;
   // bool get canPop => arguments.canPop;

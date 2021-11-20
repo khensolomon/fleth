@@ -1,11 +1,5 @@
 import 'dart:async';
-// import 'dart:io';
 import 'dart:math';
-// import 'dart:typed_data';
-// import 'dart:io';
-// import 'dart:typed_data';
-
-import 'package:fleth/type.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 
@@ -20,12 +14,10 @@ import 'package:flutter/foundation.dart';
 // import 'package:hive_flutter/hive_flutter.dart';
 
 import 'package:lidea/authentication.dart';
-
 import 'package:lidea/analytics.dart';
 import 'package:lidea/engine.dart';
-import 'package:lidea/type.dart';
 
-import 'type/main.dart';
+import 'package:fleth/type.dart';
 
 import 'purchase.dart';
 
@@ -38,19 +30,7 @@ part 'mock.dart';
 // part 'audio.dart';
 
 class Core extends _Abstract with _Mock {
-  // Creates instance through `_internal` constructor
-  // static final Core _instance = Core.internal();
-  // Core.internal();
-  // factory Core() => _instance;
-  // // retrieve the instance through the app
-  // static Core get instance => _instance;
-
-  // Core(Authentication abc) {
-  //   authentication = abc;
-  // }
   Core(Authentication authentication) : super(authentication);
-
-  // final Authentication authentication;
 
   Future<void> init() async {
     Stopwatch initWatch = Stopwatch()..start();
@@ -89,7 +69,7 @@ class Core extends _Abstract with _Mock {
     // _message = 'Done';
     // suggestionQuery = 'god';
     // suggestionQuery = collection.setting.searchQuery!;
-    searchQuery = collection.searchQuery;
+    // searchQuery = collection.searchQuery;
   }
 
   Future<void> analyticsReading() async {

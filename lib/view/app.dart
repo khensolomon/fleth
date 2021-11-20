@@ -15,11 +15,8 @@ import 'package:fleth/settings.dart';
 
 import 'package:fleth/view/home/main.dart' as home;
 import 'package:fleth/view/user/main.dart' as user;
-// import 'package:fleth/view/sliverheader_shrink/main.dart' as shrink;
-// import 'package:fleth/view/sliverheader_collapse/main.dart' as collapse;
-// import 'package:fleth/view/sliverheader_search/main.dart' as search;
 import 'package:fleth/view/search/main.dart' as search;
-import 'package:fleth/view/reader/main.dart' as reader;
+import 'package:fleth/view/read/main.dart' as read;
 import 'package:fleth/view/setting/main.dart' as setting;
 // import 'package:fleth/view/more/main.dart' as note;
 // import 'package:fleth/view/more/main.dart' as more;
@@ -79,8 +76,8 @@ abstract class _State extends State<AppMain> with SingleTickerProviderStateMixin
         ),
         const ViewNavigationModel(
           key: 3,
-          icon: reader.Main.icon,
-          name: reader.Main.name,
+          icon: read.Main.icon,
+          name: read.Main.name,
           description: 'read',
         ),
         ViewNavigationModel(
@@ -119,8 +116,8 @@ abstract class _State extends State<AppMain> with SingleTickerProviderStateMixin
         ),
       ),
       WidgetKeepAlive(
-        key: reader.Main.uniqueKey,
-        child: const reader.Main(),
+        key: read.Main.uniqueKey,
+        child: const read.Main(),
       ),
       WidgetKeepAlive(
         key: setting.Main.uniqueKey,

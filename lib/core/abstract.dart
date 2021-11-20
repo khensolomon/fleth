@@ -8,13 +8,13 @@ abstract class _Abstract extends UtilEngine with _Configuration, _Utility {
   Future<void> ensureInitialized() async {
     Stopwatch initWatch = Stopwatch()..start();
 
-    await collection.ensureInitialized();
-    await collection.prepareInitialized();
+    await collection.ensureInitialized(() {});
+    await collection.prepareInitialized(() {});
 
-    if (authentication.id.isNotEmpty && authentication.id != collection.setting.userId) {
-      final ou = collection.setting.copyWith(userId: authentication.id);
-      await collection.settingUpdate(ou);
-    }
+    // if (authentication.id.isNotEmpty && authentication.id != collection.setting.userId) {
+    //   final ou = collection.setting.copyWith(userId: authentication.id);
+    //   await collection.settingUpdate(ou);
+    // }
 
     debugPrint('ensureInitialized in ${initWatch.elapsedMilliseconds} ms');
   }
@@ -30,12 +30,12 @@ abstract class _Abstract extends UtilEngine with _Configuration, _Utility {
       APIType api = collection.env.api.firstWhere(
         (e) => e.asset.isNotEmpty,
       );
-      await UtilArchive.extractBundle(api.assetName);
+      await UtilArchive.extractBundle(api.asset);
     }
     // if (requireInitialized) {
     //   final localData = collection.env.api.where((e) => e.asset.isNotEmpty);
     //   for (APIType api in localData) {
-    //     await UtilArchive.extractBundle(api.assetName).then((_) {
+    //     await UtilArchive.extractBundle(api.asset).then((_) {
     //       debugPrint('Ok ${api.uid}');
     //     }).catchError((e) {
     //       debugPrint('Error ${api.uid} $e');
@@ -49,7 +49,7 @@ abstract class _Abstract extends UtilEngine with _Configuration, _Utility {
       APIType api = collection.env.api.firstWhere(
         (e) => e.asset.isNotEmpty,
       );
-      await UtilArchive.extractBundle(api.assetName);
+      await UtilArchive.extractBundle(api.asset);
     }
   }
 
@@ -59,7 +59,7 @@ abstract class _Abstract extends UtilEngine with _Configuration, _Utility {
     );
     if (collection.requireInitialized) {
       APIType api = collection.env.api.firstWhere((e) => e.asset.isNotEmpty);
-      await UtilArchive.extractBundle(api.assetName);
+      await UtilArchive.extractBundle(api.asset);
     }
     collection.cacheBucket = AudioBucketType.fromJSON(
       Map.fromEntries(
@@ -67,7 +67,7 @@ abstract class _Abstract extends UtilEngine with _Configuration, _Utility {
           localData.map(
             (e) async => MapEntry(
               e.uid,
-              await UtilDocument.readAsJSON<List<dynamic>>(e.localName),
+              await UtilDocument.readAsJSON<List<dynamic>>(e.local),
             ),
           ),
         ),

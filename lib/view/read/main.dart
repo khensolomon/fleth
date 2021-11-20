@@ -23,10 +23,10 @@ class Main extends StatefulWidget {
   // final SettingsController? settings;
   // final GlobalKey<NavigatorState>? navigatorKey;
 
-  static const route = '/reader';
+  static const route = '/read';
   static const icon = LideaIcon.bookOpen;
-  static const name = 'Reader';
-  static const description = 'Reader';
+  static const name = 'Read';
+  static const description = 'Read';
   static final uniqueKey = UniqueKey();
   // static final scaffoldKey = GlobalKey<ScaffoldState>();
 

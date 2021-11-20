@@ -69,7 +69,7 @@ mixin _Bar on _State {
                 child: canPop
                     ? CupertinoButton(
                         padding: const EdgeInsets.only(right: 10),
-                        onPressed: () => parent.navigator.currentState!.maybePop(),
+                        onPressed: () => parent.navigator!.currentState!.maybePop(),
                         child: const WidgetLabel(icon: CupertinoIcons.home),
                       )
                     : const SizedBox(),

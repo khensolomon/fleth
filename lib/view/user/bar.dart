@@ -33,7 +33,7 @@ mixin _Bar on _State {
                                 ),
                               ),
                               onPressed: () {
-                                arguments.navigator.currentState!.maybePop();
+                                arguments.navigator!.currentState!.maybePop();
                               },
                             )
                           : WidgetLabel(
