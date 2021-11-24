@@ -102,7 +102,7 @@ class Fleth extends StatelessWidget {
             Locale('my', ''),
           ],
 
-          onGenerateTitle: (BuildContext context) => AppLocalizations.of(context)!.appTitle,
+          onGenerateTitle: (BuildContext context) => AppLocalizations.of(context)!.appLaiSiangtho,
 
           darkTheme: IdeaData.dark(context),
           theme: IdeaData.light(context),

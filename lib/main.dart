@@ -110,7 +110,7 @@ class Fleth extends StatelessWidget {
           theme: IdeaData.light(context),
           themeMode: settings.themeMode,
 
-          onGenerateTitle: (BuildContext context) => AppLocalizations.of(context)!.appTitle,
+          onGenerateTitle: (BuildContext context) => AppLocalizations.of(context)!.appLaiSiangtho,
           home: Builder(
             builder: (BuildContext context) {
               return AnnotatedRegion<SystemUiOverlayStyle>(

@@ -65,7 +65,7 @@ mixin _Bar on _State {
                   type: MaterialType.transparency,
                   // child: WidgetLabel(label: 'Album',fontSize: (30*org.shrink).clamp(20, 30).toDouble()),
                   child: Text(
-                    translate.appTitle,
+                    translate.appLaiSiangtho,
                     style: Theme.of(context)
                         .textTheme
                         .headline6!
