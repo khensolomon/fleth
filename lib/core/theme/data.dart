@@ -1,4 +1,4 @@
-import 'dart:ui';
+// import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -9,9 +9,9 @@ class IdeaData {
     brightness: Brightness.light,
     focus: Colors.black,
     primaryScheme: Colors.black,
-    // primaryScheme: Color(0xFFdbdbdb),
+
     primary: Color(0xFFffffff),
-    // primary: Color(0xFFffffff),
+    dark: Colors.grey,
     scaffold: Color(0xFFf7f7f7),
     highlight: Colors.orange,
     // background: Color(0xFFbdbdbd),
@@ -21,15 +21,15 @@ class IdeaData {
     // shadow: Colors.grey.shade400,
     shadow: Color(0xFFbdbdbd),
     button: Color(0xFFdedcdc),
-    disable: Colors.black38,
+    disable: Colors.black12,
   );
 
   static const IdeaColor _darkColor = IdeaColor(
     brightness: Brightness.dark,
     focus: Colors.white,
     primaryScheme: Colors.white,
+
     primary: Color(0xFF9c9c9c),
-    // primary: Color(0xFF737373),
     scaffold: Color(0xFFa6a6a6),
     highlight: Colors.orange,
     background: Color(0xFFbdbdbd),
@@ -45,21 +45,27 @@ class IdeaData {
   static ThemeData theme(BuildContext context, IdeaColor color) {
     final TextTheme textTheme = Theme.of(context).textTheme.merge(_textTheme);
     // final TextTheme textTheme = _textTheme.merge(Theme.of(context).textTheme);
+    // final Brightness resolveBrightness =
+    //     color.brightness == Brightness.light ? Brightness.dark : Brightness.light;
 
     return ThemeData(
       colorScheme: color.scheme,
       brightness: color.brightness,
+      // primaryColorBrightness: Brightness.light,
+      // primarySwatch: color.primarySwatch,
 
-      // fontFamily: "Lato, sans-serif",
+      // fontFamily: "Lato, Lato, Mm3Web",
       fontFamily: "Lato, 'Mm3Web', sans-serif",
       primaryColor: color.primary,
-      primaryColorLight: color.highlight,
+      primaryColorLight: color.light,
+      primaryColorDark: color.dark,
       shadowColor: color.shadow,
       canvasColor: color.canvas,
       scaffoldBackgroundColor: color.scaffold,
       backgroundColor: color.background,
       highlightColor: color.highlight,
       disabledColor: color.disable,
+      errorColor: color.error,
 
       textTheme: textTheme.apply(
         bodyColor: color.focus,
@@ -67,52 +73,90 @@ class IdeaData {
         decorationColor: Colors.red,
       ),
       primaryTextTheme: textTheme,
-      appBarTheme: AppBarTheme(backgroundColor: color.primary, foregroundColor: color.focus),
+      appBarTheme: AppBarTheme(
+        // backgroundColor: Colors.blue,
+        // foregroundColor: Colors.red,
+        backgroundColor: color.primary,
+        foregroundColor: color.focus,
+      ),
 
-      iconTheme: IconThemeData(color: color.focus, size: 23),
+      // iconTheme: IconThemeData(color: color.focus, size: 23),
+      iconTheme: IconThemeData(color: color.focus, size: 26),
       cardTheme: CardTheme(
         color: color.primary,
-        elevation: 1,
+        elevation: 0.5,
         shadowColor: color.shadow,
-        margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+        margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
         shape: RoundedRectangleBorder(
           side: BorderSide(width: 0.2, color: color.shadow),
           // BorderRadius.circular(5)
-          borderRadius: const BorderRadius.all(Radius.circular(5)),
+          borderRadius: const BorderRadius.all(Radius.circular(7)),
         ),
       ),
-      cupertinoOverrideTheme: const NoDefaultCupertinoThemeData(
-        textTheme: CupertinoTextThemeData(
+      dialogTheme: DialogTheme(
+        // Color? backgroundColor,
+        // double? elevation,
+        // ShapeBorder? shape,
+        // TextStyle? titleTextStyle,
+        // TextStyle? contentTextStyle,
+        // backgroundColor: Colors.red,
+        titleTextStyle: TextStyle(fontSize: 19, height: 1.0, color: color.focus),
+        contentTextStyle: TextStyle(fontSize: 14, height: 1.0, color: color.focus),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(12.0),
+          ),
+        ),
+        elevation: 3,
+      ),
+      chipTheme: ChipThemeData(
+        backgroundColor: Colors.transparent,
+        disabledColor: Colors.grey,
+        selectedColor: Colors.amber,
+        secondarySelectedColor: Colors.blueAccent,
+        padding: EdgeInsets.zero,
+        labelStyle: TextStyle(color: color.focus),
+        secondaryLabelStyle: TextStyle(color: color.focus),
+        brightness: color.brightness,
+        // brightness: resolveBrightness,
+      ),
+      cupertinoOverrideTheme: NoDefaultCupertinoThemeData(
+        brightness: color.brightness,
+        textTheme: const CupertinoTextThemeData(
           primaryColor: Colors.red,
           actionTextStyle: TextStyle(color: Colors.orange),
         ),
       ),
-
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: color.shadow.withOpacity(0.7),
         // hoverColor: Colors.green,
         // focusColor: Colors.red,
-        // hintStyle: const TextStyle(height: 1.3),
-        // labelStyle: const TextStyle(height: 1.3),
+        hintStyle: TextStyle(
+          color: color.focus.withOpacity(0.7),
+          height: 1.3,
+          fontSize: 15,
+        ),
+        // labelStyle: const TextStyle(height: 1.7),
         // alignLabelWithHint: true,
+
         suffixStyle: const TextStyle(color: Colors.red),
         contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
         focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: color.background, width: 0.3),
-          borderRadius: const BorderRadius.all(Radius.circular(5)),
+          borderSide: BorderSide(color: color.shadow, width: 0.3),
+          borderRadius: const BorderRadius.all(Radius.circular(8)),
         ),
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(color: color.shadow, width: 0.2),
-          borderRadius: const BorderRadius.all(Radius.circular(5)),
+          borderRadius: const BorderRadius.all(Radius.circular(8)),
         ),
         disabledBorder: OutlineInputBorder(
           borderSide: BorderSide(color: color.shadow.withOpacity(0.8), width: 0.2),
-          borderRadius: const BorderRadius.all(Radius.circular(5)),
+          borderRadius: const BorderRadius.all(Radius.circular(8)),
         ),
         border: OutlineInputBorder(
           borderSide: BorderSide(color: color.shadow, width: 0.2),
-          borderRadius: const BorderRadius.all(Radius.circular(5)),
+          borderRadius: const BorderRadius.all(Radius.circular(8)),
         ),
       ),
       bottomSheetTheme: BottomSheetThemeData(
@@ -171,42 +215,47 @@ class IdeaData {
   static const TextTheme _textTheme = TextTheme(
     headline1: TextStyle(
       fontWeight: _fontWeightSemiThin,
-      fontFamilyFallback: ["Mm3Web", "sans-serif"],
+      fontFamilyFallback: ["Mm3Web", "Lato"],
       height: 1.0,
     ),
     headline2: TextStyle(
       fontWeight: _fontWeightThin,
-      fontFamilyFallback: ["Mm3Web", "sans-serif"],
+      fontFamilyFallback: ["Mm3Web", "Lato"],
       height: 1.0,
     ),
     headline3: TextStyle(
       fontWeight: _fontWeighRegular,
-      fontFamilyFallback: ["Mm3Web", "sans-serif"],
+      fontFamilyFallback: ["Mm3Web", "Lato"],
       height: 1.0,
     ),
     headline4: TextStyle(
       fontWeight: _fontWeighRegular,
-      fontFamilyFallback: ["Mm3Web", "sans-serif"],
+      fontFamilyFallback: ["Mm3Web", "Lato"],
       height: 1.0,
     ),
     headline5: TextStyle(
       fontWeight: _fontWeighRegular,
-      fontFamilyFallback: ["Mm3Web", "sans-serif"],
+      fontFamilyFallback: ["Mm3Web", "Lato"],
+      fontSize: 22,
       height: 1.0,
     ),
     headline6: TextStyle(
       fontWeight: _fontWeighRegular,
-      fontFamilyFallback: ["Mm3Web", "sans-serif"],
+      fontFamilyFallback: ["Mm3Web", "Lato"],
       height: 1.2,
     ),
+
+    /// default: ListTile.title
     subtitle1: TextStyle(
       fontWeight: _fontWeighRegular,
-      fontFamilyFallback: ["Mm3Web", "sans-serif"],
-      height: 1.4,
+      fontFamilyFallback: ["Mm3Web", "Lato"],
+      // height: 1.4,
+      height: 1.0,
+      fontSize: 20,
     ),
     subtitle2: TextStyle(
       fontWeight: _fontWeighMedium,
-      fontFamilyFallback: ["Mm3Web", "sans-serif"],
+      fontFamilyFallback: ["Mm3Web", "Lato"],
       height: 1.0,
     ),
     bodyText1: TextStyle(
@@ -215,28 +264,31 @@ class IdeaData {
         "sans-serif",
         "Mm3Web",
       ],
-      fontSize: 19,
-      height: 1.1,
+      fontSize: 20,
+      height: 1.25,
     ),
     bodyText2: TextStyle(
       fontWeight: _fontWeighMedium,
-      fontFamilyFallback: ["Mm3Web", "Lato", "sans-serif"],
+      fontFamilyFallback: [
+        "sans-serif",
+        "Mm3Web",
+      ],
       fontSize: 20,
       height: 1.25,
     ),
     caption: TextStyle(
       fontWeight: _fontWeighSemiBold,
-      fontFamilyFallback: ["Mm3Web", "sans-serif"],
+      fontFamilyFallback: ["Mm3Web", "Lato"],
       height: 1.0,
     ),
     button: TextStyle(
       fontWeight: _fontWeightThin,
-      fontFamilyFallback: ["Mm3Web", "sans-serif"],
+      fontFamilyFallback: ["Mm3Web", "Lato"],
       height: 1.0,
     ),
     overline: TextStyle(
       fontWeight: _fontWeighMedium,
-      fontFamilyFallback: ["Mm3Web", "sans-serif"],
+      fontFamilyFallback: ["Mm3Web", "Lato"],
       height: 1.0,
     ),
   );
