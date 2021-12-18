@@ -72,7 +72,7 @@ abstract class _State extends State<AppMain> with SingleTickerProviderStateMixin
           key: 2,
           icon: search.Main.icon,
           name: search.Main.name,
-          description: translate.search,
+          description: translate.search(true),
         ),
         const ViewNavigationModel(
           key: 3,
@@ -84,7 +84,7 @@ abstract class _State extends State<AppMain> with SingleTickerProviderStateMixin
           key: 4,
           icon: setting.Main.icon,
           name: setting.Main.name,
-          description: translate.settings,
+          description: translate.setting(true),
         ),
       ];
 
