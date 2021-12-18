@@ -20,28 +20,32 @@ mixin _Bar on _State {
                 alignment: Alignment.center,
                 children: [
                   TweenAnimationBuilder<double>(
-                    tween: Tween<double>(begin: 50, end: 0),
+                    tween: Tween<double>(begin: 30, end: 0),
                     duration: const Duration(milliseconds: 300),
                     builder: (BuildContext context, double align, Widget? child) {
                       return Positioned(
                         left: align,
-                        top: 4,
-                        child: (align == 0)
-                            ? CupertinoButton(
-                                padding: EdgeInsets.zero,
-                                child: Hero(
+                        top: 0,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 12),
+                          child: (align == 0)
+                              ? Hero(
                                   tag: 'appbar-left',
-                                  child: WidgetLabel(
-                                    icon: CupertinoIcons.left_chevron,
-                                    label: translate.back,
+                                  child: CupertinoButton(
+                                    padding: EdgeInsets.zero,
+                                    minSize: 30,
+                                    onPressed: () => Navigator.of(context).pop(),
+                                    child: WidgetLabel(
+                                      icon: CupertinoIcons.left_chevron,
+                                      label: translate.back,
+                                    ),
                                   ),
+                                )
+                              : WidgetLabel(
+                                  icon: CupertinoIcons.left_chevron,
+                                  label: translate.back,
                                 ),
-                                onPressed: () => Navigator.of(context).pop(),
-                              )
-                            : WidgetLabel(
-                                icon: CupertinoIcons.left_chevron,
-                                label: translate.back,
-                              ),
+                        ),
                       );
                     },
                   ),
@@ -76,11 +80,9 @@ mixin _Bar on _State {
                       tag: 'appbar-center',
                       child: Material(
                         type: MaterialType.transparency,
-                        // child: WidgetLabel(label: 'Album',),
-                        // child: Text('ဟုတ်တယ်',style: Theme.of(context).textTheme.headline6,),
                         child: Text(
                           'Blog',
-                          style: Theme.of(context).textTheme.headline6,
+                          style: Theme.of(context).textTheme.headline5,
                           maxLines: 1,
                           overflow: TextOverflow.fade,
                         ),
@@ -90,22 +92,23 @@ mixin _Bar on _State {
 
                   Positioned(
                     right: 0,
-                    top: 4,
-                    child: CupertinoButton(
-                      padding: EdgeInsets.zero,
+                    top: 0,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 12),
                       child: Hero(
                         tag: 'appbar-right',
-                        child: Material(
-                          type: MaterialType.transparency,
+                        child: CupertinoButton(
+                          padding: EdgeInsets.zero,
+                          minSize: 30,
                           child: WidgetLabel(
                             // icon: Icons.tune,
                             icon: CupertinoIcons.slider_horizontal_3,
                             // icon: LideaIcon.sliders,
-                            label: translate.filter,
+                            label: translate.filter(false),
                           ),
+                          onPressed: showFilter,
                         ),
                       ),
-                      onPressed: showFilter,
                     ),
                   ),
                 ],

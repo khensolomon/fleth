@@ -14,33 +14,37 @@ mixin _Bar on _State {
           alignment: const Alignment(0, 0),
           children: [
             TweenAnimationBuilder<double>(
-              tween: Tween<double>(begin: canPop ? 50 : 0, end: 0),
+              tween: Tween<double>(begin: canPop ? 30 : 0, end: 0),
               duration: const Duration(milliseconds: 300),
               builder: (BuildContext context, double align, Widget? child) {
                 return Positioned(
                   left: align,
-                  top: 4,
-                  child: canPop
-                      ? (align == 0)
-                          ? CupertinoButton(
-                              padding: EdgeInsets.zero,
-                              child: Hero(
+                  top: 0,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 12),
+                    child: canPop
+                        ? (align == 0)
+                            ? Hero(
                                 tag: 'appbar-left-$canPop',
-                                child: WidgetLabel(
-                                  icon: CupertinoIcons.left_chevron,
-                                  label: translate.back,
-                                  // label: AppLocalizations.of(context)!.back,
+                                child: CupertinoButton(
+                                  padding: EdgeInsets.zero,
+                                  minSize: 30,
+                                  onPressed: () {
+                                    arguments.navigator!.currentState!.maybePop();
+                                  },
+                                  child: WidgetLabel(
+                                    icon: CupertinoIcons.left_chevron,
+                                    label: translate.back,
+                                    // label: AppLocalizations.of(context)!.back,
+                                  ),
                                 ),
-                              ),
-                              onPressed: () {
-                                arguments.navigator!.currentState!.maybePop();
-                              },
-                            )
-                          : WidgetLabel(
-                              icon: CupertinoIcons.left_chevron,
-                              label: translate.back,
-                            )
-                      : const SizedBox(),
+                              )
+                            : WidgetLabel(
+                                icon: CupertinoIcons.left_chevron,
+                                label: translate.back,
+                              )
+                        : const SizedBox(),
+                  ),
                 );
               },
             ),
@@ -53,17 +57,22 @@ mixin _Bar on _State {
             ),
             Positioned(
               right: 0,
-              top: 4,
-              child: CupertinoButton(
-                padding: const EdgeInsets.symmetric(horizontal: 3),
+              top: 0,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 13),
                 child: Hero(
                   tag: 'appbar-right-$canPop',
-                  child: WidgetLabel(
-                    icon: Icons.logout_rounded,
-                    message: translate.signOut,
+                  child: CupertinoButton(
+                    padding: EdgeInsets.zero,
+                    minSize: 30,
+                    onPressed:
+                        authenticate.hasUser ? () async => await authenticate.signOut() : null,
+                    child: WidgetLabel(
+                      icon: Icons.logout_rounded,
+                      message: translate.signOut,
+                    ),
                   ),
                 ),
-                onPressed: authenticate.hasUser ? () async => await authenticate.signOut() : null,
               ),
             ),
           ],

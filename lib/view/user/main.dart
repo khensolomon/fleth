@@ -1,14 +1,14 @@
-import 'package:intl/intl.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/rendering.dart';
+// import 'package:flutter/rendering.dart';
 
+// import 'package:lidea/intl.dart';
 import 'package:lidea/provider.dart';
 import 'package:lidea/view.dart';
 import 'package:lidea/authentication.dart';
 import 'package:lidea/cached_network_image.dart';
 import 'package:lidea/icon.dart';
+import 'package:lidea/extension.dart';
 
 import 'package:fleth/widget.dart';
 
@@ -200,6 +200,30 @@ class _View extends _State with _Bar {
                         ),
                       ),
                       const Divider(),
+                      // ListView.builder(
+                      //   shrinkWrap: true,
+                      //   primary: false,
+                      //   physics: const NeverScrollableScrollPhysics(),
+                      //   itemCount: AppLocalizations.supportedLocales.length,
+                      //   // itemCount: Localizations.localeOf(context).,
+                      //   padding: EdgeInsets.zero,
+                      //   itemBuilder: (_, index) {
+                      //     final lang = AppLocalizations.supportedLocales[index];
+
+                      //     Locale locale = Localizations.localeOf(context);
+                      //     final String localeName = Intl.canonicalizedLocale(lang.languageCode);
+                      //     final bool isCurrent = locale.languageCode == lang.languageCode;
+
+                      //     return ListTile(
+                      //       selected: isCurrent,
+                      //       leading: Icon(isCurrent
+                      //           ? Icons.radio_button_checked
+                      //           : Icons.radio_button_unchecked),
+                      //       title: Text(localeName),
+                      //       onTap: () => settings.updateLocale(lang),
+                      //     );
+                      //   },
+                      // )
                       ListView.builder(
                         shrinkWrap: true,
                         primary: false,
@@ -208,19 +232,25 @@ class _View extends _State with _Bar {
                         // itemCount: Localizations.localeOf(context).,
                         padding: EdgeInsets.zero,
                         itemBuilder: (_, index) {
-                          final lang = AppLocalizations.supportedLocales[index];
+                          final locale = AppLocalizations.supportedLocales[index];
 
-                          Locale locale = Localizations.localeOf(context);
-                          final String localeName = Intl.canonicalizedLocale(lang.languageCode);
-                          final bool isCurrent = locale.languageCode == lang.languageCode;
+                          Locale localeCurrent = Localizations.localeOf(context);
+                          // final String localeName = Intl.canonicalizedLocale(lang.languageCode);
+                          final String localeName = Locale(locale.languageCode).nativeName;
+                          final bool active = localeCurrent.languageCode == locale.languageCode;
 
                           return ListTile(
-                            selected: isCurrent,
-                            leading: Icon(isCurrent
-                                ? Icons.radio_button_checked
-                                : Icons.radio_button_unchecked),
+                            selected: active,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(7.0),
+                            ),
+                            leading: Icon(
+                              active ? Icons.radio_button_checked : Icons.radio_button_unchecked,
+                            ),
                             title: Text(localeName),
-                            onTap: () => settings.updateLocale(lang),
+                            onTap: () {
+                              settings.updateLocale(locale);
+                            },
                           );
                         },
                       )

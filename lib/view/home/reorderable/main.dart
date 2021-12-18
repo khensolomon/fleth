@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/rendering.dart';
+// import 'package:flutter/rendering.dart';
 // import 'package:flutter/gestures.dart';
 // import 'package:flutter/services.dart';
 
@@ -55,7 +55,9 @@ abstract class _State extends State<Main> with SingleTickerProviderStateMixin {
 
   late Core core;
 
-  ViewNavigationArguments get arguments => widget.arguments as ViewNavigationArguments;
+  // ViewNavigationArguments get arguments => widget.arguments as ViewNavigationArguments;
+  late final ViewNavigationArguments arguments = widget.arguments as ViewNavigationArguments;
+  late final bool canPop = widget.arguments != null;
   // AudioAlbumType get album => arguments.meta as AudioAlbumType;
 
   // SettingsController get settings => context.read<SettingsController>();

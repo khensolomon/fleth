@@ -16,100 +16,70 @@ mixin _Bar on _State {
             // This make the return "appbar-left" Hero animation smooth
             const Positioned(
               left: 0,
-              top: 4,
-              child: CupertinoButton(
-                padding: EdgeInsets.zero,
-                child: Hero(
-                  tag: 'appbar-left',
+              top: 0,
+              child: Hero(
+                tag: 'appbar-left',
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 0, vertical: 12),
                   child: Material(
                     type: MaterialType.transparency,
-                    child: WidgetLabel(),
+                    child: SizedBox(),
+                    // child: CupertinoButton(
+                    //   padding: EdgeInsets.zero,
+                    //   minSize: 30,
+                    //   onPressed: null,
+                    //   child: SizedBox(),
+                    // ),
                   ),
                 ),
-                onPressed: null,
               ),
             ),
-            // TweenAnimationBuilder<double>(
-            //   // tween: Tween<double>(begin: arguments.canPop?0:50, end: 0),
-            //   tween: Tween<double>(begin: 50, end: 0),
-            //   duration: const Duration(milliseconds: 300),
-            //   builder: (BuildContext context, double align, Widget? child) {
-            //     return Positioned(
-            //       left: align,
-            //       top: 4,
-            //       child: (align == 0)?CupertinoButton(
-            //         padding: EdgeInsets.zero,
-            //         child: const Hero(
-            //           tag: 'appbar-left',
-            //           child: WidgetLabel( icon: CupertinoIcons.left_chevron, label: 'Back',),
-            //         ),
-            //         onPressed: () => false
-            //       ):const Padding(
-            //         padding: EdgeInsets.zero,
-            //         child: WidgetLabel( icon: CupertinoIcons.left_chevron, label: 'Back',)
-            //       )
-            //     );
-            //   },
-            // ),
 
             Align(
               alignment: Alignment.lerp(
                 const Alignment(0, 0),
-                const Alignment(0, .5),
+                const Alignment(0, .7),
                 snap.shrink,
               )!,
-              // child: PageAttribute(label: 'Album',fontSize: (30*org.shrink).clamp(20, 30).toDouble()),
               child: Hero(
                 tag: 'appbar-center',
                 child: Material(
                   type: MaterialType.transparency,
-                  // child: WidgetLabel(label: 'Album',fontSize: (30*org.shrink).clamp(20, 30).toDouble()),
                   child: Text(
-                    translate.appLaiSiangtho,
+                    translate.appMyOrdbok,
                     style: Theme.of(context)
                         .textTheme
-                        .headline6!
-                        .copyWith(fontSize: (30 * org.shrink).clamp(20.0, 30.0).toDouble()),
+                        .headline5!
+                        .copyWith(fontSize: (30 * org.shrink).clamp(22.0, 30.0).toDouble()),
                     maxLines: 1,
-                    overflow: TextOverflow.fade,
+                    softWrap: false,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
               ),
             ),
 
-            // Positioned(
-            //   right: 0,
-            //   top: 4,
-            //   child: CupertinoButton(
-            //     padding: EdgeInsets.zero,
-            //     child: const Hero(
-            //       tag: 'appbar-right',
-            //       child: Material(
-            //         type: MaterialType.transparency,
-            //         child: WidgetLabel(
-            //           icon: LideaIcon.search,
-            //           // icon: CupertinoIcons.search,
-            //           // icon: Icons.search,
-            //         ),
-            //       ),
-            //     ),
-            //     onPressed: () => core.navigate(to: '/search'),
-            //   ),
-            // ),
             Positioned(
               right: 0,
-              top: 4,
-              child: Hero(
-                tag: 'appbar-right',
-                child: CupertinoButton(
-                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                  child: Selector<Authentication, bool>(
-                    selector: (_, e) => e.hasUser,
-                    builder: (BuildContext context, bool hasUser, Widget? child) {
-                      return userPhoto();
-                    },
+              top: 0,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 12),
+                child: Hero(
+                  tag: 'appbar-right',
+                  child: CupertinoButton(
+                    padding: EdgeInsets.zero,
+                    minSize: 30,
+                    child: Tooltip(
+                      message: translate.option(true),
+                      child: Selector<Authentication, bool>(
+                        selector: (_, e) => e.hasUser,
+                        builder: (BuildContext context, bool hasUser, Widget? child) {
+                          return userPhoto();
+                        },
+                      ),
+                    ),
+                    onPressed: () => core.navigate(to: '/user'),
                   ),
-                  onPressed: () => core.navigate(to: '/user'),
                 ),
               ),
             ),

@@ -94,8 +94,8 @@ mixin _Bar on _State {
     return Semantics(
       label: "Page",
       child: Text(
-        translate.settings,
-        semanticsLabel: translate.settings,
+        translate.setting(true),
+        semanticsLabel: translate.setting(true),
       ),
     );
   }

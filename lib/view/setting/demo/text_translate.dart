@@ -1,6 +1,16 @@
-import 'package:fleth/settings.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:lidea/intl.dart';
+import 'package:fleth/settings.dart';
+
+class AppleTesting extends StatelessWidget {
+  const AppleTesting({Key? key, required this.translate}) : super(key: key);
+  final AppLocalizations translate;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(translate.aMoment);
+  }
+}
 
 class DemoTextTranslate extends StatefulWidget {
   const DemoTextTranslate({Key? key}) : super(key: key);

@@ -18,7 +18,7 @@ mixin _Bar on _State {
           children: <Widget>[
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 11),
+                padding: const EdgeInsets.symmetric(horizontal: 11.0, vertical: 11),
                 child: Hero(
                   tag: 'searchHero-0',
                   child: Material(
@@ -32,18 +32,22 @@ mixin _Bar on _State {
                 ),
               ),
             ),
-            CupertinoButton(
-              padding: const EdgeInsets.only(right: 15),
-              child: Hero(
-                tag: 'appbar-right-0',
+            Hero(
+              tag: 'appbar-right-0',
+              child: CupertinoButton(
+                alignment: Alignment.center,
+                padding: const EdgeInsets.fromLTRB(0, 0, 7, 0),
+                // padding: EdgeInsets.zero,
+                onPressed: onCancel,
                 child: Material(
                   type: MaterialType.transparency,
-                  child: WidgetLabel(
-                    label: translate.cancel,
+                  child: Text(
+                    translate.cancel,
+                    maxLines: 1,
+                    softWrap: false,
                   ),
                 ),
               ),
-              onPressed: onCancel,
             ),
           ],
         );

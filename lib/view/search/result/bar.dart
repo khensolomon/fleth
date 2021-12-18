@@ -27,7 +27,7 @@ mixin _Bar on _State {
             ),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 11),
+                padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 11),
                 child: Hero(
                   tag: 'searchHero-0',
                   child: GestureDetector(
@@ -63,17 +63,18 @@ mixin _Bar on _State {
                 ),
               ),
             ),
-            Align(
-              child: Hero(
-                tag: 'appbar-right-0',
-                child: canPop
-                    ? CupertinoButton(
-                        padding: const EdgeInsets.only(right: 10),
-                        onPressed: () => parent.navigator!.currentState!.maybePop(),
-                        child: const WidgetLabel(icon: CupertinoIcons.home),
-                      )
-                    : const SizedBox(),
-              ),
+            Hero(
+              tag: 'appbar-right-0',
+              child: canPop
+                  ? CupertinoButton(
+                      alignment: Alignment.center,
+                      padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+                      // padding: EdgeInsets.zero,
+                      onPressed: () => parent.navigator!.currentState!.maybePop(),
+                      child: const WidgetLabel(icon: CupertinoIcons.home),
+                      // child: const Icon(CupertinoIcons.home),
+                    )
+                  : const SizedBox(),
             ),
           ],
         );

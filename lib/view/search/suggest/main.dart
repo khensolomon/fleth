@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/rendering.dart';
+// import 'package:flutter/rendering.dart';
 // import 'package:flutter/gestures.dart';
 // import 'package:flutter/services.dart';
 
@@ -12,8 +12,8 @@ import 'package:lidea/icon.dart';
 
 import 'package:fleth/core.dart';
 import 'package:fleth/settings.dart';
-import 'package:fleth/widget.dart';
 import 'package:fleth/type.dart';
+// import 'package:fleth/widget.dart';
 
 part 'bar.dart';
 
@@ -134,6 +134,7 @@ abstract class _State extends State<Main> with TickerProviderStateMixin {
     final ord = str.replaceAll(RegExp(' +'), ' ').trim();
     core.notifyIf<String>(searchQueryCurrent, core.collection.suggestQuery = ord);
   }
+
   void onClear() {
     textController.clear();
     searchQueryCurrent = '';
