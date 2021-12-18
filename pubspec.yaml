@@ -14,8 +14,6 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  intl: ^0.17.0
-  cupertino_icons: ^1.0.3
 
   # Local lidea package, development only
   lidea:
@@ -25,7 +23,7 @@ dependencies:
     #   ref: main
 
   # Custom
-  in_app_purchase: ^1.0.9
+  in_app_purchase: ^2.0.1
   just_audio: ^0.9.18
 
 dev_dependencies:
@@ -41,12 +39,12 @@ flutter:
 
   # Add assets
   assets:
-    # - assets/env.json
-    # - assets/album.json
-    # - assets/bible.json
-    # - assets/word.db
+    - assets/env.json
+    - assets/album.json
+    - assets/bible.json
+    - assets/word.db
 
-  # Add fonts from package
+  # fonts from lidea
   fonts:
     - family: Lato
       fonts:
