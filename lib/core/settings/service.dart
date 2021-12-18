@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:lidea/intl.dart';
 
-// import 'package:fleth/core.dart';
+// import 'package:bible/core.dart';
 import 'package:fleth/type.dart';
 
 /// A service that stores and retrieves user settings.
