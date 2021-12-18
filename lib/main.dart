@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
+// import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 import 'package:lidea/provider.dart';
@@ -110,19 +110,20 @@ class Fleth extends StatelessWidget {
           theme: IdeaData.light(context),
           themeMode: settings.themeMode,
 
-          onGenerateTitle: (BuildContext context) => AppLocalizations.of(context)!.appLaiSiangtho,
+          onGenerateTitle: (BuildContext context) => AppLocalizations.of(context)!.appMyOrdbok,
           home: Builder(
             builder: (BuildContext context) {
               return AnnotatedRegion<SystemUiOverlayStyle>(
                 value: SystemUiOverlayStyle(
                   systemNavigationBarColor: Theme.of(context).primaryColor,
-                  systemNavigationBarDividerColor: Colors.transparent,
+                  // systemNavigationBarDividerColor: Colors.transparent,
                   systemNavigationBarIconBrightness: settings.resolvedSystemBrightness,
-                  systemNavigationBarContrastEnforced: true,
+                  systemNavigationBarContrastEnforced: false,
+
                   statusBarColor: Colors.transparent,
-                  statusBarBrightness: settings.resolvedSystemBrightness,
+                  statusBarBrightness: settings.systemBrightness,
                   statusBarIconBrightness: settings.resolvedSystemBrightness,
-                  systemStatusBarContrastEnforced: true,
+                  systemStatusBarContrastEnforced: false,
                 ),
                 child: AppMain(settings: settings),
               );
