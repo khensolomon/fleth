@@ -1,4 +1,4 @@
-package com.zaideih.app
+package com.myordbok.app
 
 import io.flutter.embedding.android.FlutterActivity
 

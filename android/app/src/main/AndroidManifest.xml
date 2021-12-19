@@ -1,7 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.zaideih.app">
+    package="com.myordbok.app">
    <application
-      android:label="Fleth"
+      android:name="${applicationName}"
+      android:label="MyOrdbok"
       android:icon="@mipmap/icon"
       android:roundIcon="@mipmap/iconrounded"
       android:usesCleartextTraffic="true">
