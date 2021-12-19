@@ -24,7 +24,7 @@ class Main extends StatefulWidget {
   final GlobalKey<NavigatorState>? navigatorKey;
   final Object? arguments;
 
-  static const route = '/suggest';
+  static const route = '/search-suggest';
   static const icon = LideaIcon.search;
   static const name = 'Suggestion';
   static const description = '...';

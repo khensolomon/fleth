@@ -6,41 +6,35 @@ import 'package:flutter/material.dart';
 import 'package:lidea/provider.dart';
 import 'package:lidea/connectivity.dart';
 import 'package:lidea/view.dart';
-import 'package:lidea/keepAlive.dart';
+// import 'package:lidea/keepAlive.dart';
 // import 'package:lidea/icon.dart';
 
 import 'package:fleth/core.dart';
 import 'package:fleth/settings.dart';
 // import 'package:fleth/type.dart';
 
-import 'package:fleth/view/home/main.dart' as home;
-import 'package:fleth/view/user/main.dart' as user;
-import 'package:fleth/view/search/main.dart' as search;
-import 'package:fleth/view/read/main.dart' as read;
-import 'package:fleth/view/setting/main.dart' as setting;
-// import 'package:fleth/view/more/main.dart' as note;
-// import 'package:fleth/view/more/main.dart' as more;
+import 'app.routes.dart';
 
 part 'app.view.dart';
 part 'app.launcher.dart';
 part 'app.other.dart';
 
-class AppMain extends StatefulWidget {
-  const AppMain({Key? key, this.settings}) : super(key: key);
+class Main extends StatefulWidget {
+  const Main({Key? key, this.settings}) : super(key: key);
   final SettingsController? settings;
 
-  static const routeName = '/';
+  static const route = '/root';
 
   @override
   _State createState() => AppView();
 }
 
-abstract class _State extends State<AppMain> with SingleTickerProviderStateMixin {
-  final scaffoldKey = GlobalKey<ScaffoldState>();
-  final pageController = PageController(keepPage: true);
+abstract class _State extends State<Main> with SingleTickerProviderStateMixin {
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+  final _pageController = PageController(keepPage: true);
   final _controller = ScrollController();
-
-  late List<Widget> _pageView;
+  // final _homeNavigator = GlobalKey<NavigatorState>();
+  // final _searchNavigator = GlobalKey<NavigatorState>();
 
   // late Core core;
   late StreamSubscription<ConnectivityResult> _connection;
@@ -53,40 +47,11 @@ abstract class _State extends State<AppMain> with SingleTickerProviderStateMixin
 
   late final Future<void> initiator = core.init();
   // late final initiator = Future.delayed(const Duration(milliseconds: 300));
-  late final GlobalKey<NavigatorState> _tmp123 = home.Main.navigatorKey;
+  // late final GlobalKey<NavigatorState> _tmp123 = AppRoutes.pageRouteNavigator;
 
-  List<ViewNavigationModel> get _pageButton => [
-        ViewNavigationModel(
-          key: 0,
-          icon: home.Main.icon,
-          name: home.Main.name,
-          description: translate.home,
-        ),
-        const ViewNavigationModel(
-          key: 1,
-          icon: user.Main.icon,
-          name: user.Main.name,
-          description: "User",
-        ),
-        ViewNavigationModel(
-          key: 2,
-          icon: search.Main.icon,
-          name: search.Main.name,
-          description: translate.search(true),
-        ),
-        const ViewNavigationModel(
-          key: 3,
-          icon: read.Main.icon,
-          name: read.Main.name,
-          description: 'read',
-        ),
-        ViewNavigationModel(
-          key: 4,
-          icon: setting.Main.icon,
-          name: setting.Main.name,
-          description: translate.setting(true),
-        ),
-      ];
+  List<ViewNavigationModel> get _pageButton => AppPageNavigation.button(translate);
+
+  late final List<Widget> _pageView = AppPageNavigation.page;
 
   @override
   void initState() {
@@ -99,31 +64,6 @@ abstract class _State extends State<AppMain> with SingleTickerProviderStateMixin
       // ConnectivityResult.wifi
       // ConnectivityResult.none
     });
-
-    _pageView = [
-      WidgetKeepAlive(
-        key: home.Main.uniqueKey,
-        child: home.Main(settings: widget.settings),
-      ),
-      WidgetKeepAlive(
-        key: user.Main.uniqueKey,
-        child: const user.Main(),
-      ),
-      WidgetKeepAlive(
-        key: search.Main.uniqueKey,
-        child: const search.Main(
-          defaultRouteName: '/result',
-        ),
-      ),
-      WidgetKeepAlive(
-        key: read.Main.uniqueKey,
-        child: const read.Main(),
-      ),
-      WidgetKeepAlive(
-        key: setting.Main.uniqueKey,
-        child: const setting.Main(),
-      ),
-    ];
   }
 
   @override
@@ -160,21 +100,24 @@ abstract class _State extends State<AppMain> with SingleTickerProviderStateMixin
     // if(page.key.currentState != null){
     //   page.key.currentState.setState(() {});
     // }
-    pageController.jumpToPage(index);
-    // pageController.animateToPage(index, duration: const Duration(milliseconds: 300), curve: Curves.easeOutQuart);
-    // pageController.animateToPage(index, duration: const Duration(milliseconds: 300), curve: Curves.linear);
+    _pageController.jumpToPage(index);
+    // _pageController.animateToPage(index, duration: const Duration(milliseconds: 300), curve: Curves.easeOutQuart);
+    // _pageController.animateToPage(index, duration: const Duration(milliseconds: 300), curve: Curves.linear);
   }
 
   void navigate({int at = 0, String? to, Object? args, bool routePush = true}) {
-    _navigatorNotify.index = at;
+    _navPageViewAction(at);
+    final _tmp123 = AppRoutes.homeNavigator;
+    // final _tmp123 = AppNavigatorState.home;
+    // final _tmp123 = _homeNavigator;
     final state = _tmp123.currentState;
-    if (at == 0 && to != null && state != null) {
+    if (to != null && state != null) {
       final canPop = state.canPop();
       // final canPop = Navigator.canPop(context);
       final arguments = ViewNavigationArguments(
-        canPop: canPop,
-        args: args,
         navigator: _tmp123,
+        args: args,
+        canPop: canPop,
       );
       if (routePush) {
         state.pushNamed(to, arguments: arguments);

@@ -9,11 +9,11 @@ import 'package:lidea/authentication.dart';
 // import 'package:in_app_purchase/in_app_purchase.dart';
 // import 'package:in_app_purchase_android/in_app_purchase_android.dart';
 
-import 'package:fleth/core.dart';
-import 'package:fleth/settings.dart';
+import 'core.dart';
+import 'settings.dart';
 
 import 'core/theme/data.dart';
-import 'view/app.dart';
+import 'view/app.routes.dart';
 
 // const bool isProduction = bool.fromEnvironment('dart.vm.product');
 
@@ -84,12 +84,11 @@ class Fleth extends StatelessWidget {
     return AnimatedBuilder(
       animation: settings,
       builder: (BuildContext context, Widget? child) {
+        // debugPrint('${settings.themeMode}');
         return MaterialApp(
           showSemanticsDebugger: false,
-          // debugShowCheckedModeBanner: false,
-
-          restorationScopeId: 'fleth',
-
+          debugShowCheckedModeBanner: false,
+          restorationScopeId: 'lidea',
           localizationsDelegates: const [
             AppLocalizations.delegate,
             GlobalMaterialLocalizations.delegate,
@@ -105,74 +104,98 @@ class Fleth extends StatelessWidget {
             // Myanmar
             Locale('my', ''),
           ],
-
           darkTheme: IdeaData.dark(context),
           theme: IdeaData.light(context),
           themeMode: settings.themeMode,
-
           onGenerateTitle: (BuildContext context) => AppLocalizations.of(context)!.appMyOrdbok,
+          initialRoute: AppRoutes.rootInitial,
+          routes: AppRoutes.rootMap,
+          navigatorObservers: [
+            NavigatorNotifyObserver(
+              Provider.of<NavigatorNotify>(
+                context,
+                listen: false,
+              ),
+            ),
+          ],
+          builder: (BuildContext context, Widget? view) {
+            return AnnotatedRegion<SystemUiOverlayStyle>(
+              value: SystemUiOverlayStyle(
+                systemNavigationBarColor: Theme.of(context).primaryColor,
+                // systemNavigationBarDividerColor: Colors.transparent,
+                systemNavigationBarIconBrightness: settings.resolvedSystemBrightness,
+                systemNavigationBarContrastEnforced: false,
+
+                statusBarColor: Colors.transparent,
+                statusBarBrightness: settings.systemBrightness,
+                statusBarIconBrightness: settings.resolvedSystemBrightness,
+                systemStatusBarContrastEnforced: false,
+              ),
+              child: view!,
+            );
+          },
+          /*
           home: Builder(
             builder: (BuildContext context) {
               return AnnotatedRegion<SystemUiOverlayStyle>(
                 value: SystemUiOverlayStyle(
                   systemNavigationBarColor: Theme.of(context).primaryColor,
-                  // systemNavigationBarDividerColor: Colors.transparent,
+                  systemNavigationBarDividerColor: Colors.transparent,
                   systemNavigationBarIconBrightness: settings.resolvedSystemBrightness,
-                  systemNavigationBarContrastEnforced: false,
-
+                  systemNavigationBarContrastEnforced: true,
                   statusBarColor: Colors.transparent,
-                  statusBarBrightness: settings.systemBrightness,
+                  statusBarBrightness: settings.resolvedSystemBrightness,
                   statusBarIconBrightness: settings.resolvedSystemBrightness,
-                  systemStatusBarContrastEnforced: false,
+                  systemStatusBarContrastEnforced: true,
                 ),
                 child: AppMain(settings: settings),
               );
             },
           ),
-          // onGenerateRoute: (RouteSettings route) => PageRouteBuilder<void>(
-          //   settings: route,
-          //   pageBuilder: (BuildContext context, Animation<double> a, Animation<double> b) {
-          //     return AnnotatedRegion<SystemUiOverlayStyle>(
-          //       value: SystemUiOverlayStyle(
-          //         systemNavigationBarColor: Theme.of(context).primaryColor,
-          //         systemNavigationBarDividerColor: Colors.transparent,
-          //         systemNavigationBarIconBrightness: settings.resolvedSystemBrightness,
-          //         systemNavigationBarContrastEnforced: true,
-          //         statusBarColor: Colors.transparent,
-          //         statusBarBrightness: settings.resolvedSystemBrightness,
-          //         statusBarIconBrightness: settings.resolvedSystemBrightness,
-          //         systemStatusBarContrastEnforced: true,
-          //       ),
-          //       child: AppMain(settings: settings),
-          //     );
-          //   },
-          // ),
-          // onGenerateRoute: (RouteSettings routeSettings) {
-          //   return MaterialPageRoute<void>(
-          //     settings: routeSettings,
-          //     builder: (BuildContext context) {
-          //       controller.context = context;
-          //       switch (routeSettings.name) {
-          //         case AppMain.routeName:
-          //         default:
-          //           return AnnotatedRegion<SystemUiOverlayStyle>(
-          //             value: SystemUiOverlayStyle(
-          //               systemNavigationBarColor: Theme.of(context).primaryColor,
-          //               systemNavigationBarDividerColor: Colors.transparent,
-          //               systemNavigationBarIconBrightness:
-          //                   controller.resolvedSystemBrightness,
-          //               systemNavigationBarContrastEnforced: true,
-          //               statusBarColor: Colors.transparent,
-          //               statusBarBrightness: controller.resolvedSystemBrightness,
-          //               statusBarIconBrightness: controller.resolvedSystemBrightness,
-          //               systemStatusBarContrastEnforced: true,
-          //             ),
-          //             child: const AppMain(),
-          //           );
-          //       }
-          //     },
-          //   );
-          // },
+          onGenerateRoute: (RouteSettings route) => PageRouteBuilder<void>(
+            settings: route,
+            pageBuilder: (BuildContext context, Animation<double> a, Animation<double> b) {
+              return AnnotatedRegion<SystemUiOverlayStyle>(
+                value: SystemUiOverlayStyle(
+                  systemNavigationBarColor: Theme.of(context).primaryColor,
+                  systemNavigationBarDividerColor: Colors.transparent,
+                  systemNavigationBarIconBrightness: settings.resolvedSystemBrightness,
+                  systemNavigationBarContrastEnforced: true,
+                  statusBarColor: Colors.transparent,
+                  statusBarBrightness: settings.resolvedSystemBrightness,
+                  statusBarIconBrightness: settings.resolvedSystemBrightness,
+                  systemStatusBarContrastEnforced: true,
+                ),
+                child: AppMain(settings: settings),
+              );
+            },
+          ),
+          onGenerateRoute: (RouteSettings routeSettings) {
+            return MaterialPageRoute<void>(
+              settings: routeSettings,
+              builder: (BuildContext context) {
+                controller.context = context;
+                switch (routeSettings.name) {
+                  case AppMain.routeName:
+                  default:
+                    return AnnotatedRegion<SystemUiOverlayStyle>(
+                      value: SystemUiOverlayStyle(
+                        systemNavigationBarColor: Theme.of(context).primaryColor,
+                        systemNavigationBarDividerColor: Colors.transparent,
+                        systemNavigationBarIconBrightness: controller.resolvedSystemBrightness,
+                        systemNavigationBarContrastEnforced: true,
+                        statusBarColor: Colors.transparent,
+                        statusBarBrightness: controller.resolvedSystemBrightness,
+                        statusBarIconBrightness: controller.resolvedSystemBrightness,
+                        systemStatusBarContrastEnforced: true,
+                      ),
+                      child: const AppMain(),
+                    );
+                }
+              },
+            );
+          },
+          */
         );
       },
     );

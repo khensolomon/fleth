@@ -9,8 +9,8 @@ import 'package:lidea/authentication.dart';
 // import 'package:in_app_purchase/in_app_purchase.dart';
 // import 'package:in_app_purchase_android/in_app_purchase_android.dart';
 
-import 'package:fleth/core.dart';
-import 'package:fleth/settings.dart';
+import 'core.dart';
+import 'settings.dart';
 
 import 'core/theme/data.dart';
 import 'view/app.dart';
@@ -84,7 +84,7 @@ class Fleth extends StatelessWidget {
           showSemanticsDebugger: false,
           // debugShowCheckedModeBanner: false,
 
-          restorationScopeId: 'fleth',
+          restorationScopeId: 'lidea',
 
           localizationsDelegates: const [
             AppLocalizations.delegate,
@@ -123,7 +123,7 @@ class Fleth extends StatelessWidget {
                   statusBarIconBrightness: settings.resolvedSystemBrightness,
                   systemStatusBarContrastEnforced: true,
                 ),
-                child: AppMain(settings: settings),
+                child: Main(settings: settings),
               );
             },
           ),

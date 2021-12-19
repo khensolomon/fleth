@@ -7,30 +7,32 @@ import 'package:lidea/intl.dart';
 import 'package:lidea/provider.dart';
 import 'package:lidea/view.dart';
 import 'package:lidea/authentication.dart';
-// import 'package:lidea/icon.dart';
+import 'package:lidea/icon.dart';
 
 import 'package:fleth/core.dart';
 import 'package:fleth/settings.dart';
 import 'package:fleth/widget.dart';
 // import 'package:fleth/type.dart';
 
-import 'package:fleth/view/setting/demo/text_translate.dart';
-import 'package:fleth/view/setting/demo/button_style.dart';
-import 'package:fleth/view/setting/demo/do_confirm.dart';
-import 'package:fleth/view/setting/demo/sliver_grid.dart';
-import 'package:fleth/view/setting/demo/sliver_list.dart';
-import 'package:fleth/view/setting/demo/text_height.dart';
-import 'package:fleth/view/setting/demo/text_size.dart';
+import 'package:lidea/view/demo/button_style.dart';
+import 'package:lidea/view/demo/do_confirm.dart';
+import 'package:lidea/view/demo/sliver_grid.dart';
+import 'package:lidea/view/demo/sliver_list.dart';
+import 'package:lidea/view/demo/text_height.dart';
+import 'package:lidea/view/demo/text_translate.dart';
+import 'package:lidea/view/demo/text_size.dart';
 
 part 'bar.dart';
 
 class Main extends StatefulWidget {
-  const Main({Key? key, this.settings, this.navigatorKey}) : super(key: key);
-  final SettingsController? settings;
-  final GlobalKey<NavigatorState>? navigatorKey;
+  const Main({Key? key, this.arguments}) : super(key: key);
+  // final SettingsController? settings;
+  final Object? arguments;
+  // final GlobalKey<NavigatorState>? navigatorKey;
 
   static const route = '/settings';
-  static const icon = Icons.settings;
+  // static const icon = Icons.settings;
+  static const icon = LideaIcon.cog;
   static const name = 'Settings';
   static const description = 'Settings';
   static final uniqueKey = UniqueKey();
@@ -186,13 +188,26 @@ class _View extends _State with _Bar {
             ],
           ),
         ),
-        const DemoTextTranslate(),
+        DemoTextTranslate(
+          itemCount: translate.itemCount,
+          itemCountNumber: translate.itemCountNumber,
+          formatDate: translate.formatDate,
+          confirmToDelete: translate.confirmToDelete,
+          formatCurrency: translate.formatCurrency,
+        ),
         const DemoButtonStyle(),
         const DemoDoConfirm(),
         const DemoSliverGrid(),
         const DemoSliverList(),
         const DemoTextHeight(),
-        const DemoTextSize(),
+        DemoTextSize(
+          headline: translate.headline,
+          subtitle: translate.subtitle,
+          text: translate.text,
+          caption: translate.caption,
+          button: translate.button,
+          overline: translate.overline,
+        ),
       ],
     );
   }

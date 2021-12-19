@@ -19,7 +19,7 @@ class Main extends StatefulWidget {
 
   final Object? arguments;
 
-  static const route = '/result';
+  static const route = '/search-result';
   static const icon = LideaIcon.search;
   static const name = 'Result';
   static const description = '...';

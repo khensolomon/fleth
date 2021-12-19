@@ -23,8 +23,8 @@ class Main extends StatefulWidget {
 
   final Object? arguments;
 
-  static const route = '/launch';
-  static const icon = LideaIcon.home;
+  static const route = '/home/launch';
+  static const icon = LideaIcon.flag;
   static const name = 'Launch';
   static const description = '...';
   // static final uniqueKey = UniqueKey();
@@ -98,7 +98,7 @@ class _View extends _State with _Bar, _Refresh {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 11),
               child: Hero(
-                tag: 'searchHero',
+                tag: 'searchHero-0',
                 child: GestureDetector(
                   child: Material(
                     type: MaterialType.transparency,
@@ -138,17 +138,17 @@ class _View extends _State with _Bar, _Refresh {
               [
                 ListTile(
                   leading: const Icon(Icons.search),
-                  title: const Text('Navigate to search'),
+                  title: const Text('Search: suggest'),
                   onTap: () => core.navigate(to: '/search'),
                 ),
                 ListTile(
                   leading: const Icon(Icons.search),
-                  title: const Text('Navigate to search result'),
-                  onTap: () => core.navigate(to: '/search/result'),
+                  title: const Text('Search: result'),
+                  onTap: () => core.navigate(to: '/search-result'),
                 ),
                 ListTile(
                   leading: const Icon(Icons.manage_search_rounded),
-                  title: const Text('Navigate to recent search'),
+                  title: const Text('Recent search'),
                   onTap: () => core.navigate(to: '/recent-search'),
                 ),
                 ListTile(
@@ -164,7 +164,7 @@ class _View extends _State with _Bar, _Refresh {
                 ListTile(
                   leading: const Icon(LideaIcon.bookOpen),
                   title: const Text('Navigate to reader'),
-                  onTap: () => core.navigate(to: '/reader'),
+                  onTap: () => core.navigate(to: '/read'),
                 ),
                 ListTile(
                   leading: const Icon(Icons.sort),
@@ -175,6 +175,11 @@ class _View extends _State with _Bar, _Refresh {
                   leading: const Icon(Icons.list_rounded),
                   title: const Text('Dismissible'),
                   onTap: () => core.navigate(to: '/dismissible'),
+                ),
+                ListTile(
+                  leading: const Icon(Icons.note_alt),
+                  title: const Text('Note'),
+                  onTap: () => core.navigate(to: '/note'),
                 ),
               ],
             ),

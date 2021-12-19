@@ -30,7 +30,9 @@ class Main extends StatefulWidget {
   final Object? arguments;
 
   static const route = '/recent-search';
-  static const icon = Icons.manage_search_rounded;
+  // static const icon = Icons.manage_search_rounded;
+  // static const icon = Icons.timeline_outlined;
+  static const icon = LideaIcon.layers;
   static const name = 'Recent search';
   static const description = '...';
   static final uniqueKey = UniqueKey();
@@ -48,7 +50,9 @@ abstract class _State extends State<Main> with SingleTickerProviderStateMixin {
   // SettingsController get settings => SettingsController.of(context);
   AppLocalizations get translate => AppLocalizations.of(context)!;
 
-  ViewNavigationArguments get arguments => widget.arguments as ViewNavigationArguments;
+  // ViewNavigationArguments get arguments => widget.arguments as ViewNavigationArguments;
+  late final ViewNavigationArguments arguments = widget.arguments as ViewNavigationArguments;
+  late final bool canPop = widget.arguments != null;
   // AudioAlbumType get album => arguments.meta as AudioAlbumType;
 
   @override

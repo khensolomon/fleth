@@ -18,20 +18,20 @@ class AppView extends _State with _Other {
 
   Widget launched() {
     return Scaffold(
-      key: scaffoldKey,
-      primary: true,
-      resizeToAvoidBottomInset: true,
+      key: _scaffoldKey,
+      // primary: true,
+      // resizeToAvoidBottomInset: true,
       body: SafeArea(
         top: false,
         bottom: true,
-        maintainBottomViewPadding: true,
+        // maintainBottomViewPadding: true,
         // onUnknownRoute: routeUnknown,
         child: PageView.builder(
-          controller: pageController,
+          controller: _pageController,
           // onPageChanged: _pageChanged,
           pageSnapping: false,
           // allowImplicitScrolling: true,
-          // physics: const NeverScrollableScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
           itemBuilder: (BuildContext context, int index) => _pageView[index],
           itemCount: _pageView.length,
         ),
@@ -87,7 +87,7 @@ class AppView extends _State with _Other {
       //
       // bottomSheet: BottomSheet(
       //   onClosing: (){
-      //     print('close');
+      //     debugPrint('close');
       //   }, builder: (b){
       //     return Container(
       //       height: 30,
@@ -135,24 +135,34 @@ class AppView extends _State with _Other {
               //     width: 0.3,
               //   ),
               // ),
-              borderRadius: const BorderRadius.vertical(
-                top: Radius.elliptical(3, 2),
-                // bottom: Radius.elliptical(3, 2)
+              // borderRadius: const BorderRadius.vertical(
+              //   top: Radius.elliptical(3, 2),
+              //   // bottom: Radius.elliptical(3, 2)
+              // ),
+              border: Border(
+                top: BorderSide(
+                  color: Theme.of(context).shadowColor,
+                  width: 0.3,
+                ),
               ),
               boxShadow: [
                 BoxShadow(
-                  blurRadius: scrollNavigation.height == 0 ? 2 : 0.2,
+                  // blurRadius: scrollNavigation.height == 0 ? 2 : 0.2,
+                  blurRadius: 0.2,
+                  // spreadRadius: 0.2,
                   // color: Theme.of(context).backgroundColor.withOpacity(0.3),
                   color: Theme.of(context).shadowColor,
                   // color: Colors.black,
                   // spreadRadius: scrollNavigation.heightFactor==0?0.2:0,
-                  spreadRadius: scrollNavigation.height == 0 ? 0.2 : 0.5,
+                  // spreadRadius: scrollNavigation.height == 0 ? 0.2 : 0.5,
                   offset: const Offset(0, 0),
                 )
               ],
             ),
             child: Padding(
-              padding: EdgeInsets.only(bottom: scrollNavigation.bottomPadding),
+              padding: EdgeInsets.only(
+                bottom: scrollNavigation.bottomPadding,
+              ),
               // padding: EdgeInsets.only(bottom:0),
               child: AnimatedOpacity(
                 opacity: scrollNavigation.heightFactor,
@@ -163,11 +173,11 @@ class AppView extends _State with _Other {
           ),
         );
       },
-      child: bottomAbc(),
+      child: bottomNavigator(),
     );
   }
 
-  Widget bottomAbc() {
+  Widget bottomNavigator() {
     return Consumer<NavigatorNotify>(
       builder: (context, route, child) {
         return Row(
@@ -204,15 +214,13 @@ class AppView extends _State with _Other {
     required bool disabled,
     required bool route,
   }) {
-    return Semantics(
-      label: route ? "Page navigation" : "History navigation",
-      namesRoute: route,
-      enabled: route && !disabled,
-      child: Tooltip(
-        message: item.description!,
-        child: CupertinoButton(
-          minSize: 25,
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 1),
+    return Tooltip(
+      message: item.description!,
+      child: CupertinoButton(
+        minSize: 25,
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 1),
+        child: ExcludeSemantics(
+          excluding: true,
           child: AnimatedContainer(
             curve: Curves.easeIn,
             duration: const Duration(milliseconds: 300),
@@ -220,13 +228,13 @@ class AppView extends _State with _Other {
             child: Icon(
               item.icon,
               size: route ? 26 : 18,
-              semanticLabel: item.name,
+              // semanticLabel: item.name,
             ),
           ),
-          // disabledColor: route ? CupertinoColors.quaternarySystemFill : Theme.of(context).hintColor,
-          // onPressed: current?null:()=>route?_navView(index):item.action(context)
-          onPressed: _navButtonAction(item, disabled),
         ),
+        // disabledColor: route ? CupertinoColors.quaternarySystemFill : Theme.of(context).hintColor,
+        // onPressed: current?null:()=>route?_navView(index):item.action(context)
+        onPressed: _navButtonAction(item, disabled),
       ),
     );
   }

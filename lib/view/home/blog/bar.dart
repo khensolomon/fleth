@@ -75,7 +75,7 @@ mixin _Bar on _State {
                   // ),
 
                   Align(
-                    // alignment: const Alignment(0,0.2),
+                    alignment: const Alignment(0, 0),
                     child: Hero(
                       tag: 'appbar-center',
                       child: Material(
