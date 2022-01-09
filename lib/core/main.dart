@@ -1,78 +1,71 @@
 import 'dart:async';
-import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
+// import 'package:flutter/foundation.dart';
 
+// NOTE: Preference
+// import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:lidea/intl.dart';
+import 'package:lidea/unit/controller.dart';
+
+// NOTE: Authentication
+// import 'package:lidea/firebase_auth.dart';
+import 'package:lidea/unit/authentication.dart';
+
+// NOTE: Navigation
+import 'package:lidea/unit/navigation.dart';
+
+// NOTE: Analytics
+import 'package:lidea/unit/analytics.dart';
+
+// NOTE: Store
+import 'package:lidea/unit/store.dart';
+// NOTE: SQLite
+// import 'package:lidea/unit/sqlite.dart';
+// NOTE: Audio
 // import 'package:audio_session/audio_session.dart';
 // import 'package:just_audio/just_audio.dart';
-// import 'package:rxdart/rxdart.dart';
 
-// import 'package:flutter/widgets.dart';
-// import 'package:just_audio_platform_interface/just_audio_platform_interface.dart';
+// NOTE: Core notify and Initializing properties
+import 'package:lidea/unit/engine.dart';
+// NOTE: Core API manager
+import 'package:lidea/util/main.dart';
+// Mock:
+import 'package:lidea/unit/mock.dart';
 
-// import 'package:hive/hive.dart';
-// import 'package:hive_flutter/hive_flutter.dart';
+import '/type/main.dart';
 
-import 'package:lidea/authentication.dart';
-import 'package:lidea/analytics.dart';
-import 'package:lidea/engine.dart';
+part 'store.dart';
+part 'sqlite.dart';
+part 'audio.dart';
 
-import 'package:fleth/type.dart';
+part 'preference.dart';
+part 'authentication.dart';
+part 'navigation.dart';
+part 'analytics.dart';
 
-import 'purchase.dart';
-
-part 'configuration.dart';
 part 'abstract.dart';
 part 'utility.dart';
 part 'mock.dart';
-// part 'store.dart';
-// part 'sqlite.dart';
-// part 'audio.dart';
 
 class Core extends _Abstract with _Mock {
-  Core(Authentication authentication) : super(authentication);
+  // Core() : super();
 
-  Future<void> init() async {
+  Future<void> init(BuildContext context) async {
     Stopwatch initWatch = Stopwatch()..start();
+    collection.locale = Localizations.localeOf(context).languageCode;
+    preference.context = context;
 
-    // if (progressPercentage == 1.0) return;
-    // await Future.delayed(const Duration(milliseconds: 1000));
-    await Future.microtask(() => null);
+    // await Future.microtask(() => null);
 
     await initData();
 
-    // progressPercentage = 0.3;
+    await store.init();
 
-    // store = new Store(notify:notify,collection: collection);
+    await _sql.init();
 
-    // await store.init();
-    // progressPercentage = 0.5;
-
-    // // _sql = new SQLite(collection: collection);
-    // // await _sql.init();
-
-    // await collection.cacheBucket.artistInit();
-    // await collection.cacheBucket.trackInit();
-    // await collection.cacheBucket.albumInit();
-    // await collection.cacheBucket.langInit();
-
-    // audio = new Audio(notifyIf:notifyIf, collection: collection);
-    // await audio.init();
-
-    // progressPercentage = 0.9;
-
-    // await definitionGenerate();
     // await mockTest();
 
     debugPrint('Initiated in ${initWatch.elapsedMilliseconds} ms');
-    // progressPercentage = 1.0;
-    // _message = 'Done';
-    // suggestionQuery = 'god';
-    // suggestionQuery = collection.setting.searchQuery!;
-    // searchQuery = collection.searchQuery;
-  }
-
-  Future<void> analyticsReading() async {
-    analyticsSearch('keyword goes here');
   }
 }

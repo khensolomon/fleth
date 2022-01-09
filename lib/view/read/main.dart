@@ -3,14 +3,13 @@ import 'package:flutter/cupertino.dart';
 // import 'package:flutter/rendering.dart';
 
 import 'package:lidea/provider.dart';
-import 'package:lidea/view.dart';
-import 'package:lidea/authentication.dart';
+import 'package:lidea/view/main.dart';
 import 'package:lidea/icon.dart';
 
-import 'package:fleth/core.dart';
-import 'package:fleth/settings.dart';
-import 'package:fleth/widget.dart';
-// import 'package:fleth/type.dart';
+import '/core/main.dart';
+
+import '/widget/main.dart';
+// import '/type/main.dart';
 
 part 'bar.dart';
 part 'optionlist.dart';
@@ -20,7 +19,6 @@ part 'chapterlist.dart';
 class Main extends StatefulWidget {
   const Main({Key? key, this.arguments}) : super(key: key);
   final Object? arguments;
-  // final SettingsController? settings;
   // final GlobalKey<NavigatorState>? navigatorKey;
 
   static const route = '/read';
@@ -36,7 +34,7 @@ class Main extends StatefulWidget {
 
 abstract class _State extends State<Main> with SingleTickerProviderStateMixin {
   late final Core core = context.read<Core>();
-  late final SettingsController settings = context.read<SettingsController>();
+  // late final SettingsController settings = context.read<SettingsController>();
   // late final AppLocalizations translate = AppLocalizations.of(context)!;
   late final Authentication authenticate = context.read<Authentication>();
   late final scrollController = ScrollController();
@@ -46,12 +44,13 @@ abstract class _State extends State<Main> with SingleTickerProviderStateMixin {
   final keyChapterButton = GlobalKey();
   final keyOptionButton = GlobalKey();
 
-  // SettingsController get settings => context.read<SettingsController>();
-  AppLocalizations get translate => AppLocalizations.of(context)!;
-  // Authentication get authenticate => context.read<Authentication>();
-
   late final ViewNavigationArguments arguments = widget.arguments as ViewNavigationArguments;
   late final bool canPop = widget.arguments != null;
+
+  // SettingsController get settings => context.read<SettingsController>();
+  // AppLocalizations get translate => AppLocalizations.of(context)!;
+  // Authentication get authenticate => context.read<Authentication>();
+  Preference get preference => core.preference;
 
   @override
   void initState() {

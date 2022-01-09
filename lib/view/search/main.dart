@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:lidea/view.dart';
+import 'package:lidea/view/main.dart';
 import 'package:lidea/icon.dart';
-
-import 'package:fleth/settings.dart';
 
 import 'result/main.dart' as result;
 import 'suggest/main.dart' as suggest;
@@ -11,12 +9,10 @@ import 'suggest/main.dart' as suggest;
 class Main extends StatefulWidget {
   const Main({
     Key? key,
-    this.settings,
     this.arguments,
     this.defaultRouteName,
   }) : super(key: key);
 
-  final SettingsController? settings;
   // final GlobalKey<NavigatorState>? navigatorKey;
   final Object? arguments;
   final String? defaultRouteName;

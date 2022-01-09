@@ -27,15 +27,15 @@ mixin _Bar on _State {
             padding: EdgeInsets.zero,
             child: WidgetLabel(
               icon: CupertinoIcons.left_chevron,
-              label: translate.back,
+              label: preference.text.back,
             ),
-            onPressed: () => true,
+            // child: const Icon(
+            //   CupertinoIcons.left_chevron,
+            // ),
+            onPressed: null,
           ),
+
           actions: [
-            IconButton(
-              icon: const Icon(Icons.accessibility),
-              onPressed: () => false,
-            ),
             IconButton(
               icon: const Icon(Icons.accessibility),
               onPressed: () => false,
@@ -57,7 +57,7 @@ mixin _Bar on _State {
                 //   );
                 // });
               },
-            )
+            ),
           ],
           // flexibleSpace: LayoutBuilder(
           //   builder: (BuildContext context, BoxConstraints constraints) {
@@ -101,8 +101,8 @@ mixin _Bar on _State {
     return Semantics(
       label: "Page",
       child: Text(
-        translate.setting(true),
-        semanticsLabel: translate.setting(true),
+        preference.text.setting(true),
+        semanticsLabel: preference.text.setting(true),
       ),
     );
   }

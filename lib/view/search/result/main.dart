@@ -4,13 +4,13 @@ import 'package:flutter/cupertino.dart';
 // import 'package:flutter/rendering.dart';
 
 import 'package:lidea/provider.dart';
-import 'package:lidea/view.dart';
+import 'package:lidea/view/main.dart';
 import 'package:lidea/icon.dart';
+// import 'package:lidea/hive.dart';
 
-import 'package:fleth/core.dart';
-import 'package:fleth/settings.dart';
-import 'package:fleth/widget.dart';
-import 'package:fleth/type.dart';
+import '/core/main.dart';
+import '/type/main.dart';
+import '/widget/main.dart';
 
 part 'bar.dart';
 
@@ -35,6 +35,7 @@ abstract class _State extends State<Main> with SingleTickerProviderStateMixin {
   late Core core;
 
   late final scrollController = ScrollController();
+  late final TextEditingController textController = TextEditingController();
   late final Future<void> initiator = core.conclusionGenerate(init: true);
 
   ViewNavigationArguments get arguments => widget.arguments as ViewNavigationArguments;
@@ -45,18 +46,21 @@ abstract class _State extends State<Main> with SingleTickerProviderStateMixin {
   // bool get canPop => navigator.currentState!.canPop();
   // bool get canPop => Navigator.of(context).canPop();
 
-  AppLocalizations get translate => AppLocalizations.of(context)!;
+  // AppLocalizations get translate => AppLocalizations.of(context)!;
+  Preference get preference => core.preference;
 
   @override
   void initState() {
     super.initState();
     core = context.read<Core>();
+    onQuery();
   }
 
   @override
   void dispose() {
-    scrollController.dispose();
     super.dispose();
+    scrollController.dispose();
+    textController.dispose();
   }
 
   @override
@@ -64,19 +68,8 @@ abstract class _State extends State<Main> with SingleTickerProviderStateMixin {
     if (mounted) super.setState(fn);
   }
 
-  void onSearch(bool status) {
+  void onUpdate(bool status) {
     if (status) {
-      // Future.microtask(() {
-      //   core.conclusionGenerate().whenComplete(() {
-      //     if (scrollController.hasClients && scrollController.position.hasContentDimensions) {
-      //       scrollController.animateTo(
-      //         scrollController.position.minScrollExtent,
-      //         curve: Curves.fastOutSlowIn,
-      //         duration: const Duration(milliseconds: 500),
-      //       );
-      //     }
-      //   });
-      // });
       Future.delayed(const Duration(milliseconds: 300), () {
         if (scrollController.hasClients && scrollController.position.hasContentDimensions) {
           scrollController.animateTo(
@@ -86,7 +79,27 @@ abstract class _State extends State<Main> with SingleTickerProviderStateMixin {
           );
         }
       });
+      onQuery();
     }
+  }
+
+  void onQuery() async {
+    Future.microtask(() {
+      textController.text = core.searchQuery;
+    });
+  }
+
+  void onSearch(String ord) async {
+    core.searchQuery = ord;
+    core.suggestQuery = ord;
+    await core.conclusionGenerate();
+    onQuery();
+    onUpdate(core.searchQuery.isNotEmpty);
+  }
+
+  void onSwitchFavorite() {
+    core.collection.favoriteSwitch(core.searchQuery);
+    core.notify();
   }
 }
 
@@ -94,7 +107,7 @@ class _View extends _State with _Bar {
   @override
   Widget build(BuildContext context) {
     return ViewPage(
-      controller: scrollController,
+      // controller: scrollController,
       child: body(),
     );
   }
@@ -104,28 +117,23 @@ class _View extends _State with _Bar {
       controller: scrollController,
       slivers: <Widget>[
         bar(),
-
         FutureBuilder(
           future: initiator,
           builder: (BuildContext _, AsyncSnapshot<void> snap) {
             switch (snap.connectionState) {
               case ConnectionState.waiting:
               case ConnectionState.none:
-                return const SliverFillRemaining(
-                  child: Center(
-                    child: Text('A moment'),
-                  ),
-                );
+                return _msg(preference.text.aMoment);
               default:
                 return Selector<Core, ConclusionType>(
                   selector: (_, e) => e.collection.cacheConclusion,
                   builder: (BuildContext context, ConclusionType o, Widget? child) {
                     if (o.query.isEmpty) {
-                      return _noQuery();
+                      return _msg(preference.text.aWordOrTwo);
                     } else if (o.raw.isNotEmpty) {
-                      return _listView(o);
+                      return _resultBlock(o);
                     } else {
-                      return _noMatch();
+                      return _msg(preference.text.searchNoMatch);
                     }
                   },
                 );
@@ -136,47 +144,38 @@ class _View extends _State with _Bar {
         //   selector: (_, e) => e.collection.cacheConclusion,
         //   builder: (BuildContext context, ConclusionType o, Widget? child) {
         //     if (o.query.isEmpty) {
-        //       return _noQuery();
+        //       return _msg(translate.aWordOrTwo);
         //     } else if (o.raw.isNotEmpty) {
-        //       return _listView(o);
+        //       return _resultBlock(o);
         //     } else {
-        //       return _noMatch();
+        //       return _msg(translate.searchNoMatch);
         //     }
         //   },
-        // )
+        // ),
       ],
     );
   }
 
-  Widget _noQuery() {
-    return const SliverToBoxAdapter(
-      child: Text('result: no query'),
-    );
-  }
-
-  Widget _noMatch() {
-    return const SliverToBoxAdapter(
-      child: Text('result: not found'),
-    );
-  }
-
-  // listView
-  Widget _listView(ConclusionType o) {
-    return SliverPadding(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 30),
-      sliver: SliverList(
-        delegate: SliverChildBuilderDelegate(
-          (BuildContext context, int index) {
-            final snap = o.raw.elementAt(index);
-            return _listItem(snap);
-          },
-          childCount: o.raw.length,
-        ),
+  Widget _msg(String msg) {
+    return SliverFillRemaining(
+      hasScrollBody: false,
+      fillOverscroll: true,
+      child: Center(
+        child: Text(msg),
       ),
     );
   }
 
-  Widget _listItem(Map<String, dynamic> item) {
+  Widget _resultBlock(ConclusionType o) {
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+        (BuildContext context, int i) => _resultContainer(o.raw.elementAt(i)),
+        childCount: o.raw.length,
+      ),
+    );
+  }
+
+  Widget _resultContainer(Map<String, dynamic> item) {
     String word = item.values.first.toString();
     return ListTile(
       title: Text(word),

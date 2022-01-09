@@ -5,7 +5,7 @@ mixin _Mock on _Abstract {
   Future<dynamic> mockTest1() async {
     Stopwatch mockWatch = Stopwatch()..start();
 
-    final a3 = UtilDocument.encodeJSON({'hello': getRandomString(10)});
+    final a3 = UtilDocument.encodeJSON({'hello': 'hello!!'});
     collection.gist.updateFile(file: userFile, content: a3).then((e) {
       debugPrint('$e');
     }).catchError((e) async {
@@ -169,51 +169,53 @@ mixin _Mock on _Abstract {
   //   return Future.error("Failed to load");
   // }
 
-  String getRandomString(int length) {
-    const _chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
-    return List.generate(length, (index) => _chars[Random().nextInt(_chars.length)]).join();
-  }
-
   /// ```dart
   /// [query: String, raw: List<Map<String, Object?>>]
   /// ```
   /// typeof [SuggestionType]
+  // Future<void> suggestionGenerate() async {
+  //   Stopwatch suggestionWatch = Stopwatch()..start();
+  //   int randomNumber = Random().nextInt(100);
+  //   collection.cacheSuggestion = SuggestionType(
+  //     query: collection.suggestQuery,
+  //     // raw: await _sql.suggestion()
+  //     raw: List.generate(randomNumber, (_) => {'word': 'random $randomNumber ${collection.suggestQuery}'}),
+  //   );
+  //   notify();
+  //   debugPrint('suggestionGenerate in ${suggestionWatch.elapsedMilliseconds} ms');
+  // }
+
   Future<void> suggestionGenerate() async {
-    Stopwatch suggestionWatch = Stopwatch()..start();
-    int randomNumber = Random().nextInt(100);
+    // this.suggestionList = await _sql.suggestion(collection.searchQuery);
+    // if (collection.cacheSuggestion.query != collection.suggestQuery) {
+    //   collection.cacheSuggestion = SuggestionType(
+    //     query: collection.suggestQuery,
+    //     raw: await _sql.suggestion(),
+    //   );
+    //   notify();
+    // }
+    // debugPrint('suggestionGenerate in ${suggestionWatch.elapsedMilliseconds} ms');
+    int randomNumber = Mock.randomNumber(100);
+    String randomString = Mock.randomString();
     collection.cacheSuggestion = SuggestionType(
       query: collection.suggestQuery,
-      // raw: await _sql.suggestion()
-      raw: List.generate(randomNumber, (_) => {'word': 'random $randomNumber ${collection.suggestQuery}'}),
+      raw: List.generate(randomNumber, (_) => {'word': '$randomString $suggestQuery'}),
     );
     notify();
-    debugPrint('suggestionGenerate in ${suggestionWatch.elapsedMilliseconds} ms');
   }
 
-  // ignore: todo
-  // TODO: definition on multi words
   /// ```dart
   /// [query: String, raw: List<Map<String, Object?>>]
   /// ```
   /// typeof [ConclusionType]
   Future<void> conclusionGenerate({bool init = false}) async {
-    // Stopwatch conclusionWatch = Stopwatch()..start();
-    int _random = Random().nextInt(100);
-    // collection.cacheConclusion = ConclusionType(
-    //   query: collection.searchQuery,
-    //   raw: List.generate(randomNumber, (_) => {'word': 'random $randomNumber'}),
-    // );
-    // notify();
-
-    // debugPrint('conclusionGenerate in ${conclusionWatch.elapsedMilliseconds} ms');
-
-    debugPrint('conclusionGenerate ${collection.searchQuery}');
+    int randomNumber = Mock.randomNumber(100);
+    String randomString = Mock.randomString();
 
     if (collection.cacheConclusion.query != collection.searchQuery) {
       collection.cacheConclusion = ConclusionType(
         query: collection.searchQuery,
-        // raw: await _definitionGenerator()
-        raw: List.generate(_random, (_) => {'word': '${collection.searchQuery} $_random'}),
+        raw: List.generate(randomNumber, (_) => {'word': '$randomString $suggestQuery'}),
       );
       collection.recentSearchUpdate(collection.searchQuery);
       if (!init) {
@@ -222,6 +224,6 @@ mixin _Mock on _Abstract {
     }
     // collection.recentSearchUpdate(word);
     // collection.searchQuery = word;
-    // analyticsSearch(collection.searchQuery);
+    analytics.search(collection.searchQuery);
   }
 }

@@ -1,18 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+// import 'package:lidea/hive.dart';
 // import 'package:flutter/rendering.dart';
 
 import 'package:lidea/intl.dart';
 
 import 'package:lidea/provider.dart';
-import 'package:lidea/view.dart';
-import 'package:lidea/authentication.dart';
+import 'package:lidea/view/main.dart';
 import 'package:lidea/icon.dart';
-
-import 'package:fleth/core.dart';
-import 'package:fleth/settings.dart';
-import 'package:fleth/widget.dart';
-// import 'package:fleth/type.dart';
 
 import 'package:lidea/view/demo/button_style.dart';
 import 'package:lidea/view/demo/do_confirm.dart';
@@ -22,11 +17,14 @@ import 'package:lidea/view/demo/text_height.dart';
 import 'package:lidea/view/demo/text_translate.dart';
 import 'package:lidea/view/demo/text_size.dart';
 
+import '/core/main.dart';
+import '/widget/main.dart';
+// import '/type/main.dart';
+
 part 'bar.dart';
 
 class Main extends StatefulWidget {
   const Main({Key? key, this.arguments}) : super(key: key);
-  // final SettingsController? settings;
   final Object? arguments;
   // final GlobalKey<NavigatorState>? navigatorKey;
 
@@ -44,25 +42,31 @@ class Main extends StatefulWidget {
 
 abstract class _State extends State<Main> with SingleTickerProviderStateMixin {
   late final Core core = context.read<Core>();
-  late final SettingsController settings = context.read<SettingsController>();
+  // late final SettingsController settings = context.read<SettingsController>();
   // late final AppLocalizations translate = AppLocalizations.of(context)!;
   late final Authentication authenticate = context.read<Authentication>();
   late final scrollController = ScrollController();
 
   // SettingsController get settings => context.read<SettingsController>();
-  AppLocalizations get translate => AppLocalizations.of(context)!;
+  // AppLocalizations get translate => AppLocalizations.of(context)!;
   // Authentication get authenticate => context.read<Authentication>();
 
+  Preference get preference => core.preference;
+
   List<String> get themeName => [
-        translate.automatic,
-        translate.light,
-        translate.dark,
+        preference.text.automatic,
+        preference.text.light,
+        preference.text.dark,
       ];
 
   @override
   void initState() {
     super.initState();
-    // Future.microtask((){});
+
+    Future.microtask(() {
+      final abc = Localizations.localeOf(context).languageCode;
+      debugPrint('core.collection.locale: $abc');
+    });
   }
 
   @override
@@ -106,6 +110,24 @@ class _View extends _State with _Bar {
         SliverList(
           delegate: SliverChildListDelegate(
             <Widget>[
+              CupertinoButton(
+                child: Text(core.collection.language('offlineaccess')),
+                onPressed: () {
+                  core.collection.language('offlineaccess');
+                },
+              ),
+              CupertinoButton(
+                child: const Text('offlineaccess: none'),
+                onPressed: () {
+                  core.collection.language('offlineaccess');
+                },
+              ),
+              CupertinoButton(
+                child: const Text('translate: hello'),
+                onPressed: () {
+                  core.collection.language('hello');
+                },
+              ),
               Card(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
@@ -117,11 +139,11 @@ class _View extends _State with _Bar {
                         padding: const EdgeInsets.symmetric(horizontal: 7),
                         child: WidgetLabel(
                           icon: Icons.lightbulb,
-                          label: translate.themeMode,
+                          label: preference.text.themeMode,
                         ),
                       ),
                       const Divider(),
-                      Selector<SettingsController, ThemeMode>(
+                      Selector<Preference, ThemeMode>(
                         selector: (_, e) => e.themeMode,
                         builder: (BuildContext context, ThemeMode theme, Widget? child) => Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -133,7 +155,7 @@ class _View extends _State with _Bar {
                                 enable: !active,
                                 label: themeName[e.index],
                               ),
-                              onPressed: active ? null : () => settings.updateThemeMode(e),
+                              onPressed: active ? null : () => preference.updateThemeMode(e),
                             );
                           }).toList(),
                         ),
@@ -153,7 +175,7 @@ class _View extends _State with _Bar {
                         padding: const EdgeInsets.symmetric(horizontal: 7),
                         child: WidgetLabel(
                           icon: Icons.translate,
-                          label: translate.locale,
+                          label: preference.text.locale,
                         ),
                       ),
                       const Divider(),
@@ -161,11 +183,11 @@ class _View extends _State with _Bar {
                         shrinkWrap: true,
                         primary: false,
                         physics: const NeverScrollableScrollPhysics(),
-                        itemCount: AppLocalizations.supportedLocales.length,
+                        itemCount: preference.supportedLocales.length,
                         // itemCount: Localizations.localeOf(context).,
                         padding: EdgeInsets.zero,
                         itemBuilder: (_, index) {
-                          final lang = AppLocalizations.supportedLocales[index];
+                          final lang = preference.supportedLocales[index];
 
                           Locale locale = Localizations.localeOf(context);
                           final String localeName = Intl.canonicalizedLocale(lang.languageCode);
@@ -177,7 +199,7 @@ class _View extends _State with _Bar {
                                 ? Icons.radio_button_checked
                                 : Icons.radio_button_unchecked),
                             title: Text(localeName),
-                            onTap: () => settings.updateLocale(lang),
+                            onTap: () => preference.updateLocale(lang),
                           );
                         },
                       )
@@ -189,11 +211,11 @@ class _View extends _State with _Bar {
           ),
         ),
         DemoTextTranslate(
-          itemCount: translate.itemCount,
-          itemCountNumber: translate.itemCountNumber,
-          formatDate: translate.formatDate,
-          confirmToDelete: translate.confirmToDelete,
-          formatCurrency: translate.formatCurrency,
+          itemCount: preference.text.itemCount,
+          itemCountNumber: preference.text.itemCountNumber,
+          formatDate: preference.text.formatDate,
+          confirmToDelete: preference.text.confirmToDelete,
+          formatCurrency: preference.text.formatCurrency,
         ),
         const DemoButtonStyle(),
         const DemoDoConfirm(),
@@ -201,12 +223,12 @@ class _View extends _State with _Bar {
         const DemoSliverList(),
         const DemoTextHeight(),
         DemoTextSize(
-          headline: translate.headline,
-          subtitle: translate.subtitle,
-          text: translate.text,
-          caption: translate.caption,
-          button: translate.button,
-          overline: translate.overline,
+          headline: preference.text.headline,
+          subtitle: preference.text.subtitle,
+          text: preference.text.text,
+          caption: preference.text.caption,
+          button: preference.text.button,
+          overline: preference.text.overline,
         ),
       ],
     );

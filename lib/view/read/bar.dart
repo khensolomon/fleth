@@ -26,7 +26,7 @@ mixin _Bar on _State {
                   child: WidgetLabel(
                     icon: Icons.bookmark_add,
                     iconSize: (org.shrink * 23).clamp(18, 23).toDouble(),
-                    message: translate.back,
+                    message: preference.text.back,
                   ),
                   onPressed: setBookMark,
                 ),
@@ -53,7 +53,7 @@ mixin _Bar on _State {
                             ),
                           ),
                           child: _barButton(
-                            label: translate.headline,
+                            label: preference.text.headline,
                             padding: const EdgeInsets.symmetric(horizontal: 7),
                             message: 'Book',
                             shrink: org.shrink,
@@ -118,7 +118,7 @@ mixin _Bar on _State {
                     child: WidgetLabel(
                       icon: LideaIcon.textSize,
                       iconSize: (org.shrink * 23).clamp(18, 23).toDouble(),
-                      message: translate.signOut,
+                      message: preference.text.signOut,
                     ),
                     onPressed: showOptionList,
                   ),

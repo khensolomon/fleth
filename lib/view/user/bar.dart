@@ -34,14 +34,14 @@ mixin _Bar on _State {
                                   },
                                   child: WidgetLabel(
                                     icon: CupertinoIcons.left_chevron,
-                                    label: translate.back,
+                                    label: preference.text.back,
                                     // label: AppLocalizations.of(context)!.back,
                                   ),
                                 ),
                               )
                             : WidgetLabel(
                                 icon: CupertinoIcons.left_chevron,
-                                label: translate.back,
+                                label: preference.text.back,
                               )
                         : const SizedBox(),
                   ),
@@ -69,7 +69,7 @@ mixin _Bar on _State {
                         authenticate.hasUser ? () async => await authenticate.signOut() : null,
                     child: WidgetLabel(
                       icon: Icons.logout_rounded,
-                      message: translate.signOut,
+                      message: preference.text.signOut,
                     ),
                   ),
                 ),

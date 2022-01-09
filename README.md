@@ -60,8 +60,7 @@ onCancel
 # %USERPROFILE%
 # %OneDrive%/
 # -keyalg RSA -keysize 2048 -validity 10000
-keytool -genkey -v -alias ? -storepass ? -keystore %OneDrive%/Setting/keystore/com.name.app.jks -deststoretype pkcs12 -keyalg RSA -keysize 2048 -validity 10000
-keytool -genkey -v -alias ? -storepass ? -keystore %OneDrive%/Setting/laisiangtho/bible.Android.jks -deststoretype pkcs12 -keyalg RSA -keysize 2048 -validity 10000
+keytool -genkey -v -alias ? -storepass ? -keystore %OneDrive%/env/dev/app/keystore.jks -deststoretype pkcs12 -keyalg RSA -keysize 2048 -validity 10000
 
 # migrate from proprietary format to [pkcs12]
 # The JKS keystore uses a proprietary format. It is recommended to migrate to PKCS12 which is an industry standard format using "keytool -importkeystore -srckeystore ?/name.app.jks -destkeystore ?/name.app.jks -deststoretype pkcs12"
@@ -70,6 +69,16 @@ keytool -importkeystore -srckeystore "path/name.jks" -destkeystore "path/name.jk
 
 # list ?
 keytool -list -v -keystore debug.keystore -alias android -storepass android -keypass android
+keytool -exportcert -alias lethil -keystore "%OneDrive%/env/dev/laisiangtho/keystore.jks" | "C:\OpenSSL\bin\openssl" sha1 -binary | "C:\OpenSSL\bin\openssl" base64
+```
+
+... 'keytool' is not recognized
+
+```bash
+evn (PATH) -> %ProgramFiles%\Android\Android Studio\jre\bin
+set PATH=%ProgramFiles%\Android\Android Studio\jre\bin
+set PATH=%ProgramFiles%\apple
+SET PATH=%PATH%;%ProgramFiles%\apple;
 ```
 
 ... gradlew Android
