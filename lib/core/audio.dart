@@ -1,3 +1,5 @@
 part of 'main.dart';
 
-class Audio {}
+class Audio {
+  Future<void> init() async {}
+}

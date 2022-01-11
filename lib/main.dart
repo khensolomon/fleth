@@ -29,13 +29,13 @@ void main() async {
   await core.ensureInitialized();
   // authentication.stateObserver(core.userObserver);
 
-  runApp(MyOrdbok(core: core));
+  runApp(Fleth(core: core));
 }
 
-class MyOrdbok extends StatelessWidget {
+class Fleth extends StatelessWidget {
   final Core core;
 
-  const MyOrdbok({Key? key, required this.core}) : super(key: key);
+  const Fleth({Key? key, required this.core}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
