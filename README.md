@@ -12,6 +12,8 @@ flutter channel stable
 
 ... primary textfield features
 
+kBottomNavigationBarHeight -> kToolbarHeight
+
 ```note
 on initState(searchQuery)
   get -> core.collection.searchQuery
@@ -20,6 +22,107 @@ onSearch
 onCancel
   restore -> core.searchQuery from core.collection.searchQuery
   update -> textController.text 
+```
+
+```dart
+late final Core core = context.read<Core>();
+late final Preference preference = core.preference;
+
+late final Authentication authenticate = context.read<Authentication>();
+
+
+Preference get preference => core.preference;
+SettingsController get settings => context.read<SettingsController>();
+AppLocalizations get translate => AppLocalizations.of(context)!;
+Authentication get authenticate => context.read<Authentication>();
+ViewScrollNotify get scrollNotify => Provider.of<ViewScrollNotify>(context, listen: false);
+ // late final ViewScrollNotify scrollNotify = context.read<ViewScrollNotify>();
+  late final ViewScrollNotify scrollNotify = Provider.of<ViewScrollNotify>(context, listen: false);
+
+late final bool _hasNav = widget.arguments != null;
+late final _nav = widget.arguments as ViewNavigationArguments;
+late final _navArguments = _nav.arguments<ViewNavigationArguments>();
+
+```
+
+```dart
+late final args = argumentsAs<ViewNavigationArguments>();
+late final param = args?.param<ViewNavigationArguments>();
+
+Positioned(
+  left: 0,
+  top: 0,
+  child: WidgetButton(
+    padding: const EdgeInsets.fromLTRB(0, 12, 0, 12),
+    child: WidgetLabel(
+      icon: Icons.arrow_back_ios_new_rounded,
+      label: preference.text.back,
+    ),
+  duration: const Duration(milliseconds: 300),
+  show: hasArguments,
+    onPressed: args?.currentState!.maybePop,
+  ),
+),
+WidgetAppbarTitle(
+  alignment: Alignment.lerp(
+    const Alignment(0, 0),
+    const Alignment(0, .5),
+    org.snapShrink,
+  ),
+  label: 'Reorderable',
+  shrink: org.shrink,
+),
+Positioned(
+  right: 0,
+  top: 0,
+  child: WidgetButton(
+    padding: const EdgeInsets.fromLTRB(0, 12, 12, 12),
+    child: AnimatedBuilder(
+      animation: dragController,
+      builder: (context, _) {
+        return WidgetLabel(
+          icon: Icons.sort,
+          iconColor: colorAnimation.value,
+        );
+      },
+    ),
+    enable: false,
+    onPressed: onSort,
+  ),
+),
+Positioned(
+  right: 0,
+  top: 0,
+  child: WidgetButton(
+    padding: const EdgeInsets.fromLTRB(0, 12, 12, 12),
+    child: const WidgetLabel(
+      icon: Icons.sort,
+    ),
+    duration: const Duration(milliseconds: 300),
+    onPressed: onSort,
+  ),
+),
+Positioned(
+  right: 0,
+  top: 0,
+  child: WidgetButton(
+    padding: const EdgeInsets.fromLTRB(0, 12, 12, 12),
+    child: const WidgetLabel(
+      icon: Icons.clear_all_rounded,
+    ),
+    duration: const Duration(milliseconds: 300),
+    enable: hasValue,
+    onPressed: () {
+      doConfirmWithDialog(
+        context: context,
+        // message: 'Do you really want to delete all?',
+        message: preference.text.confirmToDelete('all'),
+      ).then((bool? confirmation) {
+        if (confirmation != null && confirmation) onClearAll();
+      });
+    },
+  ),
+),
 ```
 
 ## Token
