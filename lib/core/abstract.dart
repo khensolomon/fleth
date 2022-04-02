@@ -39,7 +39,7 @@ abstract class _Abstract extends UnitEngine with _Utility {
     notifyIf<String>(suggestQuery, collection.suggestQuery = word);
   }
 
-  Future<void> initData() async {
+  Future<void> dataInitialized() async {
     // await initBible();
     // await initDictionary();
     // await initMusic();

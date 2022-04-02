@@ -17,6 +17,7 @@ import '/type/main.dart';
 import '/widget/main.dart';
 
 part 'bar.dart';
+part 'state.dart';
 
 class Main extends StatefulWidget {
   const Main({Key? key, this.arguments}) : super(key: key);
@@ -24,76 +25,42 @@ class Main extends StatefulWidget {
   final Object? arguments;
 
   static const route = '/store';
-  // static const icon = Icons.assistant;
   static const icon = Icons.shopping_bag;
   static const name = 'Store';
   static const description = '...';
   static final uniqueKey = UniqueKey();
-  // static final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   State<StatefulWidget> createState() => _View();
-}
-
-abstract class _State extends State<Main> with SingleTickerProviderStateMixin {
-  final scrollController = ScrollController();
-
-  // late Core core;
-  late final Core core = context.read<Core>();
-  late final store = core.store;
-
-  // ViewNavigationArguments get arguments => widget.arguments as ViewNavigationArguments;
-  late final ViewNavigationArguments arguments = widget.arguments as ViewNavigationArguments;
-  late final bool canPop = widget.arguments != null;
-  // AudioAlbumType get album => arguments.meta as AudioAlbumType;
-
-  // SettingsController get settings => context.read<SettingsController>();
-  // AppLocalizations get translate => AppLocalizations.of(context)!;
-  Preference get preference => core.preference;
-  // Authentication get authenticate => context.read<Authentication>();
-
-  @override
-  void initState() {
-    store.init();
-    super.initState();
-    // core = context.read<Core>();
-  }
-
-  @override
-  void dispose() {
-    store.dispose();
-    super.dispose();
-    scrollController.dispose();
-  }
-
-  @override
-  void setState(fn) {
-    if (mounted) super.setState(fn);
-  }
-
-  void onSort() {}
 }
 
 class _View extends _State with _Bar {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: widget.key,
       body: ViewPage(
-        // controller: scrollController,
-        child: body(),
+        controller: scrollController,
+        child: CustomScrollView(
+          controller: scrollController,
+          slivers: sliverWidgets(),
+        ),
       ),
     );
   }
 
-  CustomScrollView body() {
-    return CustomScrollView(
-      controller: scrollController,
-      slivers: <Widget>[
-        bar(),
-        cartWidget(),
-      ],
-    );
+  List<Widget> sliverWidgets() {
+    return [
+      ViewHeaderSliverSnap(
+        pinned: true,
+        floating: false,
+        padding: MediaQuery.of(context).viewPadding,
+        heights: const [kToolbarHeight, 50],
+        overlapsBackgroundColor: Theme.of(context).primaryColor,
+        overlapsBorderColor: Theme.of(context).shadowColor,
+        builder: bar,
+      ),
+      cartWidget(),
+    ];
   }
 
   Widget cartWidget() {
@@ -287,7 +254,7 @@ class _View extends _State with _Bar {
                   : null,
               title: Text(
                 title.replaceAll(RegExp(r'\(.+?\)$'), ""),
-                style: Theme.of(context).textTheme.headline4!.copyWith(fontSize: 25),
+                style: Theme.of(context).textTheme.headlineMedium,
               ),
             ),
             Builder(
@@ -295,7 +262,7 @@ class _View extends _State with _Bar {
                 if (hasPurchased) {
                   return const SizedBox();
                 }
-                return CupertinoButton(
+                return WidgetButton(
                   padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
                   // minSize: 25,
                   color: Theme.of(context).highlightColor,
@@ -342,7 +309,6 @@ class _View extends _State with _Bar {
                 semanticsLabel: description,
                 // textScaleFactor:0.9,
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodyText2,
               ),
             ),
           ],

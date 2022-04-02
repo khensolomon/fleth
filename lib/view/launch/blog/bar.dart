@@ -1,130 +1,44 @@
 part of 'main.dart';
 
 mixin _Bar on _State {
-  Widget bar() {
-    return ViewHeaderSliverSnap(
-      pinned: true,
-      floating: true,
-      reservedPadding: MediaQuery.of(context).padding.top,
-      heights: const [kBottomNavigationBarHeight, 40],
-      // overlapsBackgroundColor:Theme.of(context).primaryColor.withOpacity(0.8),
-      overlapsBackgroundColor: Theme.of(context).primaryColor,
-      overlapsBorderColor: Theme.of(context).shadowColor,
-      builder: (BuildContext context, ViewHeaderData org, ViewHeaderData snap) {
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            SizedBox(
-              height: kBottomNavigationBarHeight,
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  TweenAnimationBuilder<double>(
-                    tween: Tween<double>(begin: 30, end: 0),
-                    duration: const Duration(milliseconds: 300),
-                    builder: (BuildContext context, double align, Widget? child) {
-                      return Positioned(
-                        left: align,
-                        top: 0,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 12),
-                          child: (align == 0)
-                              ? Hero(
-                                  tag: 'appbar-left',
-                                  child: CupertinoButton(
-                                    padding: EdgeInsets.zero,
-                                    minSize: 30,
-                                    onPressed: () => Navigator.of(context).pop(),
-                                    child: WidgetLabel(
-                                      icon: CupertinoIcons.left_chevron,
-                                      label: preference.text.back,
-                                    ),
-                                  ),
-                                )
-                              : WidgetLabel(
-                                  icon: CupertinoIcons.left_chevron,
-                                  label: preference.text.back,
-                                ),
-                        ),
-                      );
-                    },
-                  ),
-
-                  // TweenAnimationBuilder<double>(
-                  //   tween: Tween<double>(begin: 100, end: 0),
-                  //   duration: const Duration(milliseconds: 150),
-                  //   builder: (BuildContext context, double align, Widget? child) {
-                  //     return Positioned(
-                  //       left: align,
-                  //       top: 7,
-                  //       child: child!
-                  //     );
-                  //   },
-                  //   child: CupertinoButton(
-                  //     padding: const EdgeInsets.only(left:7),
-                  //     child: const Hero(
-                  //       tag: 'appbar-left',
-                  //       child: LabelAttribute(
-                  //         // icon: Icons.arrow_back_ios_new,
-                  //         icon: CupertinoIcons.left_chevron,
-                  //         label: 'Back',
-                  //       ),
-                  //     ),
-                  //     onPressed: () => Navigator.of(context).pop()
-                  //   )
-                  // ),
-
-                  Align(
-                    alignment: const Alignment(0, 0),
-                    child: Hero(
-                      tag: 'appbar-center',
-                      child: Material(
-                        type: MaterialType.transparency,
-                        child: Text(
-                          'Blog',
-                          style: Theme.of(context).textTheme.headline5,
-                          maxLines: 1,
-                          overflow: TextOverflow.fade,
-                        ),
-                      ),
-                    ),
-                  ),
-
-                  Positioned(
-                    right: 0,
-                    top: 0,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 12),
-                      child: Hero(
-                        tag: 'appbar-right',
-                        child: CupertinoButton(
-                          padding: EdgeInsets.zero,
-                          minSize: 30,
-                          child: WidgetLabel(
-                            // icon: Icons.tune,
-                            icon: CupertinoIcons.slider_horizontal_3,
-                            // icon: LideaIcon.sliders,
-                            label: preference.text.filter(false),
-                          ),
-                          onPressed: showFilter,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Opacity(
-              opacity: snap.shrink,
-              child: SizedBox(
-                height: snap.offset,
-                width: double.infinity,
-                child: _barOptional(snap.shrink),
-              ),
-            )
-          ],
-        );
-      },
+  Widget bar(BuildContext context, ViewHeaderData org) {
+    return ViewHeaderLayoutStack(
+      leftAction: [
+        WidgetButton(
+          child: WidgetMark(
+            icon: Icons.arrow_back_ios_new_rounded,
+            label: preference.text.back,
+          ),
+          show: hasArguments,
+          onPressed: args?.currentState!.maybePop,
+        ),
+      ],
+      primary: Positioned(
+        top: 15.5,
+        child: WidgetAppbarTitle(
+          label: preference.text.album(true),
+        ),
+      ),
+      rightAction: [
+        WidgetButton(
+          child: const WidgetMark(
+            icon: Icons.tune_rounded,
+          ),
+          message: preference.text.filter(false),
+          onPressed: showFilter,
+        )
+      ],
+      secondary: Align(
+        alignment: const Alignment(0, .7),
+        child: Opacity(
+          opacity: org.snapShrink,
+          child: SizedBox(
+            height: org.snapHeight,
+            width: double.infinity,
+            child: _barOptional(org.snapShrink),
+          ),
+        ),
+      ),
     );
   }
 
@@ -144,9 +58,7 @@ mixin _Bar on _State {
             strutStyle: StrutStyle(height: 1 * stretch),
             text: TextSpan(
               text: 'Selected ',
-              style: Theme.of(context).textTheme.headline3!.copyWith(
-                    height: 1.2,
-                    fontWeight: FontWeight.w400,
+              style: Theme.of(context).textTheme.titleMedium!.copyWith(
                     fontSize: 18 * stretch,
                   ),
               children: const [

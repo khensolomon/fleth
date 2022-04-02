@@ -14,114 +14,82 @@ class PopOptionList extends StatefulWidget {
   State<StatefulWidget> createState() => _PopOptionListState();
 }
 
-class _PopOptionListState extends State<PopOptionList> with TickerProviderStateMixin {
-  late Core core;
+class _PopOptionListState extends State<PopOptionList> {
+  final double arrowWidth = 10;
+  final double arrowHeight = 12;
 
-  Size get targetSize => widget.render.size;
-  Offset get targetPosition => widget.render.localToGlobal(Offset.zero);
+  late final Core core = context.read<Core>();
 
-  // getOptionList
-  // List<DefinitionOption> get getOptionList => Core.instance.getOptionList;
-  // @override
-  // bool get wantKeepAlive => true;
+  late final Size mediaSize = MediaQuery.of(context).size;
 
-  @override
-  void initState() {
-    super.initState();
-    core = context.read<Core>();
+  late final double mediaWidthHaft = mediaSize.width * 0.4;
+
+  late final Size widgetSize = widget.render.size;
+  late final Offset widgetPosition = widget.render.localToGlobal(Offset.zero);
+
+  late final double bottomOfWidget = widgetPosition.dy + widgetSize.height + arrowHeight;
+
+  void setFontSize(bool increase) {
+    setState(() {
+      widget.setFontSize(increase);
+    });
   }
-
-  // void setFontSize(bool increase) {
-  //   double tmp = core.collection.fontSize;
-  //   if (increase){
-  //     tmp++;
-  //   } else {
-  //     tmp--;
-  //   }
-  //   setState(() {
-  //     core.collection.fontSize = tmp.clamp(10.0, 40.0);
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {
-    double halfWidth = (MediaQuery.of(context).size.width / 2) - 45;
-
-    return WidgetPopup(
-      left: halfWidth,
+    return WidgetPopupShapedArrow(
+      left: mediaWidthHaft,
       right: 5,
-      height: 60,
-      top: targetPosition.dy + targetSize.height + 1,
-      arrow: targetPosition.dx - halfWidth + (targetSize.width / 2) - 12,
-      // arrow: targetPosition.dx - halfWidth + (targetSize.width / 2) - 7,
-      // arrow: targetPosition.dx - halfWidth + (targetSize.width / 4),
-      // backgroundColor: const Color(0xFFdbdbdb),
+      top: bottomOfWidget,
+      height: widgetSize.height + 40,
+      // arrow: widgetPosition.dx - mediaWidthHaft + (widgetSize.width * 0.3),
+      arrow: widgetPosition.dx - mediaWidthHaft + (widgetSize.width * 0.3),
+      arrowWidth: arrowWidth,
+      arrowHeight: arrowHeight,
       backgroundColor: Theme.of(context).backgroundColor,
       child: view(),
     );
   }
 
   Widget view() {
-    return Column(
+    return Row(
       mainAxisSize: MainAxisSize.max,
       crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
-        Row(
-          mainAxisSize: MainAxisSize.max,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: fontSizeOptions(),
+        WidgetButton(
+          child: WidgetMark(
+            label: 'A',
+            labelPadding: const EdgeInsets.symmetric(horizontal: 20),
+            labelStyle: Theme.of(context).textTheme.labelSmall!.copyWith(
+                  fontWeight: FontWeight.w300,
+                ),
+          ),
+          onPressed: () => setFontSize(false),
+        ),
+        WidgetMark(
+          decoration: BoxDecoration(
+            border: Border.symmetric(
+              vertical: BorderSide(
+                width: 0.5,
+                color: Theme.of(context).primaryColor,
+              ),
+            ),
+          ),
+          label: core.collection.fontSize.toString(),
+          labelPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 7),
+        ),
+        WidgetButton(
+          child: WidgetMark(
+            label: 'A',
+            labelPadding: const EdgeInsets.symmetric(horizontal: 20),
+            labelStyle: Theme.of(context).textTheme.labelLarge!.copyWith(
+                  fontWeight: FontWeight.w300,
+                ),
+          ),
+          onPressed: () => setFontSize(true),
         ),
       ],
     );
-  }
-
-  List<Widget> fontSizeOptions() {
-    return <Widget>[
-      CupertinoButton(
-          color: Theme.of(context).primaryColor,
-          borderRadius: const BorderRadius.all(Radius.circular(3)),
-          // padding: EdgeInsets.zero,
-          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 30),
-          minSize: 40,
-          child: Text(
-            'A',
-            // style: TextStyle(fontSize: 14),
-            style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                  fontSize: 14,
-                ),
-          ),
-          onPressed: () => widget.setFontSize(false)
-          // onPressed: ()=> setFontSize(false)
-          ),
-      // new RichText(
-      //   textAlign: TextAlign.center,
-      //   text: new TextSpan(
-      //     text: 'Fontsize\n',
-      //     style: new TextStyle(
-      //       fontSize: 13,
-      //     ),
-      //     children: <TextSpan>[
-      //       new TextSpan(
-      //         text: '100%',
-      //         style: new TextStyle(fontWeight: FontWeight.bold)),
-      //     ],
-      //   ),
-      // ),
-      CupertinoButton(
-          color: Theme.of(context).primaryColor,
-          borderRadius: const BorderRadius.all(Radius.circular(3)),
-          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 30),
-          minSize: 40,
-          // ignore: prefer_const_constructors
-          child: Text(
-            'A',
-            // style: TextStyle(fontSize: 25),
-            style: Theme.of(context).textTheme.bodyText1!,
-          ),
-          // onPressed: ()=> setFontSize(true)
-          onPressed: () => widget.setFontSize(true)),
-    ];
   }
 }

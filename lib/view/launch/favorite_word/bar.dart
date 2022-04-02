@@ -19,21 +19,16 @@ mixin _Bar on _State {
           const Alignment(0, .5),
           org.snapShrink,
         ),
-        label: 'Reorderable',
+        label: preference.text.favorite(false),
         shrink: org.shrink,
       ),
       rightAction: [
         WidgetButton(
-          child: AnimatedBuilder(
-            animation: dragController,
-            builder: (context, _) {
-              return WidgetMark(
-                icon: Icons.sort,
-                iconColor: colorAnimation.value,
-              );
-            },
+          child: const WidgetMark(
+            icon: Icons.clear_all_rounded,
           ),
-          onPressed: onSort,
+          enable: collection.favorites.isNotEmpty,
+          onPressed: onDeleteAllConfirmWithDialog,
         ),
       ],
     );

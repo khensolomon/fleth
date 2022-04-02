@@ -1,12 +1,11 @@
 export "package:lidea/type/main.dart";
-// import "package:lidea/type/main.dart";
 
+import "package:lidea/type/main.dart";
 import "package:lidea/hive.dart";
 import "package:lidea/cluster/docket.dart";
-// import "package:lidea/unit/notify.dart";
+// import "package:lidea/type/main.dart";
 part "collection.dart";
-part "favorite.dart";
-part "adapter/favorite.dart";
+part "favorite_word.dart";
 part "audio.dart";
 part "synset.dart";
 part "synmap.dart";

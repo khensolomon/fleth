@@ -4,6 +4,7 @@ class ScreenLauncher extends StatelessWidget {
   const ScreenLauncher({Key? key}) : super(key: key);
 
   // A comprehensive Myanmar online dictionary
+  // Listen to Zaideih Music Station
   @override
   Widget build(BuildContext context) {
     debugPrint('state build called: root');
@@ -75,31 +76,31 @@ class ScreenLauncher extends StatelessWidget {
                 text: TextSpan(
                   text: '"',
                   semanticsLabel: "open quotation mark",
-                  style: TextStyle(
-                      color: Theme.of(context).primaryTextTheme.button!.color, fontSize: 25),
+                  style:
+                      TextStyle(color: Theme.of(context).textTheme.labelLarge!.color, fontSize: 25),
                   children: const <TextSpan>[
                     TextSpan(
-                      text: 'A',
-                      semanticsLabel: "A",
+                      text: 'Listen',
+                      semanticsLabel: "Listen",
                       style: TextStyle(fontSize: 19),
                     ),
                     TextSpan(
-                      text: ' comprehensive\n',
+                      text: ' to\n',
                       semanticsLabel: "comprehensive",
                       style: TextStyle(fontSize: 22),
                     ),
                     TextSpan(
-                      text: 'Myanmar\n',
+                      text: 'Zaideih\n',
                       semanticsLabel: "Myanmar",
                       style: TextStyle(fontWeight: FontWeight.w200, fontSize: 50),
                     ),
                     TextSpan(
-                      text: 'online ',
+                      text: 'Music ',
                       semanticsLabel: "online",
                       style: TextStyle(fontSize: 19),
                     ),
                     TextSpan(
-                      text: 'dictionary',
+                      text: 'Station',
                       semanticsLabel: "dictionary",
                       style: TextStyle(fontSize: 25),
                     ),
@@ -126,7 +127,7 @@ class ScreenLauncher extends StatelessWidget {
                 //     strokeWidth: 2.0,
                 //     value: percentage,
                 //     valueColor: AlwaysStoppedAnimation<Color>(
-                //         Theme.of(context).primaryTextTheme.button!.color!),
+                //         Theme.of(context).primarytextTheme.labelLarge!.color!),
                 //   ),
                 // ),
                 // child: CircularProgressIndicator(
@@ -134,7 +135,7 @@ class ScreenLauncher extends StatelessWidget {
                 //   semanticsValue: state.progressPercentage.toString(),
                 //   strokeWidth: 2.0,
                 //   value: state.progressPercentage,
-                //   valueColor: new AlwaysStoppedAnimation<Color>(Theme.of(context).primaryTextTheme.button!.color!),
+                //   valueColor: new AlwaysStoppedAnimation<Color>(Theme.of(context).primarytextTheme.labelLarge!.color!),
                 // )
                 // child: Consumer<Core>(
                 //   builder: (context, core, _)  => CircularProgressIndicator(
@@ -142,7 +143,7 @@ class ScreenLauncher extends StatelessWidget {
                 //     // semanticsValue: core.progressPercentage.toString(),
                 //     strokeWidth: 2.0,
                 //     value: core.progressPercentage,
-                //     valueColor: new AlwaysStoppedAnimation<Color>(Theme.of(context).primaryTextTheme.button!.color!),
+                //     valueColor: new AlwaysStoppedAnimation<Color>(Theme.of(context).primarytextTheme.labelLarge!.color!),
                 //   )
                 // )
                 // child: ValueListenableBuilder<double?>(
@@ -152,7 +153,7 @@ class ScreenLauncher extends StatelessWidget {
                 //     semanticsValue: value.toString(),
                 //     strokeWidth: 2.0,
                 //     value: value,
-                //     valueColor: new AlwaysStoppedAnimation<Color>(Theme.of(context).primaryTextTheme.button!.color!),
+                //     valueColor: new AlwaysStoppedAnimation<Color>(Theme.of(context).primarytextTheme.labelLarge!.color!),
                 //   )
                 // )
               ),

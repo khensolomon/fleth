@@ -10,12 +10,10 @@ import '/type/main.dart';
 import '/widget/main.dart';
 
 part 'bar.dart';
+part 'state.dart';
 
 class Main extends StatefulWidget {
-  const Main({
-    Key? key,
-    this.arguments,
-  }) : super(key: key);
+  const Main({Key? key, this.arguments}) : super(key: key);
 
   final Object? arguments;
 
@@ -29,111 +27,57 @@ class Main extends StatefulWidget {
   State<StatefulWidget> createState() => _View();
 }
 
-abstract class _State extends State<Main> with SingleTickerProviderStateMixin {
-  final scrollController = ScrollController();
-
-  late Core core;
-
-  late final ViewNavigationArguments arguments = widget.arguments as ViewNavigationArguments;
-  late final bool canPop = widget.arguments != null;
-
-  // AppLocalizations get translate => AppLocalizations.of(context)!;
-  Preference get preference => core.preference;
-
-  @override
-  void initState() {
-    super.initState();
-    core = context.read<Core>();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    scrollController.dispose();
-  }
-
-  @override
-  void setState(fn) {
-    if (mounted) super.setState(fn);
-  }
-
-  void onSearch(String ord) async {
-    /*
-    // core.navigate(to: '/search/result', routePush: true);
-    // core.navigate(to: '/search/result', routePush: true);
-    core.searchQuery = word;
-    // core.conclusionGenerate().whenComplete(() => core.navigate(to: '/search/result'));
-    // core.navigate(to: '/search/result');
-    // Future.delayed(const Duration(milliseconds: 200), () {
-    //   core.navigate(to: '/search-result');
-    // });
-    Future.microtask(() {
-      core.navigate(to: '/search-result');
-    });
-    */
-    core.searchQuery = ord;
-    core.suggestQuery = ord;
-    await core.conclusionGenerate();
-    Future.microtask(() {
-      core.navigate(to: '/search-result');
-    }).whenComplete(() async {
-      // await core.conclusionGenerate();
-    });
-  }
-
-  void onDelete(String ord) {
-    Future.delayed(Duration.zero, () {
-      core.collection.recentSearchDelete(ord);
-    }).whenComplete(core.notify);
-  }
-
-  void onClearAll() {
-    Future.microtask(() {
-      core.collection.boxOfRecentSearch.clear().whenComplete(core.notify);
-    });
-  }
-}
-
-// FlutterError (A dismissed Dismissible widget is still part of the tree.
-// Make sure to implement the onDismissed handler and to immediately remove the Dismissible widget from the application once that handler has fired.
 class _View extends _State with _Bar {
   @override
   Widget build(BuildContext context) {
-    return ViewPage(
-      // controller: scrollController,
-      child: Selector<Core, List<MapEntry<dynamic, RecentSearchType>>>(
-        selector: (_, e) => e.collection.recentSearches.toList(),
-        builder: (BuildContext _, List<MapEntry<dynamic, RecentSearchType>> items, Widget? __) {
-          return body(items);
-        },
+    return Scaffold(
+      body: ViewPage(
+        child: Selector<Core, List<MapEntry<dynamic, RecentSearchType>>>(
+          selector: (_, e) => e.collection.recentSearches.toList(),
+          builder: middleware,
+        ),
       ),
     );
   }
 
-  CustomScrollView body(List<MapEntry<dynamic, RecentSearchType>> items) {
-    items.sort((a, b) => b.value.date!.compareTo(a.value.date!));
+  Widget middleware(BuildContext _, List<MapEntry<dynamic, RecentSearchType>> o, Widget? __) {
     return CustomScrollView(
       controller: scrollController,
-      slivers: <Widget>[
-        bar(items.isNotEmpty),
-        if (items.isEmpty)
-          const SliverFillRemaining(
-            hasScrollBody: false,
-            child: Center(
-              child: Text('...'),
-            ),
-          )
-        else
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (BuildContext context, int index) {
-                return listContainer(index, items.elementAt(index));
-              },
-              childCount: items.length,
-            ),
-          ),
-      ],
+      slivers: sliverWidgets(o),
     );
+  }
+
+  List<Widget> sliverWidgets(List<MapEntry<dynamic, RecentSearchType>> items) {
+    items.sort((a, b) => b.value.date!.compareTo(a.value.date!));
+    return [
+      // bar(items.isNotEmpty),
+      ViewHeaderSliverSnap(
+        pinned: true,
+        floating: false,
+        padding: MediaQuery.of(context).viewPadding,
+        heights: const [kToolbarHeight, 50],
+        // heights: const [kToolbarHeight],
+        overlapsBackgroundColor: Theme.of(context).primaryColor,
+        overlapsBorderColor: Theme.of(context).shadowColor,
+        builder: bar,
+      ),
+      if (items.isEmpty)
+        const SliverFillRemaining(
+          hasScrollBody: false,
+          child: Center(
+            child: Text('...'),
+          ),
+        )
+      else
+        SliverList(
+          delegate: SliverChildBuilderDelegate(
+            (BuildContext context, int index) {
+              return listContainer(index, items.elementAt(index));
+            },
+            childCount: items.length,
+          ),
+        ),
+    ];
   }
 
   Widget listContainer(int index, MapEntry<dynamic, RecentSearchType> item) {
@@ -155,10 +99,9 @@ class _View extends _State with _Bar {
           if (confirmation != null && confirmation) {
             onDelete(word);
             return true;
-          } else {
-            return false;
           }
         }
+        return false;
       },
       // Show a red background as the item is swiped away.
       background: Container(

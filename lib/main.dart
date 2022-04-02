@@ -96,21 +96,25 @@ class Fleth extends StatelessWidget {
           initialRoute: AppRoutes.rootInitial,
           routes: AppRoutes.rootMap,
           navigatorObservers: [
+            // NavigationObserver(
+            //   Provider.of<NavigationNotify>(
+            //     context,
+            //     listen: false,
+            //   ),
+            // ),
             NavigationObserver(
-                // Provider.of<NavigationNotify>(
-                //   context,
-                //   listen: false,
-                // ),
-                core.navigation),
+              core.navigation,
+            ),
           ],
+
           builder: (BuildContext context, Widget? view) {
             return AnnotatedRegion<SystemUiOverlayStyle>(
               value: SystemUiOverlayStyle(
                 systemNavigationBarColor: Theme.of(context).primaryColor,
                 // systemNavigationBarDividerColor: Colors.transparent,
+                // systemNavigationBarDividerColor: Colors.red,
                 systemNavigationBarIconBrightness: core.preference.resolvedSystemBrightness,
                 systemNavigationBarContrastEnforced: false,
-
                 statusBarColor: Colors.transparent,
                 statusBarBrightness: core.preference.systemBrightness,
                 statusBarIconBrightness: core.preference.resolvedSystemBrightness,

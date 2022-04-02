@@ -12,15 +12,17 @@ class PopBookList extends StatefulWidget {
   State<StatefulWidget> createState() => _PopBookListState();
 }
 
-class _PopBookListState extends State<PopBookList> with TickerProviderStateMixin {
-  late Core core;
+class _PopBookListState extends State<PopBookList> {
+  final double arrowWidth = 10;
+  final double arrowHeight = 12;
 
-  // Scripture get scripture => core.scripturePrimary;
-  // BIBLE get bible => scripture.cacheVerseChapter;
-  // BOOK get book => bible.book.first;
-  // CHAPTER get chapter => book.chapter.first;
+  // late final Core core = context.read<Core>();
+  late final Size mediaSize = MediaQuery.of(context).size;
 
-  // List<DefinitionBook> get books => scripture.bookList;
+  late final Size widgetSize = widget.render.size;
+  late final Offset widgetPosition = widget.render.localToGlobal(Offset.zero);
+
+  late final double bottomOfWidget = widgetPosition.dy + widgetSize.height + arrowHeight;
 
   List<Map<String, int>> get books => [
         {'first': 50},
@@ -73,33 +75,21 @@ class _PopBookListState extends State<PopBookList> with TickerProviderStateMixin
         {'first': 4},
         {'second': 60},
       ];
-
-  Size get targetSize => widget.render.size;
-  Offset get targetPosition => widget.render.localToGlobal(Offset.zero);
-
-  // getBookList
-  // List<DefinitionBook> get getBookList => Core.instance.getBookList;
-  // @override
-  // bool get wantKeepAlive => true;
-
   final List<int> expandedList = [];
 
   @override
   void initState() {
     super.initState();
-    core = context.read<Core>();
   }
 
   @override
   Widget build(BuildContext context) {
-    // double halfWidth = (MediaQuery.of(context).size.width/2) - 50;
-    // double halfWidth = MediaQuery.of(context).size.width - 10;
-    return WidgetPopup(
-      right: 20,
+    return WidgetPopupShapedArrow(
       left: 20,
-      height: MediaQuery.of(context).size.height,
-      top: targetPosition.dy + targetSize.height + 1,
-      arrow: targetPosition.dx + (targetSize.width / 2) - 25,
+      right: 20,
+      height: mediaSize.height,
+      top: bottomOfWidget,
+      arrow: widgetPosition.dx + (widgetSize.width * 0.5) - 27,
       backgroundColor: Theme.of(context).backgroundColor,
       child: view(),
     );
@@ -148,24 +138,6 @@ class _PopBookListState extends State<PopBookList> with TickerProviderStateMixin
         itemCount: books.length,
       ),
     );
-    // return ListView.separated(
-    //   // shrinkWrap: true,
-    //   padding: const EdgeInsets.all(0),
-    //   physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-
-    //   separatorBuilder: (BuildContext _, int index) {
-    //     return const Padding(
-    //       padding: EdgeInsets.symmetric(horizontal: 15),
-    //       child: Divider(
-    //         height: 0,
-    //       ),
-    //     );
-    //   },
-    //   itemBuilder: (BuildContext _, int index) {
-    //     return bookItem(index, books[index]);
-    //   },
-    //   itemCount: books.length,
-    // );
   }
 
   Widget bookItem(int index, Map<String, int> book) {

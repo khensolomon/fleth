@@ -12,7 +12,9 @@ mixin _Bar on _State {
           centerTitle: true,
           elevation: 0.2,
           forceElevated: innerBoxIsScrolled,
-          title: barTitle(),
+          title: WidgetAppbarTitle(
+            label: preference.text.setting(true),
+          ),
           // expandedHeight: 120,
           backgroundColor: innerBoxIsScrolled
               ? Theme.of(context).primaryColor
@@ -23,10 +25,9 @@ mixin _Bar on _State {
             borderRadius: BorderRadius.vertical(bottom: Radius.elliptical(3, 2)),
           ),
           automaticallyImplyLeading: false,
-          leading: CupertinoButton(
-            padding: EdgeInsets.zero,
-            child: WidgetLabel(
-              icon: CupertinoIcons.left_chevron,
+          leading: WidgetButton(
+            child: WidgetMark(
+              icon: Icons.arrow_back_ios_new_rounded,
               label: preference.text.back,
             ),
             // child: const Icon(
@@ -41,23 +42,23 @@ mixin _Bar on _State {
               onPressed: () => false,
             ),
             IconButton(
-              icon: const Icon(Icons.bakery_dining),
+              icon: const Icon(Icons.settings),
               onPressed: () => false,
             ),
-            CupertinoButton(
-              child: const Icon(Icons.restore),
-              // child: Icon(LideaIcon.history),
-              onPressed: () async {
-                // await InAppPurchase.instance.restorePurchases().whenComplete(() =>setState);
-                // core.store.doRestore().whenComplete((){
-                //    ScaffoldMessenger.of(context).showSnackBar(
-                //     SnackBar(
-                //       content: const Text('Restore purchase completed.'),
-                //     ),
-                //   );
-                // });
-              },
-            ),
+            // WidgetButton(
+            //   child: const Icon(Icons.restore),
+            //   // child: Icon(LideaIcon.history),
+            //   onPressed: () async {
+            //     // await InAppPurchase.instance.restorePurchases().whenComplete(() =>setState);
+            //     // core.store.doRestore().whenComplete((){
+            //     //    ScaffoldMessenger.of(context).showSnackBar(
+            //     //     SnackBar(
+            //     //       content: const Text('Restore purchase completed.'),
+            //     //     ),
+            //     //   );
+            //     // });
+            //   },
+            // ),
           ],
           // flexibleSpace: LayoutBuilder(
           //   builder: (BuildContext context, BoxConstraints constraints) {
@@ -94,16 +95,6 @@ mixin _Bar on _State {
           // ),
         );
       },
-    );
-  }
-
-  Widget barTitle() {
-    return Semantics(
-      label: "Page",
-      child: Text(
-        preference.text.setting(true),
-        semanticsLabel: preference.text.setting(true),
-      ),
     );
   }
 }

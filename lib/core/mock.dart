@@ -105,8 +105,8 @@ mixin _Mock on _Abstract {
     // final cache = collection.env.url('word').cache('4354');
     // debugPrint('\n live $uriFirst \n cache $cache \n second $uriSecond');
 
-    final uriFirst = collection.env.url('bible').uri(name: '4354');
-    final uriSecond = collection.env.url('bible').uri(name: '4354', index: 1, scheme: 'http');
+    final uriFirst = collection.env.url('bible').uri('4354');
+    final uriSecond = collection.env.url('bible').uri('4354', index: 1, scheme: 'http');
     final cache = collection.env.url('bible').cache('4354');
     debugPrint('\n live $uriFirst \n cache $cache \n second $uriSecond');
 
@@ -199,7 +199,7 @@ mixin _Mock on _Abstract {
     String randomString = Mock.randomString();
     collection.cacheSuggestion = SuggestionType(
       query: collection.suggestQuery,
-      raw: List.generate(randomNumber, (_) => {'word': '$randomString $suggestQuery'}),
+      raw: List.generate(randomNumber, (_) => OfRawType(term: '$randomString $suggestQuery')),
     );
     notify();
   }

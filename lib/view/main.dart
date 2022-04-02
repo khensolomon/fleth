@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+// import 'package:flutter/cupertino.dart';
 
 import 'package:lidea/provider.dart';
 import 'package:lidea/connectivity.dart';
@@ -11,12 +11,13 @@ import 'package:lidea/view/main.dart';
 
 import '/core/main.dart';
 // import '/type/main.dart';
+import '/widget/main.dart';
 
 import 'routes.dart';
 
 part 'view.dart';
 part 'launcher.dart';
-part 'other.dart';
+part 'navigator.dart';
 
 class Main extends StatefulWidget {
   const Main({Key? key}) : super(key: key);
@@ -71,16 +72,6 @@ abstract class _State extends State<Main> with SingleTickerProviderStateMixin {
     if (mounted) super.setState(fn);
   }
 
-  void Function()? _navButtonAction(ViewNavigationModel item, bool disable) {
-    if (disable) {
-      return null;
-    } else if (item.action == null) {
-      return () => _navPageViewAction(item.key);
-    } else {
-      return item.action;
-    }
-  }
-
   void _navPageViewAction(int index) {
     core.navigation.index = index;
     ViewNavigationModel page = _pageButton.firstWhere(
@@ -112,7 +103,7 @@ abstract class _State extends State<Main> with SingleTickerProviderStateMixin {
       final canPop = state.canPop();
       // final canPop = Navigator.canPop(context);
       final arguments = ViewNavigationArguments(
-        navigator: _vi,
+        key: _vi,
         args: args,
         canPop: canPop,
       );

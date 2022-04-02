@@ -1,7 +1,12 @@
 part of "main.dart";
 
 class Collection extends ClusterDocket {
-  late Box<FavoriteType> boxOfFavorite;
+  late Box<FavoriteWordType> boxOfFavoriteWord;
+
+  SuggestionType<OfRawType> cacheSuggestion = const SuggestionType();
+  ConclusionType<Map<String, dynamic>> cacheConclusion = const ConclusionType();
+  // SuggestionType<Map<String, Object?>> cacheSuggestion = const SuggestionType();
+  // ConclusionType<Map<String, dynamic>> cacheConclusion = const ConclusionType();
 
   // retrieve the instance through the app
   Collection.internal();
@@ -9,26 +14,26 @@ class Collection extends ClusterDocket {
   @override
   Future<void> ensureInitialized() async {
     await super.ensureInitialized();
-    Hive.registerAdapter(FavoriteAdapter());
+    Hive.registerAdapter(FavoriteWordAdapter());
   }
 
   @override
   Future<void> prepareInitialized() async {
     await super.prepareInitialized();
-    boxOfFavorite = await Hive.openBox<FavoriteType>('favorite');
+    boxOfFavoriteWord = await Hive.openBox<FavoriteWordType>('favorite');
   }
 
   // NOTE: Favorite
   /// get all favorite favoriteEntries
-  Iterable<MapEntry<dynamic, FavoriteType>> get favorites {
-    return boxOfFavorite.toMap().entries;
+  Iterable<MapEntry<dynamic, FavoriteWordType>> get favorites {
+    return boxOfFavoriteWord.toMap().entries;
   }
 
   /// favorite is EXIST by word
-  MapEntry<dynamic, FavoriteType> favoriteExist(String ord) {
+  MapEntry<dynamic, FavoriteWordType> favoriteExist(String ord) {
     return favorites.firstWhere(
       (e) => stringCompare(e.value.word, ord),
-      orElse: () => MapEntry(null, FavoriteType(word: ord)),
+      orElse: () => MapEntry(null, FavoriteWordType(word: ord)),
     );
   }
 
@@ -38,9 +43,9 @@ class Collection extends ClusterDocket {
       final ob = favoriteExist(ord);
       ob.value.date = DateTime.now();
       if (ob.key == null) {
-        boxOfFavorite.add(ob.value);
+        boxOfFavoriteWord.add(ob.value);
       } else {
-        boxOfFavorite.put(ob.key, ob.value);
+        boxOfFavoriteWord.put(ob.key, ob.value);
       }
       // print('recentSearchUpdate ${ob.value.hit}');
       return true;
@@ -53,7 +58,7 @@ class Collection extends ClusterDocket {
     if (ord.isNotEmpty) {
       final ob = favoriteExist(ord);
       if (ob.key != null) {
-        boxOfFavorite.delete(ob.key);
+        boxOfFavoriteWord.delete(ob.key);
         return true;
       }
     }

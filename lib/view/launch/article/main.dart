@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
+// import 'package:flutter/cupertino.dart';
 // import 'package:flutter/rendering.dart';
 // import 'package:flutter/gestures.dart';
 // import 'package:flutter/services.dart';
 
-import 'package:lidea/provider.dart';
+// import 'package:lidea/provider.dart';
 // import 'package:lidea/intl.dart';
 import 'package:lidea/view/main.dart';
 // import 'package:lidea/icon.dart';
 
-import '/core/main.dart';
+// import '/core/main.dart';
 // import '/type/main.dart';
 import '/widget/main.dart';
 
 part 'bar.dart';
+part 'state.dart';
 
 class Main extends StatefulWidget {
-  const Main({Key? key, this.navigatorKey, this.arguments}) : super(key: key);
+  const Main({Key? key, this.arguments}) : super(key: key);
 
-  final GlobalKey<NavigatorState>? navigatorKey;
   final Object? arguments;
 
   static const route = '/article';
@@ -26,106 +26,67 @@ class Main extends StatefulWidget {
   static const name = 'Article';
   static const description = '...';
   static final uniqueKey = UniqueKey();
-  // static final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   State<StatefulWidget> createState() => _View();
-}
-
-abstract class _State extends State<Main> with SingleTickerProviderStateMixin {
-  final scrollController = ScrollController();
-
-  late Core core;
-
-  late final ViewNavigationArguments arguments = widget.arguments as ViewNavigationArguments;
-  late final bool canPop = widget.arguments != null;
-  // late final ViewNavigationArguments arguments = widget.arguments as ViewNavigationArguments;
-  // late final bool canPop = widget.arguments != null;
-  // ViewNavigationArguments get arguments => widget.arguments as ViewNavigationArguments;
-  // AudioAlbumType get album => arguments.meta as AudioAlbumType;
-
-  // SettingsController get settings => context.read<SettingsController>();
-  // AppLocalizations get translate => AppLocalizations.of(context)!;
-  // Authentication get authenticate => context.read<Authentication>();
-  Preference get preference => core.preference;
-
-  @override
-  void initState() {
-    super.initState();
-    core = context.read<Core>();
-  }
-
-  @override
-  void dispose() {
-    scrollController.dispose();
-    super.dispose();
-  }
-
-  @override
-  void setState(fn) {
-    if (mounted) super.setState(fn);
-  }
-
-  void onClearAll() {
-    Future.microtask(() {});
-  }
-
-  void onSearch(String word) {}
-
-  void onDelete(String word) {
-    Future.delayed(Duration.zero, () {});
-  }
 }
 
 class _View extends _State with _Bar {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: widget.key,
       body: ViewPage(
         controller: scrollController,
-        child: body(),
+        child: CustomScrollView(
+          controller: scrollController,
+          slivers: sliverWidgets(),
+        ),
       ),
     );
   }
 
-  CustomScrollView body() {
-    return CustomScrollView(
-      controller: scrollController,
-      slivers: <Widget>[
-        bar(),
-        SliverList(
-          delegate: SliverChildListDelegate(
-            <Widget>[
-              const Text(
-                'Article page',
-                textAlign: TextAlign.center,
-              )
-            ],
-          ),
+  List<Widget> sliverWidgets() {
+    return [
+      ViewHeaderSliverSnap(
+        pinned: true,
+        floating: false,
+        padding: MediaQuery.of(context).viewPadding,
+        heights: const [kToolbarHeight, 50],
+        overlapsBackgroundColor: Theme.of(context).primaryColor,
+        overlapsBorderColor: Theme.of(context).shadowColor,
+        builder: bar,
+      ),
+      SliverList(
+        delegate: SliverChildListDelegate(
+          <Widget>[
+            const Text(
+              'Article page',
+              textAlign: TextAlign.center,
+            )
+          ],
         ),
-        SliverList(
-          delegate: SliverChildBuilderDelegate(
-            (BuildContext context, int index) {
-              return Card(
-                margin: const EdgeInsets.all(15),
-                // color: Colors.grey[100 * (index % 9 + 1)],
-                color: Colors.grey[100 * (index % 5 + 1)],
-                // alignment: Alignment.center,
-                child: Padding(
-                  padding: const EdgeInsets.all(10),
-                  // height: 80,
-                  child: Text(
-                    "Item $index",
-                    style: const TextStyle(fontSize: 30),
-                  ),
+      ),
+      SliverList(
+        delegate: SliverChildBuilderDelegate(
+          (BuildContext context, int index) {
+            return Card(
+              margin: const EdgeInsets.all(15),
+              // color: Colors.grey[100 * (index % 9 + 1)],
+              color: Colors.grey[100 * (index % 5 + 1)],
+              // alignment: Alignment.center,
+              child: Padding(
+                padding: const EdgeInsets.all(10),
+                // height: 80,
+                child: Text(
+                  "Item $index",
+                  style: const TextStyle(fontSize: 30),
                 ),
-              );
-            },
-            childCount: 1000, // 1000 list items
-          ),
+              ),
+            );
+          },
+          childCount: 1000, // 1000 list items
         ),
-      ],
-    );
+      ),
+    ];
   }
 }

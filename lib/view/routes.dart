@@ -23,7 +23,7 @@ import 'launch/reorderable/main.dart' as reorderable;
 import 'launch/dismissible/main.dart' as dismissible;
 import 'launch/recent_search/main.dart' as recent_search;
 import 'launch/note/main.dart' as note;
-import 'launch/favorite/main.dart' as favorite;
+import 'launch/favorite_word/main.dart' as favorite_word;
 import 'launch/store/main.dart' as store;
 
 import 'search/main.dart' as search_page;
@@ -99,8 +99,8 @@ class AppRoutes {
         return reader.Main(arguments: route.arguments);
       case note.Main.route:
         return note.Main(arguments: route.arguments);
-      case favorite.Main.route:
-        return favorite.Main(arguments: route.arguments);
+      case favorite_word.Main.route:
+        return favorite_word.Main(arguments: route.arguments);
       case store.Main.route:
         return store.Main(arguments: route.arguments);
       case recent_search.Main.route:
@@ -198,18 +198,18 @@ class AppPageNavigation {
       ),
       ViewNavigationModel(
         key: 2,
-        icon: favorite.Main.icon,
-        name: favorite.Main.name,
+        icon: favorite_word.Main.icon,
+        name: favorite_word.Main.name,
         description: preference.text.favorite(false),
       ),
-      // ViewNavigationModel(
-      //   key: 3,
-      //   icon: setting.Main.icon,
-      //   name: setting.Main.name,
-      //   description: translate.setting(false),
-      // ),
       ViewNavigationModel(
         key: 3,
+        icon: setting.Main.icon,
+        name: setting.Main.name,
+        description: preference.text.setting(false),
+      ),
+      ViewNavigationModel(
+        key: 4,
         icon: store.Main.icon,
         name: store.Main.name,
         description: preference.text.store,
@@ -227,13 +227,13 @@ class AppPageNavigation {
       child: const recent_search.Main(),
     ),
     ViewKeepAlive(
-      key: favorite.Main.uniqueKey,
-      child: const favorite.Main(),
+      key: favorite_word.Main.uniqueKey,
+      child: const favorite_word.Main(),
     ),
-    // WidgetKeepAlive(
-    //   key: setting.Main.uniqueKey,
-    //   child: const setting.Main(),
-    // ),
+    ViewKeepAlive(
+      key: setting.Main.uniqueKey,
+      child: const setting.Main(),
+    ),
     ViewKeepAlive(
       key: store.Main.uniqueKey,
       child: const store.Main(),

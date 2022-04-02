@@ -12,14 +12,14 @@ import 'package:lidea/icon.dart';
 
 import '/core/main.dart';
 import '/type/main.dart';
-// import '/widget/main.dart';
+import '/widget/main.dart';
 
 part 'bar.dart';
+part 'state.dart';
 
 class Main extends StatefulWidget {
-  const Main({Key? key, this.navigatorKey, this.arguments}) : super(key: key);
+  const Main({Key? key, this.arguments}) : super(key: key);
 
-  final GlobalKey<NavigatorState>? navigatorKey;
   final Object? arguments;
 
   static const route = '/search-suggest';
@@ -27,7 +27,6 @@ class Main extends StatefulWidget {
   static const name = 'Suggestion';
   static const description = '...';
   static final uniqueKey = UniqueKey();
-  // static final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   State<StatefulWidget> createState() => _View();
@@ -42,229 +41,56 @@ onCancel
   restore -> core.searchQuery from core.collection.searchQuery
   update -> textController.text
 */
-abstract class _State extends State<Main> with TickerProviderStateMixin {
-  late Core core;
-
-  final ScrollController scrollController = ScrollController();
-  final TextEditingController textController = TextEditingController();
-  final FocusNode focusNode = FocusNode();
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-
-  ViewNavigationArguments get arguments => widget.arguments as ViewNavigationArguments;
-  GlobalKey<NavigatorState> get navigator => arguments.navigator!;
-  ViewNavigationArguments get parent => arguments.args as ViewNavigationArguments;
-  bool get canPop => arguments.args != null;
-
-  late final AnimationController clearController = AnimationController(
-    duration: const Duration(milliseconds: 500),
-    vsync: this,
-  ); //..repeat();
-  late final Animation<double> clearAnimation = CurvedAnimation(
-    parent: clearController,
-    curve: Curves.fastOutSlowIn,
-  );
-  // late final Animation<double> clearAnimation = Tween(
-  //   begin: 0.0,
-  //   end: 1.0,
-  // ).animate(clearController);
-  // late final Animation clearAnimations = ColorTween(
-  //   begin: Colors.red, end: Colors.green
-  // ).animate(clearController);
-
-  Preference get preference => core.preference;
-
-  @override
-  void initState() {
-    super.initState();
-    core = context.read<Core>();
-
-    onQuery();
-
-    focusNode.addListener(() {
-      core.nodeFocus = focusNode.hasFocus;
-    });
-
-    scrollController.addListener(() {
-      if (focusNode.hasFocus) {
-        focusNode.unfocus();
-        Future.microtask(() {
-          clearToggle(false);
-        });
-      }
-    });
-
-    // FocusScope.of(context).requestFocus(FocusNode());
-    // FocusScope.of(context).unfocus();
-
-    textController.addListener(() {
-      clearToggle(textController.text.isNotEmpty);
-    });
-
-    Future.delayed(const Duration(milliseconds: 400), () {
-      focusNode.requestFocus();
-    });
-  }
-
-  @override
-  void dispose() {
-    clearController.dispose();
-    super.dispose();
-    scrollController.dispose();
-    textController.dispose();
-    focusNode.dispose();
-  }
-
-  String get searchQuery => core.searchQuery;
-  set searchQuery(String ord) {
-    core.searchQuery = ord;
-  }
-
-  String get suggestQuery => core.suggestQuery;
-  set suggestQuery(String ord) {
-    core.suggestQuery = ord.replaceAll(RegExp(' +'), ' ').trim();
-  }
-
-  void onQuery() async {
-    Future.microtask(() {
-      textController.text = core.suggestQuery;
-    });
-  }
-
-  void onClear() {
-    textController.clear();
-    suggestQuery = '';
-    core.suggestionGenerate();
-  }
-
-  void clearToggle(bool show) {
-    if (show) {
-      clearController.forward();
-    } else {
-      clearController.reverse();
-    }
-  }
-
-  void onCancel() {
-    focusNode.unfocus();
-    Future.delayed(Duration(milliseconds: focusNode.hasPrimaryFocus ? 200 : 0), () {
-      suggestQuery = searchQuery;
-      onQuery();
-      Navigator.of(context).pop(false);
-      // navigator.currentState!.maybePop();
-      // Navigator.of(context).maybePop(false);
-    });
-  }
-
-  void onSuggest(String ord) {
-    // suggestQuery = str;
-    // Future.microtask(() {
-    //   core.suggestionGenerate();
-    // });
-    suggestQuery = ord;
-    // on recentHistory select
-    if (textController.text != ord) {
-      textController.text = ord;
-      if (focusNode.hasFocus == false) {
-        Future.delayed(const Duration(milliseconds: 400), () {
-          focusNode.requestFocus();
-        });
-      }
-    }
-    Future.microtask(() {
-      core.suggestionGenerate();
-    });
-  }
-
-  // NOTE: used in bar, suggest & result
-  void onSearch(String ord) {
-    suggestQuery = ord;
-    searchQuery = suggestQuery;
-    // Future.microtask(() {});
-    // Navigator.of(context).pop(true);
-
-    if (focusNode.hasFocus) {
-      Future.microtask(() {
-        focusNode.unfocus();
-      });
-    }
-    Future.delayed(Duration(milliseconds: focusNode.hasPrimaryFocus ? 200 : 0), () {
-      Navigator.of(context).pop(true);
-      // _parent.navigator.currentState!.pop(true);
-      // navigator.currentState!.pushReplacementNamed('/search/result', arguments: _arguments);
-      // navigator.currentState!.popAndPushNamed('/search/result', arguments: _arguments);
-    });
-
-    Future.microtask(() {
-      core.conclusionGenerate();
-    });
-
-    // Future.delayed(Duration(milliseconds: focusNode.hasPrimaryFocus ? 200 : 0), () {
-    //   Navigator.of(context).pop(true);
-    // });
-
-    // debugPrint('suggest onSearch $canPop');
-    // scrollController.animateTo(
-    //   scrollController.position.minScrollExtent,
-    //   curve: Curves.fastOutSlowIn, duration: const Duration(milliseconds: 800)
-    // );
-    // Future.delayed(Duration.zero, () {
-    //   core.collection.historyUpdate(searchQuery);
-    // });
-
-    // suggestQuery = str;
-    // searchQuery = suggestQuery;
-
-    // core.conclusionGenerate().whenComplete(() => Navigator.of(context).pop(true));
-    // Future.delayed(Duration(milliseconds: focusNode.hasPrimaryFocus ? 200 : 0), () {
-    //   Navigator.of(context).pop(true);
-    // });
-
-    // debugPrint('suggest onSearch $canPop');
-    // scrollController.animateTo(
-    //   scrollController.position.minScrollExtent,
-    //   curve: Curves.fastOutSlowIn, duration: const Duration(milliseconds: 800)
-    // );
-    // Future.delayed(Duration.zero, () {
-    //   core.collection.historyUpdate(searchQuery);
-    // });
-  }
-
-  bool onDelete(String ord) => core.collection.recentSearchDelete(ord);
-}
 
 class _View extends _State with _Bar {
   @override
   Widget build(BuildContext context) {
-    return ViewPage(
-      // controller: scrollController,
-      child: body(),
+    return Scaffold(
+      body: ViewPage(
+        controller: scrollController,
+        child: CustomScrollView(
+          controller: scrollController,
+          slivers: sliverWidgets(),
+        ),
+      ),
     );
   }
 
-  CustomScrollView body() {
-    return CustomScrollView(
-      controller: scrollController,
-      slivers: <Widget>[
-        Selector<Core, bool>(
-          selector: (BuildContext _, Core e) => e.nodeFocus,
-          builder: (BuildContext _, bool word, Widget? child) {
-            return bar();
-          },
-        ),
-        Selector<Core, SuggestionType>(
-          selector: (_, e) => e.collection.cacheSuggestion,
-          builder: (BuildContext context, SuggestionType o, Widget? child) {
-            if (o.query.isEmpty) {
-              return _suggestNoQuery();
-            } else if (o.raw.isNotEmpty) {
-              return _suggestBlock(o);
-            } else {
-              return _msg('suggest: not found');
-            }
-          },
-        )
-      ],
-    );
+  List<Widget> sliverWidgets() {
+    return [
+      // Selector<Core, bool>(
+      //   selector: (BuildContext _, Core e) => e.nodeFocus,
+      //   builder: (BuildContext _, bool word, Widget? child) {
+      //     return bar();
+      //   },
+      // ),
+      SliverLayoutBuilder(
+        builder: (BuildContext context, constraints) {
+          return ViewHeaderSliverSnap(
+            pinned: true,
+            floating: false,
+            padding: MediaQuery.of(context).viewPadding,
+            heights: const [kToolbarHeight],
+            overlapsBackgroundColor: Theme.of(context).primaryColor,
+            overlapsBorderColor: Theme.of(context).shadowColor,
+            overlapsForce: constraints.scrollOffset > 0,
+            builder: bar,
+          );
+        },
+      ),
+      Selector<Core, SuggestionType<OfRawType>>(
+        selector: (_, e) => e.collection.cacheSuggestion,
+        builder: (BuildContext context, SuggestionType<OfRawType> o, Widget? child) {
+          if (o.query.isEmpty) {
+            return _suggestNoQuery();
+          } else if (o.raw.isNotEmpty) {
+            return _suggestBlock(o);
+          } else {
+            return _msg('suggest: not found');
+          }
+        },
+      ),
+    ];
   }
 
   Widget _msg(String msg) {
@@ -295,15 +121,15 @@ class _View extends _State with _Bar {
   }
 
   // listView
-  Widget _suggestBlock(SuggestionType o) {
+  Widget _suggestBlock(SuggestionType<OfRawType> o) {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
           final snap = o.raw.elementAt(index);
           int ql = suggestQuery.length;
-          String word = snap.values.first.toString();
-          int wl = word.length;
-          return _suggestItem(word, ql < wl ? ql : wl);
+
+          int wl = snap.term.length;
+          return _suggestItem(snap.term, ql < wl ? ql : wl);
 
           // final suggestion = o.raw.elementAt(index);
           // String word = suggestion.values.first.toString();
@@ -327,14 +153,14 @@ class _View extends _State with _Bar {
   //         semanticsLabel: word,
   //         style: TextStyle(
   //           fontSize: 20,
-  //           color: Theme.of(context).textTheme.caption!.color,
+  //           color: Theme.of(context).textTheme.bodySmall!.color,
   //           // fontWeight: FontWeight.w500
   //         ),
   //         children: <TextSpan>[
   //           TextSpan(
   //             text: word.substring(hightlight),
   //             style: TextStyle(
-  //               color: Theme.of(context).primaryTextTheme.button!.color,
+  //               color: Theme.of(context).primarytextTheme.labelLarge!.color,
   //               // fontWeight: FontWeight.w300
   //             ),
   //           ),
@@ -370,7 +196,7 @@ class _View extends _State with _Bar {
             semanticsLabel: word,
             style: TextStyle(
               fontSize: 22,
-              // color: Theme.of(context).textTheme.caption!.color,
+              // color: Theme.of(context).textTheme.bodySmall!.color,
               // color: Theme.of(context).highlightColor,
               color: Theme.of(context).primaryColorDark,
               // fontWeight: FontWeight.w500
@@ -378,10 +204,10 @@ class _View extends _State with _Bar {
             children: <TextSpan>[
               TextSpan(
                 text: word.substring(hightlight),
-                // style: Theme.of(context).primaryTextTheme.bodyText2,
+                // style: Theme.of(context).primarytextTheme.bodyMedium,
                 style: TextStyle(
-                  // color: Theme.of(context).primaryTextTheme.button!.color,
-                  color: Theme.of(context).primaryTextTheme.bodyText1!.color,
+                  // color: Theme.of(context).primarytextTheme.labelLarge!.color,
+                  color: Theme.of(context).textTheme.bodyLarge!.color,
                   // color: Theme.of(context).primaryColor,
                   // fontWeight: FontWeight.w300
                 ),
@@ -486,6 +312,7 @@ class _View extends _State with _Bar {
         if (direction == DismissDirection.endToStart) {
           return onDelete(item.value.word);
         }
+        return null;
       },
     );
   }
@@ -501,16 +328,16 @@ class _View extends _State with _Bar {
           fontSize: 22,
           // color: Theme.of(context).highlightColor,
           color: Theme.of(context).primaryColorDark,
-          // color: Theme.of(context).textTheme.caption!.color,
-          // color: Theme.of(context).primaryTextTheme.button!.color,
+          // color: Theme.of(context).textTheme.bodySmall!.color,
+          // color: Theme.of(context).primarytextTheme.labelLarge!.color,
           fontWeight: FontWeight.w300,
         ),
         children: <TextSpan>[
           TextSpan(
             text: word.substring(hightlight),
             style: TextStyle(
-              // color: Theme.of(context).primaryTextTheme.button!.color,
-              color: Theme.of(context).primaryTextTheme.bodyText1!.color,
+              // color: Theme.of(context).primarytextTheme.labelLarge!.color,
+              color: Theme.of(context).textTheme.bodyLarge!.color,
             ),
           )
         ],
@@ -531,7 +358,7 @@ class _View extends _State with _Bar {
             child: Text(
               preference.text.delete,
               textAlign: TextAlign.right,
-              style: Theme.of(context).textTheme.bodyText1!.copyWith(
+              style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                     color: Theme.of(context).primaryColor,
                   ),
             ),

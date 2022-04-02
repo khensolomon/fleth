@@ -12,44 +12,44 @@ class PopChapterList extends StatefulWidget {
   State<StatefulWidget> createState() => _PopChapterListState();
 }
 
-class _PopChapterListState extends State<PopChapterList> with TickerProviderStateMixin {
-  late Core core;
+class _PopChapterListState extends State<PopChapterList> {
+  final double arrowWidth = 10;
+  final double arrowHeight = 12;
 
-  // Scripture get scripture => core.scripturePrimary;
-  // BIBLE get bible => scripture.verseChapter;
-  // BOOK get book => bible.book.first;
-  // CHAPTER get chapter => book.chapter.first;
+  // late final Core core = context.read<Core>();
+  late final Size mediaSize = MediaQuery.of(context).size;
+  late final double mediaWidthHaft = mediaSize.width * 0.4;
 
-  Size get targetSize => widget.render.size;
-  Offset get targetPosition => widget.render.localToGlobal(Offset.zero);
+  late final Size widgetSize = widget.render.size;
+  late final Offset widgetPosition = widget.render.localToGlobal(Offset.zero);
 
-  int get chapterCount => 50;
+  late final double bottomOfWidget = widgetPosition.dy + widgetSize.height + arrowHeight;
+
+  int get chapterCount => 5;
   // int get chapterCount => book.info.chapterCount;
   int get perItem => chapterCount > 4 ? 4 : chapterCount;
   // double get height => (chapterCount < 4)?(250 / chapterCount).toDouble():(chapterCount/perItem).ceilToDouble()*62;
   double get height => (chapterCount < 4)
-      ? (250 / chapterCount).toDouble()
-      : (chapterCount / perItem).ceilToDouble() * 60;
-
-  // @override
-  // bool get wantKeepAlive => true;
+      ? (200 / chapterCount).toDouble()
+      : (chapterCount / perItem).ceilToDouble() * 52;
 
   @override
   void initState() {
     super.initState();
-    core = context.read<Core>();
   }
 
   @override
   Widget build(BuildContext context) {
     // super.build(context);
-    double halfWidth = (MediaQuery.of(context).size.width / 2) - 50;
-    return WidgetPopup(
-      left: halfWidth,
-      right: 10,
+    // double halfWidth = (MediaQuery.of(context).size.width / 2) - 50;
+    return WidgetPopupShapedArrow(
+      left: mediaWidthHaft,
+      right: 30,
+      top: bottomOfWidget,
       height: height,
-      top: targetPosition.dy + targetSize.height + 1,
-      arrow: targetPosition.dx - halfWidth + (targetSize.width / 2) - 10,
+      // arrow: targetPosition.dx - halfWidth + (targetSize.width / 2) - 10,
+      // arrow: widgetPosition.dx - mediaWidthHaft,
+      arrow: widgetPosition.dx - mediaWidthHaft + (widgetSize.width * 0.2),
       backgroundColor: Theme.of(context).backgroundColor,
       child: view(),
     );
