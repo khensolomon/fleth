@@ -42,9 +42,6 @@ abstract class _State extends WidgetState {
   }
 
   void onDeleteAllConfirmWithDialog() {
-    Future.microtask(() {
-      collection.boxOfFavoriteWord.clear().whenComplete(core.notify);
-    });
     doConfirmWithDialog(
       context: context,
       // message: 'Do you really want to delete all?',
@@ -53,7 +50,7 @@ abstract class _State extends WidgetState {
       // if (confirmation != null && confirmation) onClearAll();
       if (confirmation != null && confirmation) {
         Future.microtask(() {
-          collection.boxOfFavoriteWord.clear().whenComplete(core.notify);
+          collection.boxOfFavoriteWord.clearAll().whenComplete(core.notify);
         });
       }
     });

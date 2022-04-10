@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 // import 'package:flutter/gestures.dart';
+// TODO replace with extended PullToAny
 import 'package:flutter/cupertino.dart';
 // import 'package:flutter/rendering.dart';
 
 import 'package:lidea/provider.dart';
+// import 'package:lidea/hive.dart';
+// import 'package:hive_flutter/hive_flutter.dart';
 import 'package:lidea/view/main.dart';
 import 'package:lidea/icon.dart';
 import 'package:lidea/cached_network_image.dart';
@@ -14,7 +17,6 @@ import '/widget/main.dart';
 
 part 'bar.dart';
 part 'state.dart';
-part 'refresh.dart';
 
 class Main extends StatefulWidget {
   const Main({Key? key, this.arguments}) : super(key: key);
@@ -30,7 +32,7 @@ class Main extends StatefulWidget {
   State<StatefulWidget> createState() => _View();
 }
 
-class _View extends _State with _Bar, _Refresh {
+class _View extends _State with _Bar {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,7 +57,7 @@ class _View extends _State with _Bar, _Refresh {
         overlapsBorderColor: Theme.of(context).shadowColor,
         builder: bar,
       ),
-      refresh(),
+      const PullToRefresh(),
       SliverList(
         delegate: SliverChildListDelegate(
           [
@@ -116,6 +118,10 @@ class _View extends _State with _Bar, _Refresh {
         sliver: SliverList(
           delegate: SliverChildListDelegate(
             [
+              ListTile(
+                title: const Text('BoxOfPerson'),
+                onTap: testing,
+              ),
               ListTile(
                 leading: const Icon(Icons.search),
                 title: const Text('Search: suggest'),
@@ -482,7 +488,7 @@ class _View extends _State with _Bar, _Refresh {
 
   Widget researchWrap() {
     return Selector<Core, List<MapEntry<dynamic, RecentSearchType>>>(
-      selector: (_, e) => e.collection.recentSearches.toList(),
+      selector: (_, e) => e.collection.boxOfRecentSearch.entries.toList(),
       builder: (BuildContext _, List<MapEntry<dynamic, RecentSearchType>> items, Widget? __) {
         items.sort((a, b) => b.value.date!.compareTo(a.value.date!));
         if (items.isEmpty) {

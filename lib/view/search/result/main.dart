@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-// import 'package:flutter/gestures.dart';
-import 'package:flutter/cupertino.dart';
-// import 'package:flutter/rendering.dart';
 
 import 'package:lidea/provider.dart';
 import 'package:lidea/view/main.dart';
@@ -121,7 +118,7 @@ class _View extends _State with _Bar {
     return ListTile(
       title: Text(word),
       minLeadingWidth: 10,
-      leading: const Icon(CupertinoIcons.arrow_turn_down_right, semanticLabel: 'Conclusion'),
+      leading: const Icon(Icons.ac_unit),
       onTap: () => true,
     );
   }

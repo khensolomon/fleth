@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
-// import 'package:lidea/hive.dart';
-// import 'package:flutter/rendering.dart';
 
 import 'package:lidea/intl.dart';
 
@@ -59,19 +56,19 @@ class _View extends _State with _Bar {
       SliverList(
         delegate: SliverChildListDelegate(
           <Widget>[
-            CupertinoButton(
+            WidgetButton(
               child: Text(core.collection.language('offlineaccess')),
               onPressed: () {
                 core.collection.language('offlineaccess');
               },
             ),
-            CupertinoButton(
+            WidgetButton(
               child: const Text('offlineaccess: none'),
               onPressed: () {
                 core.collection.language('offlineaccess');
               },
             ),
-            CupertinoButton(
+            WidgetButton(
               child: const Text('translate: hello'),
               onPressed: () {
                 core.collection.language('hello');
@@ -98,8 +95,7 @@ class _View extends _State with _Bar {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: ThemeMode.values.map<Widget>((e) {
                           bool active = theme == e;
-                          return CupertinoButton(
-                            padding: const EdgeInsets.all(0),
+                          return WidgetButton(
                             child: WidgetLabel(
                               enable: !active,
                               label: themeName[e.index],

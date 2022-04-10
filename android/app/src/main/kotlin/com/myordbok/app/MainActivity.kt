@@ -1,4 +1,4 @@
-package com.fleth.app
+package com.myordbok.app
 
 import io.flutter.embedding.android.FlutterActivity
 

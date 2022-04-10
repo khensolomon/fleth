@@ -154,9 +154,9 @@ class _PopBookListState extends State<PopBookList> {
           body: chapterList(isExpanded, book),
           backgroundColor: Colors.transparent,
           headerBuilder: (BuildContext context, bool isExpanded) {
-            return CupertinoButton(
+            return WidgetButton(
               // color: Colors.blue,
-              alignment: Alignment.centerLeft,
+              // alignment: Alignment.centerLeft,
               padding: const EdgeInsets.only(left: 15),
               child: Text(
                 // book.name,
@@ -213,8 +213,8 @@ class _PopBookListState extends State<PopBookList> {
 
   Widget chapterButton(int bookId, int chapterId) {
     // bool isCurrentChapter = 2 == index;
-    return CupertinoButton(
-      minSize: 55,
+    return WidgetButton(
+      // minSize: 55,
       borderRadius: const BorderRadius.all(Radius.circular(2.0)),
       padding: const EdgeInsets.all(5),
       child: Text(

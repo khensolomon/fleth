@@ -1,4 +1,4 @@
-part of 'main.dart';
+part of data.core;
 
 class NavigationObserver extends UnitNavigationObserver {
   final NavigationNotify changeNotifier;

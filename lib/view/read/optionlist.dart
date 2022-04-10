@@ -76,7 +76,8 @@ class _PopOptionListState extends State<PopOptionList> {
               ),
             ),
           ),
-          label: core.collection.fontSize.toString(),
+          // label: core.collection.fontSize.toString(),
+          label: core.collection.boxOfSettings.fontSize().asString,
           labelPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 7),
         ),
         WidgetButton(

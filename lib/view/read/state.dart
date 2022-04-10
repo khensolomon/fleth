@@ -19,14 +19,17 @@ abstract class _State extends WidgetState {
   }
 
   void setFontSize(bool increase) {
-    double size = core.collection.fontSize;
+    // double size = collection.fontSize.asDouble;
+    double size = collection.boxOfSettings.fontSize().asDouble;
     if (increase) {
       size++;
     } else {
       size--;
     }
+    // setState is not required anymore
     setState(() {
-      core.collection.fontSize = size.clamp(10.0, 40.0);
+      // collection.fontSize = size.clamp(10.0, 40.0);
+      collection.boxOfSettings.fontSize(value: size.clamp(10.0, 40.0));
     });
   }
 

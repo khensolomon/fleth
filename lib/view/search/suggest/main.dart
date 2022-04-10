@@ -1,8 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
-// import 'package:flutter/rendering.dart';
-// import 'package:flutter/gestures.dart';
-// import 'package:flutter/services.dart';
 
 // import 'package:lidea/hive.dart';
 import 'package:lidea/provider.dart';
@@ -34,11 +30,11 @@ class Main extends StatefulWidget {
 
 /*
 on initState(searchQuery)
-  get -> core.collection.searchQuery
+  get -> collection.searchQuery
 onSearch
-  set -> core.collection.searchQuery from core.searchQuery
+  set -> collection.searchQuery from core.searchQuery
 onCancel
-  restore -> core.searchQuery from core.collection.searchQuery
+  restore -> core.searchQuery from collection.searchQuery
   update -> textController.text
 */
 
@@ -108,7 +104,7 @@ class _View extends _State with _Bar {
     //   child: Text('suggest: no query'),
     // );
     return Selector<Core, Iterable<MapEntry<dynamic, RecentSearchType>>>(
-      selector: (_, e) => e.collection.recentSearch(),
+      selector: (_, e) => e.collection.boxOfRecentSearch.entries,
       builder: (BuildContext _a, Iterable<MapEntry<dynamic, RecentSearchType>> items, Widget? _b) {
         if (items.isNotEmpty) {
           return SliverToBoxAdapter(
@@ -216,7 +212,7 @@ class _View extends _State with _Bar {
           ),
         ),
         // minLeadingWidth: 10,
-        leading: const Icon(CupertinoIcons.arrow_turn_down_right, semanticLabel: 'Suggestion'),
+        leading: const Icon(Icons.north_east_rounded),
         // leading: Icon(Icons.history),
         // leading: CircleAvatar(
         //   // radius:10.0,
@@ -270,10 +266,7 @@ class _View extends _State with _Bar {
         // contentPadding: EdgeInsets.zero,
         // minLeadingWidth: 10,
         // leading: Icon(Icons.manage_search_rounded),
-        leading: const Icon(
-          CupertinoIcons.arrow_turn_down_right,
-          semanticLabel: 'Suggestion',
-        ),
+        leading: const Icon(Icons.north_east_rounded),
         title: _recentItem(item.value.word),
         // trailing: Row(
         //   mainAxisSize: MainAxisSize.min,

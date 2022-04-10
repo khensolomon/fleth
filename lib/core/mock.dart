@@ -1,4 +1,4 @@
-part of 'main.dart';
+part of data.core;
 
 /// check
 mixin _Mock on _Abstract {
@@ -198,7 +198,7 @@ mixin _Mock on _Abstract {
     int randomNumber = Mock.randomNumber(100);
     String randomString = Mock.randomString();
     collection.cacheSuggestion = SuggestionType(
-      query: collection.suggestQuery,
+      query: suggestQuery,
       raw: List.generate(randomNumber, (_) => OfRawType(term: '$randomString $suggestQuery')),
     );
     notify();
@@ -212,18 +212,18 @@ mixin _Mock on _Abstract {
     int randomNumber = Mock.randomNumber(100);
     String randomString = Mock.randomString();
 
-    if (collection.cacheConclusion.query != collection.searchQuery) {
+    if (collection.cacheConclusion.query != searchQuery) {
       collection.cacheConclusion = ConclusionType(
-        query: collection.searchQuery,
+        query: searchQuery,
         raw: List.generate(randomNumber, (_) => {'word': '$randomString $suggestQuery'}),
       );
-      collection.recentSearchUpdate(collection.searchQuery);
+      collection.boxOfRecentSearch.update(searchQuery);
       if (!init) {
         notify();
       }
     }
     // collection.recentSearchUpdate(word);
     // collection.searchQuery = word;
-    analytics.search(collection.searchQuery);
+    analytics.search(searchQuery);
   }
 }

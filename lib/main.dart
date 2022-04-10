@@ -2,9 +2,7 @@
 import 'package:flutter/material.dart';
 // NOTE: SystemUiOverlayStyle
 import 'package:flutter/services.dart';
-// NOTE: Locale delegation
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 // NOTE: Privider: state management
 import 'package:lidea/provider.dart';
 // NOTE: Scroll
@@ -12,11 +10,11 @@ import 'package:lidea/view/main.dart';
 
 import '/core/main.dart';
 import '/coloration.dart';
-
 import '/view/routes.dart';
 
 // const bool isProduction = bool.fromEnvironment('dart.vm.product');
 
+final core = Core();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.top]);
@@ -25,17 +23,14 @@ void main() async {
   //   InAppPurchaseAndroidPlatformAddition.enablePendingPurchases();
   // }
 
-  final core = Core();
   await core.ensureInitialized();
   // authentication.stateObserver(core.userObserver);
 
-  runApp(Fleth(core: core));
+  runApp(const Fleth());
 }
 
 class Fleth extends StatelessWidget {
-  final Core core;
-
-  const Fleth({Key? key, required this.core}) : super(key: key);
+  const Fleth({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -73,22 +68,10 @@ class Fleth extends StatelessWidget {
           showSemanticsDebugger: false,
           debugShowCheckedModeBanner: false,
           restorationScopeId: 'lidea',
-          localizationsDelegates: const [
-            AppLocalizations.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          locale: core.preference.locale,
           // locale: Localizations.localeOf(context),
-          supportedLocales: const [
-            // English
-            Locale('en', 'GB'),
-            // Norwegian
-            Locale('no', 'NO'),
-            // Myanmar
-            Locale('my', ''),
-          ],
+          locale: core.preference.locale,
+          localizationsDelegates: core.preference.localeDelegates,
+          supportedLocales: core.preference.localeSupports,
           darkTheme: Coloration.dark(context),
           theme: Coloration.light(context),
           themeMode: core.preference.themeMode,

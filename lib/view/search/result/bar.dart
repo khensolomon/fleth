@@ -15,9 +15,7 @@ mixin _Bar on _State {
           ),
           WidgetButton(
             padding: const EdgeInsets.only(left: 15),
-            child: const WidgetLabel(
-              icon: CupertinoIcons.home,
-            ),
+            child: const WidgetLabel(icon: LideaIcon.home),
             show: args!.hasParam,
             onPressed: param?.currentState!.maybePop,
           ),

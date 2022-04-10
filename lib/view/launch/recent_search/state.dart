@@ -39,7 +39,7 @@ abstract class _State extends WidgetState {
 
   void onDelete(String ord) {
     Future.delayed(Duration.zero, () {
-      collection.recentSearchDelete(ord);
+      collection.boxOfRecentSearch.delete(ord);
     }).whenComplete(core.notify);
   }
 
@@ -57,7 +57,7 @@ abstract class _State extends WidgetState {
       // if (confirmation != null && confirmation) onClearAll();
       if (confirmation != null && confirmation) {
         Future.microtask(() {
-          collection.boxOfRecentSearch.clear().whenComplete(core.notify);
+          collection.boxOfRecentSearch.box.clear().whenComplete(core.notify);
         });
       }
     });

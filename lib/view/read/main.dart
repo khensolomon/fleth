@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
-// import 'package:flutter/rendering.dart';
 
 import 'package:lidea/provider.dart';
 import 'package:lidea/view/main.dart';
@@ -119,7 +117,8 @@ class _View extends _State with _Bar {
           key: verse.keys.first,
           scrollPhysics: const NeverScrollableScrollPhysics(),
           style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                fontSize: core.collection.fontSize,
+                // fontSize: collection.fontSize.asDouble,
+                fontSize: collection.boxOfSettings.fontSize().asDouble,
               ),
         ),
       ),

@@ -28,7 +28,7 @@ mixin _Bar on _State {
             icon: LideaIcon.trash,
             iconSize: 22,
           ),
-          enable: collection.recentSearches.isNotEmpty,
+          enable: collection.boxOfRecentSearch.entries.isNotEmpty,
           onPressed: onDeleteAllConfirmWithDialog,
         ),
       ],

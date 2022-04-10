@@ -115,8 +115,8 @@ class _PopChapterListState extends State<PopChapterList> {
     // bool isCurrentChapter = chapter.id == index;
     return Padding(
       padding: const EdgeInsets.all(3.0),
-      child: CupertinoButton(
-        minSize: 55,
+      child: WidgetButton(
+        // minSize: 55,
         // borderRadius: BorderRadius.all(Radius.circular(2.0)),
         padding: EdgeInsets.zero,
         // color: Theme.of(context).scaffoldBackgroundColor,

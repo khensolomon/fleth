@@ -137,7 +137,7 @@ abstract class _State extends WidgetState<Main> with TickerProviderStateMixin {
     });
   }
 
-  bool onDelete(String ord) => collection.recentSearchDelete(ord);
+  bool onDelete(String ord) => collection.boxOfRecentSearch.delete(ord);
 }
 
 /*
@@ -308,7 +308,7 @@ abstract class _State extends State<Main> with TickerProviderStateMixin {
     //   curve: Curves.fastOutSlowIn, duration: const Duration(milliseconds: 800)
     // );
     // Future.delayed(Duration.zero, () {
-    //   core.collection.historyUpdate(searchQuery);
+    //   collection.historyUpdate(searchQuery);
     // });
 
     // suggestQuery = str;
@@ -325,10 +325,10 @@ abstract class _State extends State<Main> with TickerProviderStateMixin {
     //   curve: Curves.fastOutSlowIn, duration: const Duration(milliseconds: 800)
     // );
     // Future.delayed(Duration.zero, () {
-    //   core.collection.historyUpdate(searchQuery);
+    //   collection.historyUpdate(searchQuery);
     // });
   }
 
-  bool onDelete(String ord) => core.collection.recentSearchDelete(ord);
+  bool onDelete(String ord) => collection.recentSearchDelete(ord);
 }
 */

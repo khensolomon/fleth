@@ -1,4 +1,6 @@
-part of 'main.dart';
+part of data.type;
+
+class BoxOfFavoriteWord<E> extends BoxOfAbstract<FavoriteWordType> {}
 
 @HiveType(typeId: 2)
 class FavoriteWordType {

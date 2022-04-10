@@ -12,16 +12,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:fleth/main.dart';
-import 'package:fleth/core/main.dart';
+// import 'package:fleth/core/main.dart';
 
 void main() async {
-  final core = Core();
+  // final core = Core();
   await core.ensureInitialized();
 
   group('MyWidgets', () {
     testWidgets('Counter increments smoke test', (WidgetTester tester) async {
       // Build our app and trigger a frame.
-      await tester.pumpWidget(Fleth(core: core));
+      await tester.pumpWidget(const Fleth());
 
       // Verify that our counter starts at 0.
       expect(find.text('0'), findsOneWidget);

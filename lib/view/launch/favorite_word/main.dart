@@ -1,8 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
-// import 'package:flutter/rendering.dart';
-// import 'package:flutter/gestures.dart';
-// import 'package:flutter/services.dart';
 
 // import 'package:lidea/hive.dart';
 import 'package:lidea/provider.dart';
@@ -132,11 +128,7 @@ class _View extends _State with _Bar {
         return false;
       },
       // Show a red background as the item is swiped away.
-      background: Container(
-        color: Colors.red,
-        alignment: Alignment.centerRight,
-        child: const Icon(CupertinoIcons.delete_simple),
-      ),
+      background: _listDismissibleBackground(),
       child: Container(
         // shape: RoundedRectangleBorder(
         //   borderRadius: BorderRadius.circular(0),
@@ -184,6 +176,20 @@ class _View extends _State with _Bar {
           //       )
           //     : const SizedBox(),
           onTap: () => onSearch(word),
+        ),
+      ),
+    );
+  }
+
+  Widget _listDismissibleBackground() {
+    return Container(
+      color: Theme.of(context).disabledColor,
+      alignment: Alignment.centerRight,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 15),
+        child: Text(
+          preference.text.delete,
+          style: Theme.of(context).textTheme.bodyMedium,
         ),
       ),
     );
