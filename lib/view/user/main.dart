@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:lidea/provider.dart';
 import 'package:lidea/view/main.dart';
-import 'package:lidea/cached_network_image.dart';
 import 'package:lidea/icon.dart';
-import 'package:lidea/extension.dart';
 
 import '/core/main.dart';
 import '/widget/main.dart';
@@ -29,16 +27,6 @@ class Main extends StatefulWidget {
 
 class _View extends _State with _Bar {
   @override
-  // Widget build(BuildContext context) {
-  //   return Scaffold(
-  //     body: ViewPage(
-  //       // controller: _scrollController,
-  //       child: Consumer<Authentication>(
-  //         builder: (_, __, ___) => body(),
-  //       ),
-  //     ),
-  //   );
-  // }
   Widget build(BuildContext context) {
     return Scaffold(
       body: ViewPage(
@@ -50,7 +38,7 @@ class _View extends _State with _Bar {
     );
   }
 
-  Widget middleware(BuildContext context, Authentication o, Widget? child) {
+  Widget middleware(BuildContext context, Authentication aut, Widget? child) {
     return CustomScrollView(
       controller: scrollController,
       slivers: sliverWidgets(),
@@ -68,6 +56,7 @@ class _View extends _State with _Bar {
         overlapsBorderColor: Theme.of(context).shadowColor,
         builder: bar,
       ),
+      // SliverToBoxAdapter(child: Text(authenticate.message)),
       SliverPadding(
         padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
         sliver: FutureBuilder(
@@ -83,29 +72,12 @@ class _View extends _State with _Bar {
           },
         ),
       ),
-      SliverPadding(
-        padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
-        sliver: FutureBuilder(
-          future: Future.delayed(const Duration(milliseconds: 250), () => true),
-          builder: (_, snap) {
-            if (snap.hasData) {
-              return themeContainer();
-            }
-            return const SliverToBoxAdapter();
-          },
-        ),
+
+      WidgetUserTheme(
+        preference: preference,
       ),
-      SliverPadding(
-        padding: const EdgeInsets.fromLTRB(0, 15, 0, 25),
-        sliver: FutureBuilder(
-          future: Future.delayed(const Duration(milliseconds: 150), () => true),
-          builder: (_, snap) {
-            if (snap.hasData) {
-              return localeContainer();
-            }
-            return const SliverToBoxAdapter();
-          },
-        ),
+      WidgetUserLocale(
+        preference: preference,
       ),
       // Selector<ViewScrollNotify, double>(
       //   selector: (_, e) => e.bottomPadding,
@@ -129,279 +101,99 @@ class _View extends _State with _Bar {
     );
   }
 
-  List<Widget> signInList() {
-    return [
-      signInDecoration(
-        icon: LideaIcon.google,
-        label: 'Google',
-        onPressed: () async {
-          await authenticate.signInWithGoogle();
-        },
-      ),
-      signInDecoration(
-        icon: LideaIcon.facebook,
-        label: 'Facebook',
-        onPressed: () async {
-          await authenticate.signInWithFacebook();
-        },
-      ),
-      // signInDecoration(
-      //   icon: LideaIcon.apple,
-      //   label: 'Apple',
-      //   onPressed: null,
-      // ),
-      // signInDecoration(
-      //   icon: LideaIcon.microsoft,
-      //   label: 'Microsoft',
-      //   onPressed: null,
-      // ),
-      // signInDecoration(
-      //   icon: LideaIcon.github,
-      //   label: 'GitHub',
-      //   onPressed: null,
-      // ),
-      // const OutlinedButton(
-      //   child: WidgetLabel(
-      //     icon: LideaIcon.github,
-      //     iconSize: 17,
-      //     label: 'GitHub',
-      //   ),
-      //   onPressed: null,
-      // ),
-    ];
-  }
-
-  Widget signInDecoration({IconData? icon, String? label, void Function()? onPressed}) {
-    return WidgetButton(
-      margin: const EdgeInsets.all(7),
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 3),
-      decoration: BoxDecoration(
-        color: Theme.of(context).primaryColor,
-        borderRadius: BorderRadius.circular(100),
-        border: Border.all(
-          color: Theme.of(context).shadowColor,
-          width: 1,
+  Widget signInContainer() {
+    return WidgetBlockSection(
+      headerTitle: WidgetBlockTile(
+        title: WidgetLabel(
+          // alignment: Alignment.centerLeft,
+          label: preference.text.wouldYouLiketoSignIn,
         ),
       ),
-      child: WidgetLabel(
-        icon: icon,
-        iconSize: 20,
-        label: label,
-        labelStyle: Theme.of(context).textTheme.labelLarge,
-      ),
-      onPressed: onPressed,
-    );
-  }
-
-  Widget signInContainer() {
-    return SliverList(
-      delegate: SliverChildListDelegate(
-        <Widget>[
-          WidgetBlockTile(
-            title: WidgetLabel(
-              // alignment: Alignment.centerLeft,
-              label: preference.text.wouldYouLiketoSignIn,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 25),
+        child: ListBody(
+          children: [
+            SignInButton(
+              icon: LideaIcon.google,
+              label: 'Google',
+              onPressed: authenticate.signInWithGoogle,
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 25),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: signInList(),
-            ),
-            // child: Wrap(
-            //   alignment: WrapAlignment.center,
-            //   spacing: 10,
-            //   runSpacing: 10,
-            //   children: signInList(),
+            if (authenticate.showFacebook)
+              SignInButton(
+                icon: LideaIcon.facebook,
+                label: 'Facebook',
+                onPressed: authenticate.signInWithFacebook,
+              ),
+            if (authenticate.showApple)
+              SignInButton(
+                icon: LideaIcon.apple,
+                label: 'Apple',
+                onPressed: () {
+                  authenticate.signInWithApple().whenComplete(() {
+                    if (authenticate.message.isNotEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(authenticate.message),
+                        ),
+                      );
+                    }
+                  });
+                },
+              ),
+            // SignInButton(
+            //   icon: LideaIcon.microsoft,
+            //   label: 'Microsoft',
+            //   onPressed: null,
             // ),
-          ),
-          // Padding(
-          //   padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 25),
-          //   child: WidgetLabel(
-          //     label: preference.text.bySigningIn,
-          //   ),
-          // ),
-        ],
+            // SignInButton(
+            //   icon: LideaIcon.github,
+            //   label: 'GitHub',
+            //   onPressed: null,
+            // ),
+          ],
+        ),
       ),
+      // footerTitle: WidgetBlockTile(
+      //   title: WidgetLabel(
+      //     // alignment: Alignment.centerLeft,
+      //     label: preference.text.bySigningIn,
+      //   ),
+      // ),
     );
   }
 
   Widget profileContainer() {
-    return SliverList(
-      delegate: SliverChildListDelegate(
-        <Widget>[
-          WidgetBlockTile(
-            title: WidgetLabel(
-              label: authenticate.user!.displayName!,
-              labelStyle: Theme.of(context).textTheme.titleLarge,
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 25),
-            child: Column(
-              children: [
-                WidgetLabel(
-                  label: authenticate.user!.email!,
-                  // label: 'khensolomon@gmail.com',
-                  labelStyle: Theme.of(context).textTheme.labelSmall,
-                ),
-                // Text(
-                //   authenticate.id,
-                //   textAlign: TextAlign.center,
-                // ),
-              ],
-            ),
-          ),
-        ],
+    return WidgetBlockSection(
+      headerTitle: WidgetBlockTile(
+        title: WidgetLabel(
+          // label: authenticate.user!.displayName,
+          label: authenticate.userDisplayname,
+          labelStyle: Theme.of(context).textTheme.titleLarge,
+        ),
       ),
-    );
-  }
-
-  Widget themeContainer() {
-    return SliverList(
-      delegate: SliverChildListDelegate(
-        <Widget>[
-          // Padding(
-          //   padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 25),
-          //   child: WidgetLabel(
-          //     alignment: Alignment.centerLeft,
-          //     // icon: Icons.lightbulb,
-          //     label: preference.text.themeMode,
-          //   ),
-          // ),
-          WidgetBlockTile(
-            title: WidgetLabel(
-              alignment: Alignment.centerLeft,
-              label: preference.text.themeMode,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 25),
+        child: ListBody(
+          children: [
+            WidgetLabel(
+              // label: authenticate.user!.email!,
+              label: authenticate.userEmail,
+              // label: 'khensolomon@gmail.com',
+              labelStyle: Theme.of(context).textTheme.labelSmall,
             ),
-          ),
-          Card(
-            margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 0),
-            child: Selector<Preference, ThemeMode>(
-              selector: (_, e) => e.themeMode,
-              builder: (BuildContext context, ThemeMode theme, Widget? child) {
-                return ListView.separated(
-                  shrinkWrap: true,
-                  primary: false,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: ThemeMode.values.length,
-                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                  itemBuilder: (_, index) {
-                    ThemeMode mode = ThemeMode.values[index];
-                    bool active = theme == mode;
-                    return WidgetButton(
-                      child: WidgetLabel(
-                        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 15),
-                        alignment: Alignment.centerLeft,
-                        icon: Icons.check_rounded,
-                        iconColor: active ? null : Theme.of(context).focusColor,
-                        label: themeName[index],
-                        labelPadding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
-                        labelStyle: Theme.of(context).textTheme.bodyLarge,
-                        softWrap: true,
-                        maxLines: 3,
-                      ),
-                      onPressed: () {
-                        if (!active) {
-                          preference.updateThemeMode(mode);
-                        }
-                      },
-                    );
-                    // return ListTile(
-                    //   contentPadding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
-                    //   // contentPadding: EdgeInsets.zero,
-                    //   minVerticalPadding: 0.0,
-                    //   leading: const Icon(Icons.check_rounded),
-                    //   title: Text(themeName[index]),
-                    //   // style: ListTileStyle.drawer,
-                    //   onTap: () {
-                    //     preference.updateThemeMode(mode);
-                    //   },
-                    // );
-                  },
-                  separatorBuilder: (_, index) {
-                    return Divider(
-                      // thickness: 0,
-                      height: 1,
-                      color: Theme.of(context).shadowColor,
-                    );
-                    // return const SizedBox();
-                  },
-                );
-              },
-            ),
-          )
-        ],
+            // Text(
+            //   authenticate.id,
+            //   textAlign: TextAlign.center,
+            // ),
+          ],
+        ),
       ),
-    );
-  }
-
-  Widget localeContainer() {
-    return SliverList(
-      delegate: SliverChildListDelegate(
-        <Widget>[
-          // Padding(
-          //   padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 25),
-          //   child: WidgetLabel(
-          //     alignment: Alignment.centerLeft,
-          //     label: preference.text.locale,
-          //   ),
-          // ),
-          WidgetBlockTile(
-            title: WidgetLabel(
-              alignment: Alignment.centerLeft,
-              label: preference.text.locale,
-            ),
-          ),
-          Card(
-            margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 0),
-            child: Selector<Preference, ThemeMode>(
-              selector: (_, e) => e.themeMode,
-              builder: (BuildContext context, ThemeMode theme, Widget? child) {
-                return ListView.separated(
-                  shrinkWrap: true,
-                  primary: false,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: preference.supportedLocales.length,
-                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                  itemBuilder: (_, index) {
-                    final locale = preference.supportedLocales[index];
-
-                    Locale localeCurrent = Localizations.localeOf(context);
-                    // final String localeName = Intl.canonicalizedLocale(lang.languageCode);
-                    final String localeName = Locale(locale.languageCode).nativeName;
-                    final bool active = localeCurrent.languageCode == locale.languageCode;
-
-                    return WidgetButton(
-                      child: WidgetLabel(
-                        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 15),
-                        alignment: Alignment.centerLeft,
-                        icon: Icons.check_rounded,
-                        iconColor: active ? null : Theme.of(context).focusColor,
-                        label: localeName,
-                        labelPadding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
-                        labelStyle: Theme.of(context).textTheme.bodyLarge,
-                        softWrap: true,
-                        maxLines: 3,
-                      ),
-                      onPressed: () {
-                        preference.updateLocale(locale);
-                      },
-                    );
-                  },
-                  separatorBuilder: (_, index) {
-                    return Divider(
-                      height: 1,
-                      color: Theme.of(context).shadowColor,
-                    );
-                  },
-                );
-              },
-            ),
-          )
-        ],
-      ),
+      // footerTitle: WidgetBlockTile(
+      //   title: WidgetLabel(
+      //     // alignment: Alignment.centerLeft,
+      //     label: preference.text.bySigningIn,
+      //   ),
+      // ),
     );
   }
 }
