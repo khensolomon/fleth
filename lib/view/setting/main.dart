@@ -128,11 +128,11 @@ class _View extends _State with _Bar {
                       shrinkWrap: true,
                       primary: false,
                       physics: const NeverScrollableScrollPhysics(),
-                      itemCount: preference.supportedLocales.length,
+                      itemCount: preference.listOfLocale.length,
                       // itemCount: Localizations.localeOf(context).,
                       padding: EdgeInsets.zero,
                       itemBuilder: (_, index) {
-                        final lang = preference.supportedLocales[index];
+                        final lang = preference.listOfLocale.elementAt(index);
 
                         Locale locale = Localizations.localeOf(context);
                         final String localeName = Intl.canonicalizedLocale(lang.languageCode);
