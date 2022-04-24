@@ -9,7 +9,6 @@ import 'package:lidea/provider.dart';
 // import 'package:hive_flutter/hive_flutter.dart';
 import 'package:lidea/view/main.dart';
 import 'package:lidea/icon.dart';
-import 'package:lidea/cached_network_image.dart';
 
 import '/core/main.dart';
 import '/type/main.dart';
