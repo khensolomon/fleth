@@ -26,14 +26,11 @@ mixin _Bar on _State {
           ),
           automaticallyImplyLeading: false,
           leading: WidgetButton(
+            onPressed: null,
             child: WidgetMark(
               icon: Icons.arrow_back_ios_new_rounded,
               label: preference.text.back,
             ),
-            // child: const Icon(
-            //   CupertinoIcons.left_chevron,
-            // ),
-            onPressed: null,
           ),
 
           actions: [

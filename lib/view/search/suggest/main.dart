@@ -105,7 +105,7 @@ class _View extends _State with _Bar {
     // );
     return Selector<Core, Iterable<MapEntry<dynamic, RecentSearchType>>>(
       selector: (_, e) => e.collection.boxOfRecentSearch.entries,
-      builder: (BuildContext _a, Iterable<MapEntry<dynamic, RecentSearchType>> items, Widget? _b) {
+      builder: (BuildContext _, Iterable<MapEntry<dynamic, RecentSearchType>> items, Widget? __) {
         if (items.isNotEmpty) {
           return SliverToBoxAdapter(
             child: _recentBlock(items),
@@ -262,6 +262,14 @@ class _View extends _State with _Bar {
     return Dismissible(
       key: Key(item.value.date.toString()),
       direction: DismissDirection.endToStart,
+      background: _recentDismissibleBackground(),
+      // secondaryBackground: _recentListDismissibleSecondaryBackground),
+      confirmDismiss: (direction) async {
+        if (direction == DismissDirection.endToStart) {
+          return onDelete(item.value.word);
+        }
+        return null;
+      },
       child: ListTile(
         // contentPadding: EdgeInsets.zero,
         // minLeadingWidth: 10,
@@ -299,14 +307,6 @@ class _View extends _State with _Bar {
         // ),
         onTap: () => onSuggest(item.value.word),
       ),
-      background: _recentDismissibleBackground(),
-      // secondaryBackground: _recentListDismissibleSecondaryBackground),
-      confirmDismiss: (direction) async {
-        if (direction == DismissDirection.endToStart) {
-          return onDelete(item.value.word);
-        }
-        return null;
-      },
     );
   }
 

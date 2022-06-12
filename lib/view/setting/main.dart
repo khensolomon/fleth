@@ -96,11 +96,11 @@ class _View extends _State with _Bar {
                         children: ThemeMode.values.map<Widget>((e) {
                           bool active = theme == e;
                           return WidgetButton(
+                            onPressed: active ? null : () => preference.updateThemeMode(e),
                             child: WidgetLabel(
                               enable: !active,
                               label: themeName[e.index],
                             ),
-                            onPressed: active ? null : () => preference.updateThemeMode(e),
                           );
                         }).toList(),
                       ),

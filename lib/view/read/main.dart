@@ -86,12 +86,12 @@ class _View extends _State with _Bar {
                 child: WidgetButton(
                   // key: kOptionButton,
                   constraints: const BoxConstraints(maxWidth: 56, minWidth: 40.0),
+                  message: preference.text.fontSize,
+                  onPressed: showOptionList,
                   child: WidgetLabel(
                     icon: LideaIcon.textSize,
                     iconColor: Theme.of(context).primaryColorDark,
                   ),
-                  message: preference.text.fontSize,
-                  onPressed: showOptionList,
                 )),
           ),
         ),

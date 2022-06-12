@@ -134,12 +134,12 @@ class AppRoutes {
   static Route<dynamic>? homeBuilder(RouteSettings route) {
     return PageRouteBuilder(
       settings: route,
-      pageBuilder: (BuildContext _, Animation<double> _a, Animation<double> _b) {
+      pageBuilder: (BuildContext _, Animation<double> __, Animation<double> ___) {
         return _homePage(route);
       },
       transitionDuration: const Duration(milliseconds: 400),
       reverseTransitionDuration: const Duration(milliseconds: 400),
-      transitionsBuilder: (_, animation, _b, child) => FadeTransition(
+      transitionsBuilder: (_, animation, __, child) => FadeTransition(
         opacity: animation,
         child: child,
       ),
@@ -159,7 +159,7 @@ class AppRoutes {
     // );
     return PageRouteBuilder(
       settings: route,
-      pageBuilder: (BuildContext _, Animation<double> _a, Animation<double> _b) {
+      pageBuilder: (BuildContext _, Animation<double> __, Animation<double> ___) {
         switch (route.name) {
           case search_suggest.Main.route:
             return search_suggest.Main(arguments: args);

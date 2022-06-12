@@ -10,15 +10,15 @@ mixin _Bar on _State {
         children: [
           WidgetButton(
             constraints: const BoxConstraints(maxWidth: 56, minWidth: 50.0, maxHeight: 40),
+            message: preference.text.addTo(preference.text.bookmark(true)),
+            // onPressed: setBookMark,
+            show: hasArguments,
+            onPressed: args?.currentState!.maybePop,
             child: WidgetLabel(
               icon: Icons.bookmark_add,
               iconColor: Theme.of(context).primaryColorDark,
               iconSize: (org.shrink * 26).clamp(18, 26).toDouble(),
             ),
-            message: preference.text.addTo(preference.text.bookmark(true)),
-            // onPressed: setBookMark,
-            show: hasArguments,
-            onPressed: args?.currentState!.maybePop,
           ),
           Expanded(
             flex: 1,
@@ -34,13 +34,13 @@ mixin _Bar on _State {
                       left: Radius.elliptical(20, 50),
                     ),
                   ),
+                  message: preference.text.book(true),
+                  onPressed: showBookList,
                   child: _barButton(
                     label: '1',
                     shrink: org.shrink,
                     padding: EdgeInsets.fromLTRB(7, 0, org.snapShrink * 5, 0),
                   ),
-                  message: preference.text.book(true),
-                  onPressed: showBookList,
                 ),
                 Divider(
                   indent: 1 * org.snapShrink,
@@ -54,13 +54,13 @@ mixin _Bar on _State {
                       right: Radius.elliptical(20, 50),
                     ),
                   ),
+                  message: preference.text.chapter(true),
+                  onPressed: showChapterList,
                   child: _barButton(
                     label: '150',
                     shrink: org.shrink,
                     padding: const EdgeInsets.fromLTRB(3, 0, 7, 0),
                   ),
-                  message: preference.text.chapter(true),
-                  onPressed: showChapterList,
                 ),
               ],
             ),
@@ -68,13 +68,13 @@ mixin _Bar on _State {
           WidgetButton(
             key: kOptionButton,
             constraints: const BoxConstraints(maxWidth: 56, minWidth: 50.0),
+            message: preference.text.fontSize,
+            onPressed: showOptionList,
             child: WidgetLabel(
               icon: LideaIcon.textSize,
               iconColor: Theme.of(context).primaryColorDark,
               iconSize: (org.shrink * 22).clamp(18, 22).toDouble(),
             ),
-            message: preference.text.fontSize,
-            onPressed: showOptionList,
           ),
         ],
       ),

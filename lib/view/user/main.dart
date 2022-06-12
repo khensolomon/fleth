@@ -56,6 +56,9 @@ class _View extends _State with _Bar {
         overlapsBorderColor: Theme.of(context).shadowColor,
         builder: bar,
       ),
+      PullToActivate(
+        onUpdate: () => core.collection.updateToken(force: true),
+      ),
       // SliverToBoxAdapter(child: Text(authenticate.message)),
       SliverPadding(
         padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
@@ -72,13 +75,17 @@ class _View extends _State with _Bar {
           },
         ),
       ),
-
       WidgetUserTheme(
         preference: preference,
       ),
       WidgetUserLocale(
         preference: preference,
       ),
+      WidgetUserAccount(
+        preference: preference,
+        authenticate: authenticate,
+      ),
+
       // Selector<ViewScrollNotify, double>(
       //   selector: (_, e) => e.bottomPadding,
       //   builder: (context, bottomPadding, child) {
@@ -89,16 +96,6 @@ class _View extends _State with _Bar {
       //   },
       // ),
     ];
-  }
-
-  Widget profile() {
-    return SliverList(
-      delegate: SliverChildListDelegate(
-        <Widget>[
-          const Text('signed in'),
-        ],
-      ),
-    );
   }
 
   Widget signInContainer() {
@@ -115,39 +112,35 @@ class _View extends _State with _Bar {
           children: [
             SignInButton(
               icon: LideaIcon.google,
-              label: 'Google',
-              onPressed: authenticate.signInWithGoogle,
+              label: 'Sign in with Google',
+              onPressed: () {
+                authenticate.signInWithGoogle().whenComplete(whenCompleteSignIn);
+              },
             ),
-            if (authenticate.showFacebook)
-              SignInButton(
-                icon: LideaIcon.facebook,
-                label: 'Facebook',
-                onPressed: authenticate.signInWithFacebook,
-              ),
             if (authenticate.showApple)
               SignInButton(
                 icon: LideaIcon.apple,
-                label: 'Apple',
+                label: 'Sign in with Apple',
                 onPressed: () {
-                  authenticate.signInWithApple().whenComplete(() {
-                    if (authenticate.message.isNotEmpty) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(authenticate.message),
-                        ),
-                      );
-                    }
-                  });
+                  authenticate.signInWithApple().whenComplete(whenCompleteSignIn);
+                },
+              ),
+            if (authenticate.showFacebook)
+              SignInButton(
+                icon: LideaIcon.facebook,
+                label: 'Sign in with Facebook',
+                onPressed: () {
+                  authenticate.signInWithFacebook().whenComplete(whenCompleteSignIn);
                 },
               ),
             // SignInButton(
             //   icon: LideaIcon.microsoft,
-            //   label: 'Microsoft',
+            //   label: 'Sign in with Microsoft',
             //   onPressed: null,
             // ),
             // SignInButton(
             //   icon: LideaIcon.github,
-            //   label: 'GitHub',
+            //   label: 'Sign in with GitHub',
             //   onPressed: null,
             // ),
           ],
@@ -171,6 +164,12 @@ class _View extends _State with _Bar {
           labelStyle: Theme.of(context).textTheme.titleLarge,
         ),
       ),
+      // footerTitle: WidgetBlockTile(
+      //   title: WidgetLabel(
+      //     // alignment: Alignment.centerLeft,
+      //     label: preference.text.bySigningIn,
+      //   ),
+      // ),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 25),
         child: ListBody(
@@ -181,6 +180,7 @@ class _View extends _State with _Bar {
               // label: 'khensolomon@gmail.com',
               labelStyle: Theme.of(context).textTheme.labelSmall,
             ),
+
             // Text(
             //   authenticate.id,
             //   textAlign: TextAlign.center,
@@ -188,12 +188,6 @@ class _View extends _State with _Bar {
           ],
         ),
       ),
-      // footerTitle: WidgetBlockTile(
-      //   title: WidgetLabel(
-      //     // alignment: Alignment.centerLeft,
-      //     label: preference.text.bySigningIn,
-      //   ),
-      // ),
     );
   }
 }

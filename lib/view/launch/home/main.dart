@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 // import 'package:flutter/gestures.dart';
-// TODO replace with extended PullToAny
 import 'package:flutter/cupertino.dart';
 // import 'package:flutter/rendering.dart';
 
@@ -63,14 +62,14 @@ class _View extends _State with _Bar {
             WidgetBlockTile(
               title: Text(preference.text.recentSearch(true)),
               trailing: WidgetButton(
-                child: const WidgetLabel(
-                  icon: Icons.more_horiz,
-                ),
                 message: preference.text.addTo(preference.text.recentSearch(true)),
                 duration: const Duration(milliseconds: 300),
                 onPressed: () {
                   core.navigate(to: '/recent-search');
                 },
+                child: const WidgetLabel(
+                  icon: Icons.more_horiz,
+                ),
               ),
             ),
             Card(
@@ -89,14 +88,14 @@ class _View extends _State with _Bar {
             WidgetBlockTile(
               title: Text(preference.text.favorite(true)),
               trailing: WidgetButton(
-                child: const WidgetLabel(
-                  icon: Icons.more_horiz,
-                ),
                 message: preference.text.addTo(preference.text.favorite(true)),
                 duration: const Duration(milliseconds: 300),
                 onPressed: () {
                   core.navigate(to: '/favorite-word');
                 },
+                child: const WidgetLabel(
+                  icon: Icons.more_horiz,
+                ),
               ),
             ),
             Card(

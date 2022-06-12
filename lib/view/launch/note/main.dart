@@ -84,11 +84,6 @@ class _View extends _State with _Bar {
     // );
     return SwipeForMore(
       key: Key('$index'),
-      child: ListTile(
-        title: Text(item),
-        leading: Text('$index'),
-        trailing: dragHandler(index),
-      ),
       menu: <Widget>[
         Container(
           color: Colors.black26,
@@ -105,6 +100,11 @@ class _View extends _State with _Bar {
           ),
         ),
       ],
+      child: ListTile(
+        title: Text(item),
+        leading: Text('$index'),
+        trailing: dragHandler(index),
+      ),
     );
   }
 
@@ -141,10 +141,10 @@ class SwipeForMore extends StatefulWidget {
   final double dx;
 
   @override
-  _SwipeForMoreState createState() => _SwipeForMoreState();
+  SwipeForMoreState createState() => SwipeForMoreState();
 }
 
-class _SwipeForMoreState extends State<SwipeForMore> with SingleTickerProviderStateMixin {
+class SwipeForMoreState extends State<SwipeForMore> with SingleTickerProviderStateMixin {
   late final AnimationController controller = AnimationController(
     vsync: this,
     duration: const Duration(milliseconds: 500),

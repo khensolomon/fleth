@@ -10,7 +10,6 @@ class Collection extends ClusterDocket {
 
   // retrieve the instance through the app
   Collection.internal();
-  // TODO remove super.internal from all child
   // Collection.internal() : super.internal();
 
   @override

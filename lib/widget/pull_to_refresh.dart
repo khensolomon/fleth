@@ -1,22 +1,22 @@
 part of ui.widget;
 
-// PullToAny(
+// PullToActivate(
 //   onUpdate: Future.value(),
 // );
 // const PullToRefresh();
 
-// class PullToRefresh extends PullToAny {
+// class PullToRefresh extends PullToActivate {
 //   const PullToRefresh({
 //     Key? key,
 //     Future<void> Function()? onUpdate,
 //   }) : super(key: key, onUpdate: onUpdate);
 // }
 
-class PullToRefresh extends PullToAny {
+class PullToRefresh extends PullToActivate {
   const PullToRefresh({Key? key}) : super(key: key);
 
   @override
-  State<PullToAny> createState() => _PullToRefreshState();
+  State<PullToActivate> createState() => _PullToRefreshState();
 }
 
 class _PullToRefreshState extends PullOfState {
