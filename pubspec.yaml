@@ -36,9 +36,6 @@ flutter:
   # Add assets
   assets:
     - assets/env.json
-    - assets/album.json
-    - assets/bible.json
-    - assets/word.db
 
   # fonts from lidea
   fonts:
